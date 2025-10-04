@@ -16,23 +16,20 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
 $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll();
 ?>
 <?php include '../templates/header.php'; ?>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<h2>إدارة العقوبات</h2>
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSanctionModal">إضافة عقوبة</button>
+<h2><?php echo htmlspecialchars($translations['sanctions']); ?></h2>
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSanctionModal"><?php echo htmlspecialchars($translations['add_sanction'] ?? 'إضافة عقوبة'); ?></button>
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
     <div class="col-auto">
-        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+        <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search'] ?? 'ابحث...'); ?>">
     </div>
     <div class="col-auto">
-        <input type="text" id="filterType" class="form-control" placeholder="نوع العقوبة">
+        <input type="text" id="filterType" class="form-control" placeholder="<?php echo htmlspecialchars($translations['sanction_type'] ?? 'نوع العقوبة'); ?>">
     </div>
     <div class="col-auto">
         <select id="filterAuteur" class="form-select">
-            <option value="">كل المسؤولين</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_responsibles'] ?? 'كل المسؤولين'); ?></option>
             <?php
             foreach ($users as $user) {
                 echo "<option value=\"" . htmlspecialchars($user['nom'] . ' ' . $user['prenom']) . "\">" . htmlspecialchars($user['nom'] . ' ' . $user['prenom']) . "</option>";
@@ -41,22 +38,22 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
         </select>
     </div>
     <div class="col-auto">
-        <input type="date" id="dateFrom" class="form-control" placeholder="من تاريخ">
+        <input type="date" id="dateFrom" class="form-control" placeholder="<?php echo htmlspecialchars($translations['from_date'] ?? 'من تاريخ'); ?>">
     </div>
     <div class="col-auto">
-        <input type="date" id="dateTo" class="form-control" placeholder="إلى تاريخ">
+        <input type="date" id="dateTo" class="form-control" placeholder="<?php echo htmlspecialchars($translations['to_date'] ?? 'إلى تاريخ'); ?>">
     </div>
 </div>
 
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
-            <th>المتدرب</th>
-            <th>النوع</th>
-            <th>الوصف</th>
-            <th>تاريخ العقوبة</th>
-            <th>المسؤول</th>
-            <th>إجراءات</th>
+            <th><?php echo htmlspecialchars($translations['trainee'] ?? 'المتدرب'); ?></th>
+            <th><?php echo htmlspecialchars($translations['type'] ?? 'النوع'); ?></th>
+            <th><?php echo htmlspecialchars($translations['description'] ?? 'الوصف'); ?></th>
+            <th><?php echo htmlspecialchars($translations['sanction_date'] ?? 'تاريخ العقوبة'); ?></th>
+            <th><?php echo htmlspecialchars($translations['responsible'] ?? 'المسؤول'); ?></th>
+            <th><?php echo htmlspecialchars($translations['actions'] ?? 'إجراءات'); ?></th>
         </tr>
     </thead>
     <tbody id="sanctionsTableBody">
@@ -68,11 +65,11 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
             <td><?php echo $sanction['date_punition']; ?></td>
             <td><?php echo htmlspecialchars($sanction['auteur_id'] ? $sanction['auteur_nom'] . ' ' . $sanction['auteur_prenom'] : ''); ?></td>
             <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editSanctionModal<?php echo $sanction['id']; ?>">تعديل</button>
-                <form method="post" action="../actions/delete_sanction.php" style="display:inline-block;" onsubmit="return confirm('هل أنت متأكد من حذف العقوبة؟');">
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editSanctionModal<?php echo $sanction['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <form method="post" action="../actions/delete_sanction.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_sanction']); ?>');">
                     <input type="hidden" name="id" value="<?php echo $sanction['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                    <button type="submit" class="btn btn-sm btn-danger">حذف</button>
+                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
                 </form>
             </td>
         </tr>
@@ -81,18 +78,18 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
         <div class="modal fade" id="editSanctionModal<?php echo $sanction['id']; ?>" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="post" action="../actions/edit_sanction.php">
+                    <form class="edit-sanction-form" method="post" action="../actions/edit_sanction.php">
                         <div class="modal-header">
-                            <h5 class="modal-title">تعديل عقوبة</h5>
+                            <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_sanction']); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
                             <input type="hidden" name="id" value="<?php echo $sanction['id']; ?>">
                             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                             <div class="mb-3">
-                                <label class="form-label">المتدرب</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['trainee']); ?></label>
                                 <select name="id_stagiaire" class="form-control" required>
-                                    <?php foreach ($stagiaires as $stagiaire): 
+                                    <?php foreach ($stagiaires as $stagiaire):
                                         $selected = ($sanction['id_stagiaire'] == $stagiaire['id']) ? 'selected' : '';
                                     ?>
                                     <option value="<?php echo $stagiaire['id']; ?>" <?php echo $selected; ?>>
@@ -102,22 +99,22 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">النوع</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['type']); ?></label>
                                 <input type="text" name="type" class="form-control" value="<?php echo htmlspecialchars($sanction['type']); ?>" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">الوصف</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['description']); ?></label>
                                 <textarea name="description" class="form-control"><?php echo htmlspecialchars($sanction['description']); ?></textarea>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">تاريخ العقوبة</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['sanction_date']); ?></label>
                                 <input type="date" name="date_punition" class="form-control" value="<?php echo $sanction['date_punition']; ?>" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">المسؤول</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['responsible']); ?></label>
                                 <select name="auteur_id" class="form-control">
-                                    <option value="">اختر</option>
-                                    <?php foreach ($users as $user): 
+                                    <option value=""><?php echo htmlspecialchars($translations['select']); ?></option>
+                                    <?php foreach ($users as $user):
                                         $selected = ($sanction['auteur_id'] == $user['id']) ? 'selected' : '';
                                     ?>
                                     <option value="<?php echo $user['id']; ?>" <?php echo $selected; ?>>
@@ -128,8 +125,8 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                            <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                            <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
                         </div>
                     </form>
                 </div>
@@ -146,15 +143,15 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
         <div class="modal-content">
             <form method="post" action="../actions/add_sanction.php">
                 <div class="modal-header">
-                    <h5 class="modal-title">إضافة عقوبة</h5>
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_sanction']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                     <div class="mb-3">
-                        <label class="form-label">المتدرب</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['trainee']); ?></label>
                         <select name="id_stagiaire" class="form-control" required>
-                            <option value="">اختر</option>
+                            <option value=""><?php echo htmlspecialchars($translations['select']); ?></option>
                             <?php foreach ($stagiaires as $stagiaire): ?>
                             <option value="<?php echo $stagiaire['id']; ?>">
                                 <?php echo htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']); ?>
@@ -163,21 +160,21 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">النوع</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['type']); ?></label>
                         <input type="text" name="type" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">الوصف</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['description']); ?></label>
                         <textarea name="description" class="form-control"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">تاريخ العقوبة</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['sanction_date']); ?></label>
                         <input type="date" name="date_punition" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">المسؤول</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['responsible']); ?></label>
                         <select name="auteur_id" class="form-control">
-                            <option value="">اختر</option>
+                            <option value=""><?php echo htmlspecialchars($translations['select']); ?></option>
                             <?php foreach ($users as $user): ?>
                             <option value="<?php echo $user['id']; ?>">
                                 <?php echo htmlspecialchars($user['nom'] . ' ' . $user['prenom']); ?>
@@ -187,8 +184,8 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">إضافة</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['add']); ?></button>
                 </div>
             </form>
         </div>
@@ -239,5 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
     dateTo.addEventListener('change', filterTable);
 });
 </script>
+<script src="js/edit_sanction_ajax.js"></script>
 
 <?php include '../templates/footer.php'; ?>

@@ -14,20 +14,17 @@ $permissions = $pdo->query("
 $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")->fetchAll();
 ?>
 <?php include '../templates/header.php'; ?>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<h2>إدارة الأذونات</h2>
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addPermissionModal">إضافة إذن</button>
+<h2><?php echo htmlspecialchars($translations['permissions']); ?></h2>
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><?php echo htmlspecialchars($translations['add_permission']); ?></button>
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
     <div class="col-auto">
-        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+        <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search']); ?>">
     </div>
     <div class="col-auto">
         <select id="filterType" class="form-select">
-            <option value="">كل الأنواع</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_types']); ?></option>
             <option value="samedi">samedi</option>
             <option value="dimanche">dimanche</option>
             <option value="exceptionnelle">exceptionnelle</option>
@@ -36,30 +33,30 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
     </div>
     <div class="col-auto">
         <select id="filterStatut" class="form-select">
-            <option value="">كل الحالات</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_statuses']); ?></option>
             <option value="en_attente">en_attente</option>
             <option value="acceptee">acceptee</option>
             <option value="refusee">refusee</option>
         </select>
     </div>
     <div class="col-auto">
-        <input type="date" id="dateFrom" class="form-control" placeholder="من تاريخ البداية">
+        <input type="date" id="dateFrom" class="form-control" placeholder="<?php echo htmlspecialchars($translations['from_start_date']); ?>">
     </div>
     <div class="col-auto">
-        <input type="date" id="dateTo" class="form-control" placeholder="إلى تاريخ البداية">
+        <input type="date" id="dateTo" class="form-control" placeholder="<?php echo htmlspecialchars($translations['to_start_date']); ?>">
     </div>
 </div>
 
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
-            <th>المتدرب</th>
-            <th>النوع</th>
-            <th>تاريخ البداية</th>
-            <th>تاريخ النهاية</th>
-            <th>الموضوع</th>
-            <th>الحالة</th>
-            <th>إجراءات</th>
+            <th><?php echo htmlspecialchars($translations['trainee']); ?></th>
+            <th><?php echo htmlspecialchars($translations['type']); ?></th>
+            <th><?php echo htmlspecialchars($translations['start_date']); ?></th>
+            <th><?php echo htmlspecialchars($translations['end_date']); ?></th>
+            <th><?php echo htmlspecialchars($translations['subject']); ?></th>
+            <th><?php echo htmlspecialchars($translations['status']); ?></th>
+            <th><?php echo htmlspecialchars($translations['actions']); ?></th>
         </tr>
     </thead>
     <tbody id="permissionsTableBody">
@@ -72,11 +69,11 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
             <td><?php echo htmlspecialchars($perm['motif']); ?></td>
             <td><?php echo htmlspecialchars($perm['statut']); ?></td>
             <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editPermissionModal<?php echo $perm['id']; ?>">تعديل</button>
-                <form method="post" action="../actions/delete_permission.php" style="display:inline-block;" onsubmit="return confirm('هل أنت متأكد من حذف الإذن؟');">
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editPermissionModal<?php echo $perm['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <form method="post" action="../actions/delete_permission.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_permission']); ?>');">
                     <input type="hidden" name="id" value="<?php echo $perm['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                    <button type="submit" class="btn btn-sm btn-danger">حذف</button>
+                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
                 </form>
             </td>
         </tr>
@@ -85,18 +82,18 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
         <div class="modal fade" id="editPermissionModal<?php echo $perm['id']; ?>" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="post" action="../actions/edit_permission.php">
+                    <form class="edit-permission-form" method="post" action="../actions/edit_permission.php">
                         <div class="modal-header">
-                            <h5 class="modal-title">تعديل إذن</h5>
+                            <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_permission']); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
                             <input type="hidden" name="id" value="<?php echo $perm['id']; ?>">
                             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                             <div class="mb-3">
-                                <label class="form-label">المتدرب</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['trainee']); ?></label>
                                 <select name="id_stagiaire" class="form-control" required>
-                                    <?php foreach ($stagiaires as $stagiaire): 
+                                    <?php foreach ($stagiaires as $stagiaire):
                                         $selected = ($perm['id_stagiaire'] == $stagiaire['id']) ? 'selected' : '';
                                     ?>
                                     <option value="<?php echo $stagiaire['id']; ?>" <?php echo $selected; ?>>
@@ -106,7 +103,7 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">النوع</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['type']); ?></label>
                                 <select name="type" class="form-control" required>
                                     <?php
                                     $types = ['samedi','dimanche','exceptionnelle','vacance'];
@@ -118,19 +115,19 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">تاريخ البداية</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['start_date']); ?></label>
                                 <input type="date" name="date_debut" class="form-control" value="<?php echo $perm['date_debut']; ?>">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">تاريخ النهاية</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['end_date']); ?></label>
                                 <input type="date" name="date_fin" class="form-control" value="<?php echo $perm['date_fin']; ?>">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">الموضوع</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['subject']); ?></label>
                                 <textarea name="motif" class="form-control"><?php echo htmlspecialchars($perm['motif']); ?></textarea>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">الحالة</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['status']); ?></label>
                                 <select name="statut" class="form-control" required>
                                     <?php
                                     $statuses = ['acceptee','refusee','en_attente'];
@@ -143,8 +140,8 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                            <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                            <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
                         </div>
                     </form>
                 </div>
@@ -161,15 +158,15 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
         <div class="modal-content">
             <form method="post" action="../actions/add_permission.php">
                 <div class="modal-header">
-                    <h5 class="modal-title">إضافة إذن</h5>
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_permission']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                     <div class="mb-3">
-                        <label class="form-label">المتدرب</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['trainee']); ?></label>
                         <select name="id_stagiaire" class="form-control" required>
-                            <option value="">اختر</option>
+                            <option value=""><?php echo htmlspecialchars($translations['select']); ?></option>
                             <?php foreach ($stagiaires as $stagiaire): ?>
                             <option value="<?php echo $stagiaire['id']; ?>">
                                 <?php echo htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']); ?>
@@ -178,9 +175,9 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">النوع</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['type']); ?></label>
                         <select name="type" class="form-control" required>
-                            <option value="">اختر</option>
+                            <option value=""><?php echo htmlspecialchars($translations['select']); ?></option>
                             <option value="samedi">samedi</option>
                             <option value="dimanche">dimanche</option>
                             <option value="exceptionnelle">exceptionnelle</option>
@@ -188,19 +185,19 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">تاريخ البداية</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['start_date']); ?></label>
                         <input type="date" name="date_debut" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">تاريخ النهاية</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['end_date']); ?></label>
                         <input type="date" name="date_fin" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">الموضوع</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['subject']); ?></label>
                         <textarea name="motif" class="form-control"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">الحالة</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['status']); ?></label>
                         <select name="statut" class="form-control" required>
                             <option value="en_attente">en_attente</option>
                             <option value="acceptee">acceptee</option>
@@ -209,8 +206,8 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">إضافة</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['add']); ?></button>
                 </div>
             </form>
         </div>
@@ -261,5 +258,6 @@ document.addEventListener('DOMContentLoaded', function() {
     dateTo.addEventListener('change', filterTable);
 });
 </script>
+<script src="js/edit_permission_ajax.js"></script>
 
 <?php include '../templates/footer.php'; ?>

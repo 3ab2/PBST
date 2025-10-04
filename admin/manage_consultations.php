@@ -16,17 +16,17 @@ $docteurs = $pdo->query("SELECT id, nom, prenom FROM users WHERE role = 'docteur
 $csrf_token = generate_csrf_token();
 ?>
 <?php include '../templates/header.php'; ?>
-<h2>إدارة الاستشارات</h2>
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addConsultationModal">إضافة استشارة</button>
+<h2><?php echo htmlspecialchars($translations['consultations']); ?></h2>
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addConsultationModal"><?php echo htmlspecialchars($translations['add_consultation'] ?? 'إضافة استشارة'); ?></button>
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
     <div class="col-auto">
-        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+        <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search'] ?? 'ابحث...'); ?>">
     </div>
     <div class="col-auto">
         <select id="filterStagiaire" class="form-select">
-            <option value="">كل المتدربين</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_trainees'] ?? 'كل المتدربين'); ?></option>
             <?php
             foreach ($stagiaires as $stagiaire) {
                 echo "<option value=\"" . htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']) . "\">" . htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']) . "</option>";
@@ -36,7 +36,7 @@ $csrf_token = generate_csrf_token();
     </div>
     <div class="col-auto">
         <select id="filterDocteur" class="form-select">
-            <option value="">كل الأطباء</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_doctors'] ?? 'كل الأطباء'); ?></option>
             <?php
             foreach ($docteurs as $docteur) {
                 echo "<option value=\"" . htmlspecialchars($docteur['nom'] . ' ' . $docteur['prenom']) . "\">" . htmlspecialchars($docteur['nom'] . ' ' . $docteur['prenom']) . "</option>";
@@ -45,25 +45,25 @@ $csrf_token = generate_csrf_token();
         </select>
     </div>
     <div class="col-auto">
-        <input type="date" id="dateFrom" class="form-control" placeholder="من تاريخ">
+        <input type="date" id="dateFrom" class="form-control" placeholder="<?php echo htmlspecialchars($translations['from_date'] ?? 'من تاريخ'); ?>">
     </div>
     <div class="col-auto">
-        <input type="date" id="dateTo" class="form-control" placeholder="إلى تاريخ">
+        <input type="date" id="dateTo" class="form-control" placeholder="<?php echo htmlspecialchars($translations['to_date'] ?? 'إلى تاريخ'); ?>">
     </div>
 </div>
 
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
-            <th>المعرف</th>
-            <th>المتدرب</th>
-            <th>الطبيب</th>
-            <th>تاريخ الاستشارة</th>
-            <th>التشخيص</th>
-            <th>العلاج</th>
-            <th>ملاحظات</th>
-            <th>ملف الاستشارة</th>
-            <th>إجراءات</th>
+            <th><?php echo htmlspecialchars($translations['id'] ?? 'المعرف'); ?></th>
+            <th><?php echo htmlspecialchars($translations['trainee'] ?? 'المتدرب'); ?></th>
+            <th><?php echo htmlspecialchars($translations['doctor'] ?? 'الطبيب'); ?></th>
+            <th><?php echo htmlspecialchars($translations['consultation_date'] ?? 'تاريخ الاستشارة'); ?></th>
+            <th><?php echo htmlspecialchars($translations['diagnosis'] ?? 'التشخيص'); ?></th>
+            <th><?php echo htmlspecialchars($translations['treatment'] ?? 'العلاج'); ?></th>
+            <th><?php echo htmlspecialchars($translations['notes'] ?? 'ملاحظات'); ?></th>
+            <th><?php echo htmlspecialchars($translations['consultation_file'] ?? 'ملف الاستشارة'); ?></th>
+            <th><?php echo htmlspecialchars($translations['actions'] ?? 'إجراءات'); ?></th>
         </tr>
     </thead>
     <tbody id="consultationsTableBody">
@@ -78,15 +78,15 @@ $csrf_token = generate_csrf_token();
             <td><?php echo nl2br(htmlspecialchars($consultation['remarques'])); ?></td>
             <td>
                 <?php if ($consultation['file'] != null): ?>
-                <a href="../files/<?php echo $consultation['file']; ?>" class="btn btn-sm btn-primary">تحميل الملف</a>
+                <a href="../files/<?php echo $consultation['file']; ?>" class="btn btn-sm btn-primary"><?php echo htmlspecialchars($translations['download_file']); ?></a>
                 <?php endif; ?>
             </td>
             <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editConsultationModal<?php echo $consultation['id']; ?>">تعديل</button>
-                <form method="post" action="../actions/delete_consultation.php" style="display:inline-block;" onsubmit="return confirm('هل أنت متأكد من حذف الاستشارة؟');">
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editConsultationModal<?php echo $consultation['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <form method="post" action="../actions/delete_consultation.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_consultation']); ?>');">
                     <input type="hidden" name="id" value="<?php echo $consultation['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                    <button type="submit" class="btn btn-sm btn-danger">حذف</button>
+                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
                 </form>
             </td>
         </tr>
@@ -97,16 +97,16 @@ $csrf_token = generate_csrf_token();
                 <div class="modal-content">
                     <form method="post" action="../actions/edit_consultation.php">
                         <div class="modal-header">
-                            <h5 class="modal-title">تعديل استشارة</h5>
+                            <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_consultation']); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
                             <input type="hidden" name="id" value="<?php echo $consultation['id']; ?>">
                             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                             <div class="mb-3">
-                                <label class="form-label">المتدرب</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['stagiaire']); ?></label>
                                 <select name="id_stagiaire" class="form-control" required>
-                                    <?php foreach ($stagiaires as $stagiaire): 
+                                    <?php foreach ($stagiaires as $stagiaire):
                                         $selected = ($consultation['id_stagiaire'] == $stagiaire['id']) ? 'selected' : '';
                                     ?>
                                     <option value="<?php echo $stagiaire['id']; ?>" <?php echo $selected; ?>>
@@ -116,9 +116,9 @@ $csrf_token = generate_csrf_token();
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">الطبيب</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['docteur']); ?></label>
                                 <select name="id_docteur" class="form-control" required>
-                                    <?php foreach ($docteurs as $docteur): 
+                                    <?php foreach ($docteurs as $docteur):
                                         $selected = ($consultation['id_docteur'] == $docteur['id']) ? 'selected' : '';
                                     ?>
                                     <option value="<?php echo $docteur['id']; ?>" <?php echo $selected; ?>>
@@ -128,25 +128,25 @@ $csrf_token = generate_csrf_token();
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">تاريخ الاستشارة</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['date_consultation']); ?></label>
                                 <input type="date" name="date_consultation" class="form-control" value="<?php echo $consultation['date_consultation']; ?>" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">التشخيص</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['diagnostic']); ?></label>
                                 <textarea name="diagnostic" class="form-control"><?php echo htmlspecialchars($consultation['diagnostic']); ?></textarea>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">العلاج</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['traitement']); ?></label>
                                 <textarea name="traitement" class="form-control"><?php echo htmlspecialchars($consultation['traitement']); ?></textarea>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">ملاحظات</label>
+                                <label class="form-label"><?php echo htmlspecialchars($translations['remarques']); ?></label>
                                 <textarea name="remarques" class="form-control"><?php echo htmlspecialchars($consultation['remarques']); ?></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                            <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                            <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
                         </div>
                     </form>
                 </div>
@@ -163,15 +163,15 @@ $csrf_token = generate_csrf_token();
         <div class="modal-content">
             <form method="post" action="../actions/add_consultation.php" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title">إضافة استشارة</h5>
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_consultation'] ?? 'إضافة استشارة'); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                     <div class="mb-3">
-                        <label class="form-label">المتدرب</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['stagiaire'] ?? 'المتدرب'); ?></label>
                         <select name="id_stagiaire" class="form-control" required>
-                            <option value="">اختر</option>
+                            <option value=""><?php echo htmlspecialchars($translations['select'] ?? 'اختر'); ?></option>
                             <?php foreach ($stagiaires as $stagiaire): ?>
                             <option value="<?php echo $stagiaire['id']; ?>">
                                 <?php echo htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']); ?>
@@ -180,9 +180,9 @@ $csrf_token = generate_csrf_token();
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">الطبيب</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['docteur'] ?? 'الطبيب'); ?></label>
                         <select name="id_docteur" class="form-control" required>
-                            <option value="">اختر</option>
+                            <option value=""><?php echo htmlspecialchars($translations['select'] ?? 'اختر'); ?></option>
                             <?php foreach ($docteurs as $docteur): ?>
                             <option value="<?php echo $docteur['id']; ?>">
                                 <?php echo htmlspecialchars($docteur['nom'] . ' ' . $docteur['prenom']); ?>
@@ -191,29 +191,29 @@ $csrf_token = generate_csrf_token();
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">تاريخ الاستشارة</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['date_consultation'] ?? 'تاريخ الاستشارة'); ?></label>
                         <input type="date" name="date_consultation" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">التشخيص</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['diagnostic'] ?? 'التشخيص'); ?></label>
                         <textarea name="diagnostic" class="form-control"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">العلاج</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['traitement'] ?? 'العلاج'); ?></label>
                         <textarea name="traitement" class="form-control"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">ملاحظات</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['remarques'] ?? 'ملاحظات'); ?></label>
                         <textarea name="remarques" class="form-control"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Upload Consultation File</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['upload_consultation_file'] ?? 'Upload Consultation File'); ?></label>
                         <input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">إضافة</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel'] ?? 'إلغاء'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['add'] ?? 'إضافة'); ?></button>
                 </div>
             </form>
         </div>

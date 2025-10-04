@@ -22,16 +22,16 @@ $csrf_token = generate_csrf_token();
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/army.png">
 <?php include '../templates/header.php'; ?>
-<h2>إدارة الدورات</h2>
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStageModal">إضافة دورة</button>
+<h2><?php echo htmlspecialchars($translations['courses']); ?></h2>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStageModal"><?php echo htmlspecialchars($translations['add_course'] ?? 'إضافة دورة'); ?></button>
 <table class="table table-striped mt-3">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>المسمى</th>
-            <th>تاريخ البداية</th>
-            <th>تاريخ النهاية</th>
-            <th>إجراءات</th>
+            <th><?php echo htmlspecialchars($translations['id'] ?? 'ID'); ?></th>
+            <th><?php echo htmlspecialchars($translations['title'] ?? 'المسمى'); ?></th>
+            <th><?php echo htmlspecialchars($translations['start_date'] ?? 'تاريخ البداية'); ?></th>
+            <th><?php echo htmlspecialchars($translations['end_date'] ?? 'تاريخ النهاية'); ?></th>
+            <th><?php echo htmlspecialchars($translations['actions'] ?? 'إجراءات'); ?></th>
         </tr>
     </thead>
     <tbody>
@@ -42,8 +42,8 @@ $csrf_token = generate_csrf_token();
             <td><?php echo $stage['date_debut']; ?></td>
             <td><?php echo $stage['date_fin']; ?></td>
             <td>
-                <button class="btn btn-sm btn-warning">تعديل</button>
-                <button class="btn btn-sm btn-danger">حذف</button>
+                <button class="btn btn-sm btn-warning"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <button class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -56,28 +56,28 @@ $csrf_token = generate_csrf_token();
         <div class="modal-content">
             <form method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title">إضافة دورة</h5>
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_course']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                     <input type="hidden" name="add_stage" value="1">
                     <div class="mb-3">
-                        <label class="form-label">المسمى</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['title']); ?></label>
                         <input type="text" name="intitule" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">تاريخ البداية</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['start_date']); ?></label>
                         <input type="date" name="date_debut" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">تاريخ النهاية</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['end_date']); ?></label>
                         <input type="date" name="date_fin" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">إضافة</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['add']); ?></button>
                 </div>
             </form>
         </div>

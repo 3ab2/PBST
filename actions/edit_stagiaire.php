@@ -1,6 +1,6 @@
 <?php
 require '../functions.php';
-check_role('secretaire');
+check_role('admin');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $csrf = $_POST['csrf_token'];
@@ -39,7 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $pdo->prepare("UPDATE stagiaires SET matricule = ?, nom = ?, prenom = ?, date_naissance = ?, adresse = ?, telephone = ?, email = ?, date_inscription = ?, groupe_sanguin = ?, grade = ?, photo = ?, id_stage = ?, id_specialite = ? WHERE id = ?");
     $stmt->execute([$matricule, $nom, $prenom, $date_naissance, $adresse, $telephone, $email, $date_inscription, $groupe_sanguin, $grade, $photo, $id_stage, $id_specialite, $id]);
 
-    header('Location: ../secretaire/manage_stagiaires.php');
+    // Check if it's an AJAX request
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        echo json_encode(['success' => true]);
+    } else {
+        header('Location: ../admin/manage_stagiaires.php');
+    }
     exit;
 } else {
     header('Location: ../secretaire/manage_stagiaires.php');
