@@ -156,7 +156,7 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
 <div class="modal fade" id="addPermissionModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" action="../actions/add_permission.php">
+            <form id="addPermissionForm" method="post" action="../actions/add_permission.php">
                 <div class="modal-header">
                     <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_permission']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -259,5 +259,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script src="js/edit_permission_ajax.js"></script>
+<script src="js/add_permission_ajax.js"></script>
 
 <?php include '../templates/footer.php'; ?>

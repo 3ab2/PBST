@@ -118,7 +118,7 @@ return [
     'manage_users' => 'إدارة المستخدمين',
     'manage_stages' => 'إدارة الدورات',
     'manage_specialites' => 'إدارة التخصصات',
-    'manage_consultations' => 'إدارة الاستشارات',
+    'manage_consultations' => 'إدارة الاستشارات الطبية',
     'manage_stagiaires' => 'إدارة المتدربين',
     'manage_notes' => 'إدارة الملاحظات',
     'manage_permissions' => 'إدارة الأذونات',
@@ -144,5 +144,21 @@ return [
     'traitement' => 'العلاج',
     'remarques' => 'ملاحظات',
     'select' => 'اختر',
-
+    // New keys for docteur/dashboard_docteur.php
+    'doctor_dashboard_title' => 'لوحة تحكم الطبيب',
+    'doctor_dashboard_welcome' => 'مرحبا بك في لوحة التحكم الخاصة بالطبيب.',
+    'manage_consultations_link' => 'إدارة الاستشارات الطبية',
+    // New keys for secretaire/dashboard_secretaire.php
+    'secretaire_dashboard_title' => 'لوحة تحكم السكرتير',
+    'secretaire_dashboard_welcome' => 'مرحبا بك في لوحة التحكم الخاصة بالسكرتير.',
+    'manage_stagiaires_link' => 'إدارة المتدربين',
+    // New keys for auth/login.php
+    'login_title' => 'تسجيل الدخول',
+    'login_username_label' => 'اسم المستخدم',
+    'login_password_label' => 'كلمة المرور',
+    'login_username_placeholder' => 'أدخل اسم المستخدم',
+    'login_password_placeholder' => 'أدخل كلمة المرور',
+    'login_button' => 'دخول',
+    'login_csrf_invalid' => 'رمز CSRF غير صالح',
+    'login_invalid_credentials' => 'بيانات الدخول غير صحيحة',
 ];

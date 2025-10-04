@@ -95,7 +95,7 @@ $csrf_token = generate_csrf_token();
         <div class="modal fade" id="editConsultationModal<?php echo $consultation['id']; ?>" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form method="post" action="../actions/edit_consultation.php">
+                    <form class="edit-consultation-form" method="post" action="../actions/edit_consultation.php">
                         <div class="modal-header">
                             <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_consultation']); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -161,7 +161,7 @@ $csrf_token = generate_csrf_token();
 <div class="modal fade" id="addConsultationModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form method="post" action="../actions/add_consultation.php" enctype="multipart/form-data">
+            <form id="addConsultationForm" method="post" action="../actions/add_consultation.php" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_consultation'] ?? 'إضافة استشارة'); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -264,5 +264,8 @@ document.addEventListener('DOMContentLoaded', function() {
     dateTo.addEventListener('change', filterTable);
 });
 </script>
+
+<script src="../admin/js/add_consultation_ajax.js"></script>
+<script src="../admin/js/edit_consultation_ajax.js"></script>
 
 <?php include '../templates/footer.php'; ?>

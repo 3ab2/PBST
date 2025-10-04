@@ -15,8 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['csrf_token'])) {
     $stmt = $pdo->prepare("INSERT INTO remarques (id_stagiaire, remarque, date_remarque, auteur_id) VALUES (?, ?, ?, ?)");
     $stmt->execute([$id_stagiaire, $remarque, $date_remarque, $auteur_id]);
 
-    header('Location: ../admin/manage_notes.php');
-    exit;
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+        echo json_encode(['success' => true]);
+        exit;
+    } else {
+        header('Location: ../admin/manage_notes.php');
+        exit;
+    }
 } else {
     header('Location: ../admin/manage_notes.php');
     exit;

@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $csrf = $_POST['csrf_token'];
 
     if (!validate_csrf_token($csrf)) {
-        $errors[] = 'رمز CSRF غير صالح';
+        $errors[] = $translations['login_csrf_invalid'];
     } else {
         $stmt = $pdo->prepare("SELECT id, password, role FROM users WHERE username = ?");
         $stmt->execute([$username]);
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: ../' . $user['role'] . '/dashboard_' . $user['role'] . '.php');
             exit;
         } else {
-            $errors[] = 'بيانات الدخول غير صحيحة';
+            $errors[] = $translations['login_invalid_credentials'];
         }
     }
 }
@@ -35,6 +35,17 @@ $csrf_token = generate_csrf_token();
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/army.png">
 <?php include '../templates/header.php'; ?>
+<div class="position-absolute top-0 end-0 p-3">
+    <div class="dropdown">
+        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <?php echo htmlspecialchars($translations['language']); ?>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+            <li><a class="dropdown-item" href="?lang=ar"><?php echo htmlspecialchars($translations['arabic']); ?></a></li>
+            <li><a class="dropdown-item" href="?lang=fr"><?php echo htmlspecialchars($translations['french']); ?></a></li>
+        </ul>
+    </div>
+</div>
 <style>
     body, html {
         height: 100%;
@@ -96,7 +107,7 @@ $csrf_token = generate_csrf_token();
     }
         </style>
         <div class="anime-bg"></div>
-        <h2 class="text-center mb-4">تسجيل الدخول</h2>
+        <h2 class="text-center mb-4"><?php echo htmlspecialchars($translations['login_title']); ?></h2>
         <?php if ($errors): ?>
             <div class="alert alert-danger">
                 <?php foreach ($errors as $error): echo "<p>$error</p>"; endforeach; ?>
@@ -104,16 +115,16 @@ $csrf_token = generate_csrf_token();
         <?php endif; ?>
         <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
         <div class="mb-3 form-group">
-            <label for="username" class="form-label">اسم المستخدم</label>
+            <label for="username" class="form-label"><?php echo htmlspecialchars($translations['login_username_label']); ?></label>
             <i class="bi bi-person-fill form-icon"></i>
-            <input type="text" class="form-control" id="username" name="username" required autocomplete="username" placeholder="أدخل اسم المستخدم">
+            <input type="text" class="form-control" id="username" name="username" required autocomplete="username" placeholder="<?php echo htmlspecialchars($translations['login_username_placeholder']); ?>">
         </div>
         <div class="mb-3 form-group">
-            <label for="password" class="form-label">كلمة المرور</label>
+            <label for="password" class="form-label"><?php echo htmlspecialchars($translations['login_password_label']); ?></label>
             <i class="bi bi-lock-fill form-icon"></i>
-            <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password" placeholder="أدخل كلمة المرور">
+            <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password" placeholder="<?php echo htmlspecialchars($translations['login_password_placeholder']); ?>">
         </div>
-        <button type="submit" class="btn btn-primary w-100">دخول</button>
+        <button type="submit" class="btn btn-primary w-100"><?php echo htmlspecialchars($translations['login_button']); ?></button>
     </form>
 </div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">

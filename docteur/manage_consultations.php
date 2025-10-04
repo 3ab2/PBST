@@ -19,17 +19,17 @@ $csrf_token = generate_csrf_token();
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/army.png">
 <?php include '../templates/header.php'; ?>
-<h2>إدارة الاستشارات الطبية</h2>
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addConsultationModal">إضافة استشارة</button>
+<h2><?php echo htmlspecialchars($translations['manage_consultations']); ?></h2>
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addConsultationModal"><?php echo htmlspecialchars($translations['add_consultation']); ?></button>
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
     <div class="col-auto">
-        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+        <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search']); ?>">
     </div>
     <div class="col-auto">
         <select id="filterStagiaire" class="form-select">
-            <option value="">كل المتدربين</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_trainees']); ?></option>
             <?php
             foreach ($stagiaires as $stagiaire) {
                 $fullName = htmlspecialchars($stagiaire['matricule'] . ' - ' . $stagiaire['nom'] . ' ' . $stagiaire['prenom']);
@@ -39,23 +39,23 @@ $csrf_token = generate_csrf_token();
         </select>
     </div>
     <div class="col-auto">
-        <input type="date" id="dateFrom" class="form-control" placeholder="من تاريخ">
+        <input type="date" id="dateFrom" class="form-control" placeholder="<?php echo htmlspecialchars($translations['from_date']); ?>">
     </div>
     <div class="col-auto">
-        <input type="date" id="dateTo" class="form-control" placeholder="إلى تاريخ">
+        <input type="date" id="dateTo" class="form-control" placeholder="<?php echo htmlspecialchars($translations['to_date']); ?>">
     </div>
 </div>
 
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
-            <th>المتدرب</th>
-            <th>تاريخ الاستشارة</th>
-            <th>التشخيص</th>
-            <th>العلاج</th>
-            <th>الملاحظات</th>
-            <th>ملف الاستشارة</th>
-            <th>إجراءات</th>
+            <th><?php echo htmlspecialchars($translations['trainee']); ?></th>
+            <th><?php echo htmlspecialchars($translations['consultation_date']); ?></th>
+            <th><?php echo htmlspecialchars($translations['diagnosis']); ?></th>
+            <th><?php echo htmlspecialchars($translations['treatment']); ?></th>
+            <th><?php echo htmlspecialchars($translations['notes']); ?></th>
+            <th><?php echo htmlspecialchars($translations['consultation_file']); ?></th>
+            <th><?php echo htmlspecialchars($translations['actions']); ?></th>
         </tr>
     </thead>
     <tbody id="consultationsTableBody">
@@ -68,12 +68,16 @@ $csrf_token = generate_csrf_token();
             <td><?php echo htmlspecialchars($cons['remarques']); ?></td>
             <td>
                 <?php if ($cons['file'] != null): ?>
-                <a href="../files/<?php echo $cons['file']; ?>" class="btn btn-sm btn-primary">تحميل الملف</a>
+                <a href="../files/<?php echo $cons['file']; ?>" class="btn btn-sm btn-primary"><?php echo htmlspecialchars($translations['download_file']); ?></a>
                 <?php endif; ?>
             </td>
             <td>
-                <button class="btn btn-sm btn-warning">تعديل</button>
-                <button class="btn btn-sm btn-danger">حذف</button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editConsultationModal<?php echo $cons['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <form method="post" action="../actions/delete_consultation.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_consultation']); ?>');">
+                    <input type="hidden" name="id" value="<?php echo $cons['id']; ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                </form>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -86,49 +90,104 @@ $csrf_token = generate_csrf_token();
         <div class="modal-content">
             <form method="post" action="../actions/add_consultation.php" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title">إضافة استشارة طبية</h5>
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_consultation']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                     <div class="mb-3">
-                        <label class="form-label">المتدرب</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['stagiaire']); ?></label>
                         <select name="id_stagiaire" class="form-control" required>
-                            <option value="">اختر المتدرب</option>
+                            <option value=""><?php echo htmlspecialchars($translations['select'] . ' ' . $translations['stagiaire']); ?></option>
                             <?php foreach ($stagiaires as $stagiaire): ?>
                                 <option value="<?php echo $stagiaire['id']; ?>"><?php echo htmlspecialchars($stagiaire['matricule'] . ' - ' . $stagiaire['nom'] . ' ' . $stagiaire['prenom']); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">تاريخ الاستشارة</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['date_consultation']); ?></label>
                         <input type="date" name="date_consultation" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">التشخيص</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['diagnostic']); ?></label>
                         <textarea name="diagnostic" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">العلاج</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['traitement']); ?></label>
                         <textarea name="traitement" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">الملاحظات</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['remarques']); ?></label>
                         <textarea name="remarques" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Upload Consultation File</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['upload_consultation_file']); ?></label>
                         <input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">إضافة</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['add']); ?></button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Edit Consultation Modals -->
+<?php foreach ($consultations as $cons): ?>
+<div class="modal fade" id="editConsultationModal<?php echo $cons['id']; ?>" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" action="../actions/edit_consultation.php" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_consultation']); ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="<?php echo $cons['id']; ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['stagiaire']); ?></label>
+                        <select name="id_stagiaire" class="form-control" required>
+                            <option value=""><?php echo htmlspecialchars($translations['select'] . ' ' . $translations['stagiaire']); ?></option>
+                            <?php foreach ($stagiaires as $stagiaire): ?>
+                                <option value="<?php echo $stagiaire['id']; ?>" <?php echo ($stagiaire['id'] == $cons['id_stagiaire']) ? 'selected="selected"' : ''; ?>>
+                                    <?php echo htmlspecialchars($stagiaire['matricule'] . ' - ' . $stagiaire['nom'] . ' ' . $stagiaire['prenom']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['date_consultation']); ?></label>
+                        <input type="date" name="date_consultation" class="form-control" value="<?php echo $cons['date_consultation']; ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['diagnostic']); ?></label>
+                        <textarea name="diagnostic" class="form-control" rows="3"><?php echo htmlspecialchars($cons['diagnostic']); ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['traitement']); ?></label>
+                        <textarea name="traitement" class="form-control" rows="3"><?php echo htmlspecialchars($cons['traitement']); ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['remarques']); ?></label>
+                        <textarea name="remarques" class="form-control" rows="3"><?php echo htmlspecialchars($cons['remarques']); ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['upload_consultation_file']); ?></label>
+                        <input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

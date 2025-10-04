@@ -132,7 +132,7 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
 <div class="modal fade" id="addNoteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" action="../actions/add_note.php">
+            <form id="addNoteForm" method="post" action="../actions/add_note.php">
                 <div class="modal-header">
                     <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_note']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -219,5 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script src="js/edit_note_ajax.js"></script>
+<script src="js/add_note_ajax.js"></script>
 
 <?php include '../templates/footer.php'; ?>

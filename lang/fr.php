@@ -119,7 +119,7 @@ return [
     'manage_users' => 'Gérer les utilisateurs',
     'manage_stages' => 'Gérer les stages',
     'manage_specialites' => 'Gérer les spécialités',
-    'manage_consultations' => 'Gérer les consultations',
+    'manage_consultations' => 'Gestion des consultations médicales',
     'manage_stagiaires' => 'Gérer les stagiaires',
     'manage_notes' => 'Gérer les notes',
     'manage_permissions' => 'Gérer les permissions',
@@ -143,4 +143,21 @@ return [
     'traitement' => 'Traitement',
     'remarques' => 'Remarques',
     'select' => 'Choisir',
+    // New keys for docteur/dashboard_docteur.php
+    'doctor_dashboard_title' => 'Tableau de bord du médecin',
+    'doctor_dashboard_welcome' => 'Bienvenue sur le tableau de bord du médecin.',
+    'manage_consultations_link' => 'Gestion des consultations médicales',
+    // New keys for secretaire/dashboard_secretaire.php
+    'secretaire_dashboard_title' => 'Tableau de bord du secrétaire',
+    'secretaire_dashboard_welcome' => 'Bienvenue sur le tableau de bord du secrétaire.',
+    'manage_stagiaires_link' => 'Gérer les stagiaires',
+    // New keys for auth/login.php
+    'login_title' => 'Connexion',
+    'login_username_label' => 'Nom d\'utilisateur',
+    'login_password_label' => 'Mot de passe',
+    'login_username_placeholder' => 'Entrez le nom d\'utilisateur',
+    'login_password_placeholder' => 'Entrez le mot de passe',
+    'login_button' => 'Se connecter',
+    'login_csrf_invalid' => 'Jeton CSRF invalide',
+    'login_invalid_credentials' => 'Identifiants invalides',
 ];

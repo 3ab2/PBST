@@ -17,8 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['csrf_token'])) {
     $stmt = $pdo->prepare("INSERT INTO permissions (id_stagiaire, type, date_debut, date_fin, motif, statut) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->execute([$id_stagiaire, $type, $date_debut, $date_fin, $motif, $statut]);
 
-    header('Location: ../admin/manage_permissions.php');
-    exit;
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+        echo json_encode(['success' => true]);
+        exit;
+    } else {
+        header('Location: ../admin/manage_permissions.php');
+        exit;
+    }
 } else {
     header('Location: ../admin/manage_permissions.php');
     exit;

@@ -34,10 +34,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $pdo->prepare("INSERT INTO consultations (id_stagiaire, id_docteur, date_consultation, diagnostic, traitement, remarques, file) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([$id_stagiaire, $id_docteur, $date_consultation, $diagnostic, $traitement, $remarques, $file_path]);
 
-    if ($_SESSION['role'] == 'admin') {
-        header('Location: ../admin/manage_consultations.php');
+    // Check if it's an AJAX request
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        echo json_encode(['success' => true]);
     } else {
-        header('Location: ../docteur/manage_consultations.php');
+        if ($_SESSION['role'] == 'admin') {
+            header('Location: ../admin/manage_consultations.php');
+        } else {
+            header('Location: ../docteur/manage_consultations.php');
+        }
     }
     exit;
 } else {

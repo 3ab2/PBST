@@ -42,8 +42,12 @@ $csrf_token = generate_csrf_token();
             <td><?php echo $stage['date_debut']; ?></td>
             <td><?php echo $stage['date_fin']; ?></td>
             <td>
-                <button class="btn btn-sm btn-warning"><?php echo htmlspecialchars($translations['edit']); ?></button>
-                <button class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStageModal<?php echo $stage['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <form method="post" action="../actions/delete_stage.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_stage'] ?? 'Are you sure you want to delete this stage?'); ?>');">
+                    <input type="hidden" name="id" value="<?php echo $stage['id']; ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                </form>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -83,4 +87,41 @@ $csrf_token = generate_csrf_token();
         </div>
     </div>
 </div>
+
+<!-- Edit Stage Modals -->
+<?php foreach ($stages as $stage): ?>
+<div class="modal fade" id="editStageModal<?php echo $stage['id']; ?>" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="../actions/edit_stage.php">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_course'] ?? 'Edit Course'); ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="<?php echo $stage['id']; ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['title']); ?></label>
+                        <input type="text" name="intitule" class="form-control" value="<?php echo htmlspecialchars($stage['intitule']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['start_date']); ?></label>
+                        <input type="date" name="date_debut" class="form-control" value="<?php echo $stage['date_debut']; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['end_date']); ?></label>
+                        <input type="date" name="date_fin" class="form-control" value="<?php echo $stage['date_fin']; ?>">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+
 <?php include '../templates/footer.php'; ?>

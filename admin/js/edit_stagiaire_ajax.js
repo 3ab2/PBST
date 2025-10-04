@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Attach submit event listener to all edit forms dynamically
-    document.addEventListener('submit', function(e) {
-        if (e.target.classList.contains('edit-stagiaire-form')) {
+    const editForms = document.querySelectorAll('form[action*="edit_stagiaire.php"]');
+    editForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
-            const form = e.target;
             const formData = new FormData(form);
-
             fetch(form.action, {
                 method: 'POST',
                 headers: {
@@ -16,19 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Close the modal
                     const modal = form.closest('.modal');
                     const modalInstance = bootstrap.Modal.getInstance(modal);
                     modalInstance.hide();
-                    // Reload the page to refresh the table
                     location.reload();
                 } else {
-                    alert('Error: ' + (data.error || 'Unknown error'));
+                    alert('Error editing stagiaire: ' + (data.error || 'Unknown error'));
                 }
             })
             .catch(error => {
-                alert('Error updating stagiaire: ' + error.message);
+                alert('Error editing stagiaire: ' + error.message);
             });
-        }
+        });
     });
 });

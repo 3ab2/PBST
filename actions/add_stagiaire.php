@@ -1,6 +1,8 @@
 <?php
 require '../functions.php';
-check_role('admin');
+if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'secretaire') {
+    die('Access denied');
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $csrf = $_POST['csrf_token'];
@@ -36,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         echo json_encode(['success' => true]);
     } else {
-        header('Location: ../admin/manage_stagiaires.php');
+        $redirect = ($_SESSION['role'] == 'admin') ? '../admin/manage_stagiaires.php' : '../secretaire/manage_stagiaires.php';
+        header('Location: ' . $redirect);
     }
     exit;
 } else {

@@ -47,13 +47,69 @@ $csrf_token = generate_csrf_token();
             <td><?php echo $user['nom'] . ' ' . $user['prenom']; ?></td>
             <td><?php echo $user['email']; ?></td>
             <td>
-                <button class="btn btn-sm btn-warning"><?php echo htmlspecialchars($translations['edit']); ?></button>
-                <button class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal<?php echo $user['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <form method="post" action="../actions/delete_user.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_user'] ?? 'Are you sure you want to delete this user?'); ?>');">
+                    <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                </form>
             </td>
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<!-- Edit User Modals -->
+<?php foreach ($users as $user): ?>
+<div class="modal fade" id="editUserModal<?php echo $user['id']; ?>" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="../actions/edit_user.php">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_user']); ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['username']); ?></label>
+                        <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['password']); ?> (<?php echo htmlspecialchars($translations['leave_blank'] ?? 'leave blank to keep current'); ?>)</label>
+                        <input type="password" name="password" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['role']); ?></label>
+                        <select name="role" class="form-control" required>
+                            <option value="admin" <?php echo $user['role'] == 'admin' ? 'selected' : ''; ?>><?php echo htmlspecialchars($translations['admin']); ?></option>
+                            <option value="secretaire" <?php echo $user['role'] == 'secretaire' ? 'selected' : ''; ?>><?php echo htmlspecialchars($translations['secretaire']); ?></option>
+                            <option value="docteur" <?php echo $user['role'] == 'docteur' ? 'selected' : ''; ?>><?php echo htmlspecialchars($translations['docteur']); ?></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['last_name']); ?></label>
+                        <input type="text" name="nom" class="form-control" value="<?php echo htmlspecialchars($user['nom']); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['first_name']); ?></label>
+                        <input type="text" name="prenom" class="form-control" value="<?php echo htmlspecialchars($user['prenom']); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['email']); ?></label>
+                        <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
 
 <!-- Add User Modal -->
 <div class="modal fade" id="addUserModal" tabindex="-1">

@@ -141,7 +141,7 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
 <div class="modal fade" id="addSanctionModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" action="../actions/add_sanction.php">
+            <form id="addSanctionForm" method="post" action="../actions/add_sanction.php">
                 <div class="modal-header">
                     <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_sanction']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -237,5 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script src="js/edit_sanction_ajax.js"></script>
+<script src="js/add_sanction_ajax.js"></script>
 
 <?php include '../templates/footer.php'; ?>

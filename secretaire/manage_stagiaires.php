@@ -3,7 +3,7 @@ require '../functions.php';
 check_role('secretaire');
 
 // Fetch stagiaires with related stage and specialite names
-$sql = "SELECT s.*, st.intitule AS stage_name, sp.nom_specialite AS specialite_name 
+$sql = "SELECT s.*, st.intitule AS stage_name, sp.nom_specialite AS specialite_name
         FROM stagiaires s
         JOIN stages st ON s.id_stage = st.id
         JOIN specialites sp ON s.id_specialite = sp.id
@@ -18,17 +18,17 @@ $csrf_token = generate_csrf_token();
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/army.png">
 <?php include '../templates/header.php'; ?>
-<h2>إدارة المتدربين</h2>
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStagiaireModal">إضافة متدرب</button>
+<h2><?php echo htmlspecialchars($translations['manage_stagiaires']); ?></h2>
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStagiaireModal"><?php echo htmlspecialchars($translations['add_trainee']); ?></button>
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
     <div class="col-auto">
-        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+        <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search']); ?>">
     </div>
     <div class="col-auto">
         <select id="filterStage" class="form-select">
-            <option value="">كل الدورات</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_stages']); ?></option>
             <?php
             foreach ($stages as $stage) {
                 echo "<option value=\"" . htmlspecialchars($stage['intitule']) . "\">" . htmlspecialchars($stage['intitule']) . "</option>";
@@ -38,7 +38,7 @@ $csrf_token = generate_csrf_token();
     </div>
     <div class="col-auto">
         <select id="filterSpecialite" class="form-select">
-            <option value="">كل التخصصات</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_specialities']); ?></option>
             <?php
             foreach ($specialites as $spec) {
                 echo "<option value=\"" . htmlspecialchars($spec['nom_specialite']) . "\">" . htmlspecialchars($spec['nom_specialite']) . "</option>";
@@ -48,7 +48,7 @@ $csrf_token = generate_csrf_token();
     </div>
     <div class="col-auto">
         <select id="filterGroupeSanguin" class="form-select">
-            <option value="">كل المجموعات الدموية</option>
+            <option value=""><?php echo htmlspecialchars($translations['all_blood_groups']); ?></option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
             <option value="B+">B+</option>
@@ -64,18 +64,18 @@ $csrf_token = generate_csrf_token();
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
-            <th>المعرف</th>
-            <th>المسجل</th>
-            <th>الاسم</th>
-            <th>اللقب</th>
-            <th>تاريخ الميلاد</th>
-            <th>الهاتف</th>
-            <th>البريد الإلكتروني</th>
-            <th>المجموعة الدموية</th>
-            <th>الدورة</th>
-            <th>التخصص</th>
-            <th>الصورة</th>
-            <th>إجراءات</th>
+            <th><?php echo htmlspecialchars($translations['matricule_label']); ?></th>
+            <th><?php echo htmlspecialchars($translations['registered']); ?></th>
+            <th><?php echo htmlspecialchars($translations['last_name']); ?></th>
+            <th><?php echo htmlspecialchars($translations['first_name']); ?></th>
+            <th><?php echo htmlspecialchars($translations['birth_date']); ?></th>
+            <th><?php echo htmlspecialchars($translations['phone']); ?></th>
+            <th><?php echo htmlspecialchars($translations['email']); ?></th>
+            <th><?php echo htmlspecialchars($translations['blood_group']); ?></th>
+            <th><?php echo htmlspecialchars($translations['stage']); ?></th>
+            <th><?php echo htmlspecialchars($translations['speciality']); ?></th>
+            <th><?php echo htmlspecialchars($translations['photo']); ?></th>
+            <th><?php echo htmlspecialchars($translations['actions']); ?></th>
         </tr>
     </thead>
     <tbody id="stagiairesTableBody">
@@ -95,205 +95,205 @@ $csrf_token = generate_csrf_token();
                 <?php if ($stagiaire['photo'] && file_exists("../uploads/stagiaires/" . $stagiaire['photo'])): ?>
                     <img src="../uploads/stagiaires/<?php echo $stagiaire['photo']; ?>" alt="Photo" style="max-width: 50px; max-height: 50px;">
                 <?php else: ?>
-                    لا توجد صورة
+                    <?php echo htmlspecialchars($translations['no_photo']); ?>
                 <?php endif; ?>
             </td>
             <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStagiaireModal<?php echo $stagiaire['id']; ?>">تعديل</button>
-               
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStagiaireModal<?php echo $stagiaire['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+
             </td>
         </tr>
-
-        <!-- Edit Modal -->
-        <div class="modal fade" id="editStagiaireModal<?php echo $stagiaire['id']; ?>" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form method="post" action="../actions/edit_stagiaire.php" enctype="multipart/form-data">
-                        <div class="modal-header">
-                            <h5 class="modal-title">تعديل متدرب</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" name="id" value="<?php echo $stagiaire['id']; ?>">
-                            <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">المسجل</label>
-                                    <input type="date" name="date_inscription" class="form-control" value="<?php echo $stagiaire['date_inscription']; ?>" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">المجموعة الدموية</label>
-                                    <select name="groupe_sanguin" class="form-control" required>
-                                        <?php
-                                        $blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
-                                        foreach ($blood_groups as $bg) {
-                                            $selected = ($stagiaire['groupe_sanguin'] == $bg) ? 'selected' : '';
-                                            echo "<option value=\"$bg\" $selected>$bg</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">المعرف (matricule)</label>
-                                    <input type="text" name="matricule" class="form-control" value="<?php echo htmlspecialchars($stagiaire['matricule']); ?>" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">الاسم</label>
-                                    <input type="text" name="nom" class="form-control" value="<?php echo htmlspecialchars($stagiaire['nom']); ?>" required>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">اللقب</label>
-                                    <input type="text" name="prenom" class="form-control" value="<?php echo htmlspecialchars($stagiaire['prenom']); ?>" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">تاريخ الميلاد</label>
-                                    <input type="date" name="date_naissance" class="form-control" value="<?php echo $stagiaire['date_naissance']; ?>">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">العنوان</label>
-                                <textarea name="adresse" class="form-control"><?php echo htmlspecialchars($stagiaire['adresse']); ?></textarea>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">الهاتف</label>
-                                    <input type="text" name="telephone" class="form-control" value="<?php echo htmlspecialchars($stagiaire['telephone']); ?>">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">البريد الإلكتروني</label>
-                                    <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($stagiaire['email']); ?>">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">الدرجة</label>
-                                    <input type="text" name="grade" class="form-control" value="<?php echo htmlspecialchars($stagiaire['grade']); ?>">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">الدورة</label>
-                                    <select name="id_stage" class="form-control" required>
-                                        <?php
-                                        $stages = $pdo->query("SELECT * FROM stages ORDER BY intitule")->fetchAll();
-                                        foreach ($stages as $stage) {
-                                            $selected = ($stagiaire['id_stage'] == $stage['id']) ? 'selected' : '';
-                                            echo "<option value=\"{$stage['id']}\" $selected>" . htmlspecialchars($stage['intitule']) . "</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">التخصص</label>
-                                <select name="id_specialite" class="form-control" required>
-                                    <?php
-                                    $specialites = $pdo->query("SELECT * FROM specialites ORDER BY nom_specialite")->fetchAll();
-                                    foreach ($specialites as $spec) {
-                                        $selected = ($stagiaire['id_specialite'] == $spec['id']) ? 'selected' : '';
-                                        echo "<option value=\"{$spec['id']}\" $selected>" . htmlspecialchars($spec['nom_specialite']) . "</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">الصورة (اختياري)</label>
-                                <input type="file" name="photo" accept="image/jpeg,image/png,image/gif" class="form-control">
-                                <?php if ($stagiaire['photo'] && file_exists("../uploads/stagiaires/" . $stagiaire['photo'])): ?>
-                                    <img src="../uploads/stagiaires/<?php echo $stagiaire['photo']; ?>" alt="Photo" style="max-width: 100px; max-height: 100px; margin-top: 10px;">
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                            <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<!-- Edit Modals -->
+<?php foreach ($stagiaires as $stagiaire): ?>
+<div class="modal fade" id="editStagiaireModal<?php echo $stagiaire['id']; ?>" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" action="../actions/edit_stagiaire.php" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_trainee']); ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="<?php echo $stagiaire['id']; ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['registered']); ?></label>
+                            <input type="date" name="date_inscription" class="form-control" value="<?php echo $stagiaire['date_inscription']; ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['blood_group']); ?></label>
+                            <select name="groupe_sanguin" class="form-control" required>
+                                <?php
+                                $blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
+                                foreach ($blood_groups as $bg) {
+                                    $selected = ($stagiaire['groupe_sanguin'] == $bg) ? 'selected' : '';
+                                    echo "<option value=\"$bg\" $selected>$bg</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['matricule_label']); ?></label>
+                            <input type="text" name="matricule" class="form-control" value="<?php echo htmlspecialchars($stagiaire['matricule']); ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['last_name']); ?></label>
+                            <input type="text" name="nom" class="form-control" value="<?php echo htmlspecialchars($stagiaire['nom']); ?>" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['first_name']); ?></label>
+                            <input type="text" name="prenom" class="form-control" value="<?php echo htmlspecialchars($stagiaire['prenom']); ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['birth_date']); ?></label>
+                            <input type="date" name="date_naissance" class="form-control" value="<?php echo $stagiaire['date_naissance']; ?>">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['address']); ?></label>
+                        <textarea name="adresse" class="form-control"><?php echo htmlspecialchars($stagiaire['adresse']); ?></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['phone']); ?></label>
+                            <input type="text" name="telephone" class="form-control" value="<?php echo htmlspecialchars($stagiaire['telephone']); ?>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['email']); ?></label>
+                            <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($stagiaire['email']); ?>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['grade']); ?></label>
+                            <input type="text" name="grade" class="form-control" value="<?php echo htmlspecialchars($stagiaire['grade']); ?>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['stage']); ?></label>
+                            <select name="id_stage" class="form-control" required>
+                                <?php
+                                $stages_edit = $pdo->query("SELECT * FROM stages ORDER BY intitule")->fetchAll();
+                                foreach ($stages_edit as $stage) {
+                                    $selected = ($stagiaire['id_stage'] == $stage['id']) ? 'selected' : '';
+                                    echo "<option value=\"{$stage['id']}\" $selected>" . htmlspecialchars($stage['intitule']) . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['speciality']); ?></label>
+                        <select name="id_specialite" class="form-control" required>
+                            <?php
+                            $specialites_edit = $pdo->query("SELECT * FROM specialites ORDER BY nom_specialite")->fetchAll();
+                            foreach ($specialites_edit as $spec) {
+                                $selected = ($stagiaire['id_specialite'] == $spec['id']) ? 'selected' : '';
+                                echo "<option value=\"{$spec['id']}\" $selected>" . htmlspecialchars($spec['nom_specialite']) . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['photo_optional']); ?></label>
+                        <input type="file" name="photo" accept="image/jpeg,image/png,image/gif" class="form-control">
+                        <?php if ($stagiaire['photo'] && file_exists("../uploads/stagiaires/" . $stagiaire['photo'])): ?>
+                            <img src="../uploads/stagiaires/<?php echo $stagiaire['photo']; ?>" alt="Photo" style="max-width: 100px; max-height: 100px; margin-top: 10px;">
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
 
 <!-- Add Stagiaire Modal -->
 <div class="modal fade" id="addStagiaireModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form method="post" action="../actions/add_stagiaire.php" enctype="multipart/form-data">
+            <form id="addStagiaireForm" method="post" action="../actions/add_stagiaire.php" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title">إضافة متدرب</h5>
+                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_trainee']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">المسجل</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['registered']); ?></label>
                             <input type="date" name="date_inscription" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                                    <label class="form-label">المجموعة الدموية</label>
-                                    <select name="groupe_sanguin" class="form-control" required>
-                                        <?php
-                                        $blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
-                                        foreach ($blood_groups as $bg) {
-                                            $selected = ($stagiaire['groupe_sanguin'] == $bg) ? 'selected' : '';
-                                            echo "<option value=\"$bg\" $selected>$bg</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['blood_group']); ?></label>
+                            <select name="groupe_sanguin" class="form-control" required>
+                                <?php
+                                $blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
+                                foreach ($blood_groups as $bg) {
+                                    echo "<option value=\"$bg\">$bg</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">المعرف (matricule)</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['matricule_label']); ?></label>
                             <input type="text" name="matricule" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">الاسم</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['last_name']); ?></label>
                             <input type="text" name="nom" class="form-control" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">اللقب</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['first_name']); ?></label>
                             <input type="text" name="prenom" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">تاريخ الميلاد</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['birth_date']); ?></label>
                             <input type="date" name="date_naissance" class="form-control">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">العنوان</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['address']); ?></label>
                         <textarea name="adresse" class="form-control"></textarea>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">الهاتف</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['phone']); ?></label>
                             <input type="text" name="telephone" class="form-control">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">البريد الإلكتروني</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['email']); ?></label>
                             <input type="email" name="email" class="form-control">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">الدرجة</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['grade']); ?></label>
                             <input type="text" name="grade" class="form-control">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">الدورة</label>
+                            <label class="form-label"><?php echo htmlspecialchars($translations['stage']); ?></label>
                             <select name="id_stage" class="form-control" required>
-                                <option value="">اختر</option>
+                                <option value=""><?php echo htmlspecialchars($translations['choose']); ?></option>
                                 <?php
-                                $stages = $pdo->query("SELECT * FROM stages ORDER BY intitule")->fetchAll();
-                                foreach ($stages as $stage) {
+                                $stages_add = $pdo->query("SELECT * FROM stages ORDER BY intitule")->fetchAll();
+                                foreach ($stages_add as $stage) {
                                     echo "<option value=\"{$stage['id']}\">" . htmlspecialchars($stage['intitule']) . "</option>";
                                 }
                                 ?>
@@ -301,25 +301,25 @@ $csrf_token = generate_csrf_token();
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">التخصص</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['speciality']); ?></label>
                         <select name="id_specialite" class="form-control" required>
-                            <option value="">اختر</option>
+                            <option value=""><?php echo htmlspecialchars($translations['choose']); ?></option>
                             <?php
-                            $specialites = $pdo->query("SELECT * FROM specialites ORDER BY nom_specialite")->fetchAll();
-                            foreach ($specialites as $spec) {
+                            $specialites_add = $pdo->query("SELECT * FROM specialites ORDER BY nom_specialite")->fetchAll();
+                            foreach ($specialites_add as $spec) {
                                 echo "<option value=\"{$spec['id']}\">" . htmlspecialchars($spec['nom_specialite']) . "</option>";
                             }
                             ?>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">الصورة</label>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['photo']); ?></label>
                         <input type="file" name="photo" accept="image/jpeg,image/png,image/gif" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">إضافة</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['add']); ?></button>
                 </div>
             </form>
         </div>
@@ -366,5 +366,8 @@ document.addEventListener('DOMContentLoaded', function() {
     filterGroupeSanguin.addEventListener('change', filterTable);
 });
 </script>
+
+<script src="../admin/js/add_stagiaire_ajax.js"></script>
+<script src="../admin/js/edit_stagiaire_ajax.js"></script>
 
 <?php include '../templates/footer.php'; ?>
