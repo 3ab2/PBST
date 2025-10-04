@@ -17,6 +17,47 @@ $csrf_token = generate_csrf_token();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <h2>إدارة المتدربين</h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStagiaireModal">إضافة متدرب</button>
+
+<!-- Search and Filter -->
+<div class="mb-3 row g-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+    </div>
+    <div class="col-auto">
+        <select id="filterStage" class="form-select">
+            <option value="">كل الدورات</option>
+            <?php
+            $stages = $pdo->query("SELECT * FROM stages ORDER BY intitule")->fetchAll();
+            foreach ($stages as $stage) {
+                echo "<option value=\"" . htmlspecialchars($stage['intitule']) . "\">" . htmlspecialchars($stage['intitule']) . "</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select id="filterSpecialite" class="form-select">
+            <option value="">كل التخصصات</option>
+            <?php
+            $specialites = $pdo->query("SELECT * FROM specialites ORDER BY nom_specialite")->fetchAll();
+            foreach ($specialites as $spec) {
+                echo "<option value=\"" . htmlspecialchars($spec['nom_specialite']) . "\">" . htmlspecialchars($spec['nom_specialite']) . "</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select id="filterBloodGroup" class="form-select">
+            <option value="">كل المجموعات الدموية</option>
+            <?php
+            $blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
+            foreach ($blood_groups as $bg) {
+                echo "<option value=\"$bg\">$bg</option>";
+            }
+            ?>
+        </select>
+    </div>
+</div>
+
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
@@ -34,9 +75,9 @@ $csrf_token = generate_csrf_token();
             <th>إجراءات</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="stagiairesTableBody">
         <?php foreach ($stagiaires as $stagiaire): ?>
-        <tr>
+        <tr data-stage="<?php echo htmlspecialchars($stagiaire['stage_name']); ?>" data-specialite="<?php echo htmlspecialchars($stagiaire['specialite_name']); ?>" data-bloodgroup="<?php echo $stagiaire['groupe_sanguin']; ?>">
             <td><?php echo $stagiaire['matricule']; ?></td>
             <td><?php echo $stagiaire['date_inscription']; ?></td>
             <td><?php echo htmlspecialchars($stagiaire['nom']); ?></td>
@@ -285,4 +326,46 @@ $csrf_token = generate_csrf_token();
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterStage = document.getElementById('filterStage');
+    const filterSpecialite = document.getElementById('filterSpecialite');
+    const filterBloodGroup = document.getElementById('filterBloodGroup');
+    const tbody = document.getElementById('stagiairesTableBody');
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase();
+        const stageValue = filterStage.value;
+        const specialiteValue = filterSpecialite.value;
+        const bloodGroupValue = filterBloodGroup.value;
+
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const stage = row.getAttribute('data-stage');
+            const specialite = row.getAttribute('data-specialite');
+            const bloodgroup = row.getAttribute('data-bloodgroup');
+
+            const matchesSearch = text.includes(searchValue);
+            const matchesStage = !stageValue || stage === stageValue;
+            const matchesSpecialite = !specialiteValue || specialite === specialiteValue;
+            const matchesBloodGroup = !bloodGroupValue || bloodgroup === bloodGroupValue;
+
+            if (matchesSearch && matchesStage && matchesSpecialite && matchesBloodGroup) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    filterStage.addEventListener('change', filterTable);
+    filterSpecialite.addEventListener('change', filterTable);
+    filterBloodGroup.addEventListener('change', filterTable);
+});
+</script>
+
 <?php include '../templates/footer.php'; ?>

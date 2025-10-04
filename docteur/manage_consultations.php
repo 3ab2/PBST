@@ -21,6 +21,31 @@ $csrf_token = generate_csrf_token();
 <?php include '../templates/header.php'; ?>
 <h2>إدارة الاستشارات الطبية</h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addConsultationModal">إضافة استشارة</button>
+
+<!-- Search and Filter -->
+<div class="mb-3 row g-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+    </div>
+    <div class="col-auto">
+        <select id="filterStagiaire" class="form-select">
+            <option value="">كل المتدربين</option>
+            <?php
+            foreach ($stagiaires as $stagiaire) {
+                $fullName = htmlspecialchars($stagiaire['matricule'] . ' - ' . $stagiaire['nom'] . ' ' . $stagiaire['prenom']);
+                echo "<option value=\"$fullName\">$fullName</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-auto">
+        <input type="date" id="dateFrom" class="form-control" placeholder="من تاريخ">
+    </div>
+    <div class="col-auto">
+        <input type="date" id="dateTo" class="form-control" placeholder="إلى تاريخ">
+    </div>
+</div>
+
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
@@ -33,9 +58,9 @@ $csrf_token = generate_csrf_token();
             <th>إجراءات</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="consultationsTableBody">
         <?php foreach ($consultations as $cons): ?>
-        <tr>
+        <tr data-stagiaire="<?php echo htmlspecialchars($cons['matricule'] . ' - ' . $cons['nom'] . ' ' . $cons['prenom']); ?>" data-date="<?php echo $cons['date_consultation']; ?>">
             <td><?php echo htmlspecialchars($cons['matricule'] . ' - ' . $cons['nom'] . ' ' . $cons['prenom']); ?></td>
             <td><?php echo $cons['date_consultation']; ?></td>
             <td><?php echo htmlspecialchars($cons['diagnostic']); ?></td>
@@ -104,4 +129,45 @@ $csrf_token = generate_csrf_token();
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterStagiaire = document.getElementById('filterStagiaire');
+    const dateFrom = document.getElementById('dateFrom');
+    const dateTo = document.getElementById('dateTo');
+    const tbody = document.getElementById('consultationsTableBody');
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase();
+        const stagiaireValue = filterStagiaire.value;
+        const fromValue = dateFrom.value;
+        const toValue = dateTo.value;
+
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const stagiaire = row.getAttribute('data-stagiaire');
+            const date = new Date(row.getAttribute('data-date'));
+
+            const matchesSearch = text.includes(searchValue);
+            const matchesStagiaire = !stagiaireValue || stagiaire === stagiaireValue;
+            const matchesFrom = !fromValue || date >= new Date(fromValue);
+            const matchesTo = !toValue || date <= new Date(toValue);
+
+            if (matchesSearch && matchesStagiaire && matchesFrom && matchesTo) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    filterStagiaire.addEventListener('change', filterTable);
+    dateFrom.addEventListener('change', filterTable);
+    dateTo.addEventListener('change', filterTable);
+});
+</script>
+
 <?php include '../templates/footer.php'; ?>

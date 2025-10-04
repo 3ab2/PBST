@@ -21,6 +21,33 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
 
 <h2>إدارة العقوبات</h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSanctionModal">إضافة عقوبة</button>
+
+<!-- Search and Filter -->
+<div class="mb-3 row g-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+    </div>
+    <div class="col-auto">
+        <input type="text" id="filterType" class="form-control" placeholder="نوع العقوبة">
+    </div>
+    <div class="col-auto">
+        <select id="filterAuteur" class="form-select">
+            <option value="">كل المسؤولين</option>
+            <?php
+            foreach ($users as $user) {
+                echo "<option value=\"" . htmlspecialchars($user['nom'] . ' ' . $user['prenom']) . "\">" . htmlspecialchars($user['nom'] . ' ' . $user['prenom']) . "</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-auto">
+        <input type="date" id="dateFrom" class="form-control" placeholder="من تاريخ">
+    </div>
+    <div class="col-auto">
+        <input type="date" id="dateTo" class="form-control" placeholder="إلى تاريخ">
+    </div>
+</div>
+
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
@@ -32,9 +59,9 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
             <th>إجراءات</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="sanctionsTableBody">
         <?php foreach ($sanctions as $sanction): ?>
-        <tr>
+        <tr data-stagiaire="<?php echo htmlspecialchars($sanction['nom'] . ' ' . $sanction['prenom']); ?>" data-type="<?php echo htmlspecialchars($sanction['type']); ?>" data-auteur="<?php echo htmlspecialchars($sanction['auteur_id'] ? $sanction['auteur_nom'] . ' ' . $sanction['auteur_prenom'] : ''); ?>" data-date="<?php echo $sanction['date_punition']; ?>">
             <td><?php echo htmlspecialchars($sanction['nom'] . ' ' . $sanction['prenom']); ?></td>
             <td><?php echo htmlspecialchars($sanction['type']); ?></td>
             <td><?php echo nl2br(htmlspecialchars($sanction['description'])); ?></td>
@@ -167,5 +194,50 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterType = document.getElementById('filterType');
+    const filterAuteur = document.getElementById('filterAuteur');
+    const dateFrom = document.getElementById('dateFrom');
+    const dateTo = document.getElementById('dateTo');
+    const tbody = document.getElementById('sanctionsTableBody');
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase();
+        const typeValue = filterType.value.toLowerCase();
+        const auteurValue = filterAuteur.value;
+        const fromValue = dateFrom.value;
+        const toValue = dateTo.value;
+
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const type = row.getAttribute('data-type').toLowerCase();
+            const auteur = row.getAttribute('data-auteur');
+            const date = new Date(row.getAttribute('data-date'));
+
+            const matchesSearch = text.includes(searchValue);
+            const matchesType = !typeValue || type.includes(typeValue);
+            const matchesAuteur = !auteurValue || auteur === auteurValue;
+            const matchesFrom = !fromValue || date >= new Date(fromValue);
+            const matchesTo = !toValue || date <= new Date(toValue);
+
+            if (matchesSearch && matchesType && matchesAuteur && matchesFrom && matchesTo) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    filterType.addEventListener('input', filterTable);
+    filterAuteur.addEventListener('change', filterTable);
+    dateFrom.addEventListener('change', filterTable);
+    dateTo.addEventListener('change', filterTable);
+});
+</script>
 
 <?php include '../templates/footer.php'; ?>

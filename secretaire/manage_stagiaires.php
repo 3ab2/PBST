@@ -10,12 +10,57 @@ $sql = "SELECT s.*, st.intitule AS stage_name, sp.nom_specialite AS specialite_n
         ORDER BY s.id DESC";
 $stagiaires = $pdo->query($sql)->fetchAll();
 
+// Fetch stages and specialites for filters
+$stages = $pdo->query("SELECT id, intitule FROM stages ORDER BY intitule")->fetchAll();
+$specialites = $pdo->query("SELECT id, nom_specialite FROM specialites ORDER BY nom_specialite")->fetchAll();
+
 $csrf_token = generate_csrf_token();
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/army.png">
 <?php include '../templates/header.php'; ?>
 <h2>إدارة المتدربين</h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStagiaireModal">إضافة متدرب</button>
+
+<!-- Search and Filter -->
+<div class="mb-3 row g-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+    </div>
+    <div class="col-auto">
+        <select id="filterStage" class="form-select">
+            <option value="">كل الدورات</option>
+            <?php
+            foreach ($stages as $stage) {
+                echo "<option value=\"" . htmlspecialchars($stage['intitule']) . "\">" . htmlspecialchars($stage['intitule']) . "</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select id="filterSpecialite" class="form-select">
+            <option value="">كل التخصصات</option>
+            <?php
+            foreach ($specialites as $spec) {
+                echo "<option value=\"" . htmlspecialchars($spec['nom_specialite']) . "\">" . htmlspecialchars($spec['nom_specialite']) . "</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select id="filterGroupeSanguin" class="form-select">
+            <option value="">كل المجموعات الدموية</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select>
+    </div>
+</div>
+
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
@@ -33,9 +78,9 @@ $csrf_token = generate_csrf_token();
             <th>إجراءات</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="stagiairesTableBody">
         <?php foreach ($stagiaires as $stagiaire): ?>
-        <tr>
+        <tr data-stage="<?php echo htmlspecialchars($stagiaire['stage_name']); ?>" data-specialite="<?php echo htmlspecialchars($stagiaire['specialite_name']); ?>" data-groupe-sanguin="<?php echo $stagiaire['groupe_sanguin']; ?>">
             <td><?php echo $stagiaire['matricule']; ?></td>
             <td><?php echo $stagiaire['date_inscription']; ?></td>
             <td><?php echo htmlspecialchars($stagiaire['nom']); ?></td>
@@ -280,4 +325,46 @@ $csrf_token = generate_csrf_token();
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterStage = document.getElementById('filterStage');
+    const filterSpecialite = document.getElementById('filterSpecialite');
+    const filterGroupeSanguin = document.getElementById('filterGroupeSanguin');
+    const tbody = document.getElementById('stagiairesTableBody');
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase();
+        const stageValue = filterStage.value;
+        const specialiteValue = filterSpecialite.value;
+        const groupeSanguinValue = filterGroupeSanguin.value;
+
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const stage = row.getAttribute('data-stage');
+            const specialite = row.getAttribute('data-specialite');
+            const groupeSanguin = row.getAttribute('data-groupe-sanguin');
+
+            const matchesSearch = text.includes(searchValue);
+            const matchesStage = !stageValue || stage === stageValue;
+            const matchesSpecialite = !specialiteValue || specialite === specialiteValue;
+            const matchesGroupeSanguin = !groupeSanguinValue || groupeSanguin === groupeSanguinValue;
+
+            if (matchesSearch && matchesStage && matchesSpecialite && matchesGroupeSanguin) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    filterStage.addEventListener('change', filterTable);
+    filterSpecialite.addEventListener('change', filterTable);
+    filterGroupeSanguin.addEventListener('change', filterTable);
+});
+</script>
+
 <?php include '../templates/footer.php'; ?>

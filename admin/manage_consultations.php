@@ -18,6 +18,40 @@ $csrf_token = generate_csrf_token();
 <?php include '../templates/header.php'; ?>
 <h2>إدارة الاستشارات</h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addConsultationModal">إضافة استشارة</button>
+
+<!-- Search and Filter -->
+<div class="mb-3 row g-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+    </div>
+    <div class="col-auto">
+        <select id="filterStagiaire" class="form-select">
+            <option value="">كل المتدربين</option>
+            <?php
+            foreach ($stagiaires as $stagiaire) {
+                echo "<option value=\"" . htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']) . "\">" . htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']) . "</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select id="filterDocteur" class="form-select">
+            <option value="">كل الأطباء</option>
+            <?php
+            foreach ($docteurs as $docteur) {
+                echo "<option value=\"" . htmlspecialchars($docteur['nom'] . ' ' . $docteur['prenom']) . "\">" . htmlspecialchars($docteur['nom'] . ' ' . $docteur['prenom']) . "</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-auto">
+        <input type="date" id="dateFrom" class="form-control" placeholder="من تاريخ">
+    </div>
+    <div class="col-auto">
+        <input type="date" id="dateTo" class="form-control" placeholder="إلى تاريخ">
+    </div>
+</div>
+
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
@@ -32,9 +66,9 @@ $csrf_token = generate_csrf_token();
             <th>إجراءات</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="consultationsTableBody">
         <?php foreach ($consultations as $consultation): ?>
-        <tr>
+        <tr data-stagiaire="<?php echo htmlspecialchars($consultation['stagiaire_nom'] . ' ' . $consultation['stagiaire_prenom']); ?>" data-docteur="<?php echo htmlspecialchars($consultation['docteur_nom'] . ' ' . $consultation['docteur_prenom']); ?>" data-date="<?php echo $consultation['date_consultation']; ?>">
             <td><?php echo $consultation['id']; ?></td>
             <td><?php echo htmlspecialchars($consultation['stagiaire_nom'] . ' ' . $consultation['stagiaire_prenom']); ?></td>
             <td><?php echo htmlspecialchars($consultation['docteur_nom'] . ' ' . $consultation['docteur_prenom']); ?></td>
@@ -185,4 +219,50 @@ $csrf_token = generate_csrf_token();
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterStagiaire = document.getElementById('filterStagiaire');
+    const filterDocteur = document.getElementById('filterDocteur');
+    const dateFrom = document.getElementById('dateFrom');
+    const dateTo = document.getElementById('dateTo');
+    const tbody = document.getElementById('consultationsTableBody');
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase();
+        const stagiaireValue = filterStagiaire.value;
+        const docteurValue = filterDocteur.value;
+        const fromValue = dateFrom.value;
+        const toValue = dateTo.value;
+
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const stagiaire = row.getAttribute('data-stagiaire');
+            const docteur = row.getAttribute('data-docteur');
+            const date = new Date(row.getAttribute('data-date'));
+
+            const matchesSearch = text.includes(searchValue);
+            const matchesStagiaire = !stagiaireValue || stagiaire === stagiaireValue;
+            const matchesDocteur = !docteurValue || docteur === docteurValue;
+            const matchesFrom = !fromValue || date >= new Date(fromValue);
+            const matchesTo = !toValue || date <= new Date(toValue);
+
+            if (matchesSearch && matchesStagiaire && matchesDocteur && matchesFrom && matchesTo) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    filterStagiaire.addEventListener('change', filterTable);
+    filterDocteur.addEventListener('change', filterTable);
+    dateFrom.addEventListener('change', filterTable);
+    dateTo.addEventListener('change', filterTable);
+});
+</script>
+
 <?php include '../templates/footer.php'; ?>

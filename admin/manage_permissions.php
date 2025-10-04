@@ -19,6 +19,37 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
 
 <h2>إدارة الأذونات</h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addPermissionModal">إضافة إذن</button>
+
+<!-- Search and Filter -->
+<div class="mb-3 row g-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" id="searchInput" class="form-control" placeholder="ابحث...">
+    </div>
+    <div class="col-auto">
+        <select id="filterType" class="form-select">
+            <option value="">كل الأنواع</option>
+            <option value="samedi">samedi</option>
+            <option value="dimanche">dimanche</option>
+            <option value="exceptionnelle">exceptionnelle</option>
+            <option value="vacance">vacance</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select id="filterStatut" class="form-select">
+            <option value="">كل الحالات</option>
+            <option value="en_attente">en_attente</option>
+            <option value="acceptee">acceptee</option>
+            <option value="refusee">refusee</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <input type="date" id="dateFrom" class="form-control" placeholder="من تاريخ البداية">
+    </div>
+    <div class="col-auto">
+        <input type="date" id="dateTo" class="form-control" placeholder="إلى تاريخ البداية">
+    </div>
+</div>
+
 <table class="table table-striped table-responsive">
     <thead>
         <tr>
@@ -31,9 +62,9 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
             <th>إجراءات</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="permissionsTableBody">
         <?php foreach ($permissions as $perm): ?>
-        <tr>
+        <tr data-stagiaire="<?php echo htmlspecialchars($perm['nom'] . ' ' . $perm['prenom']); ?>" data-type="<?php echo htmlspecialchars($perm['type']); ?>" data-statut="<?php echo htmlspecialchars($perm['statut']); ?>" data-date="<?php echo $perm['date_debut']; ?>">
             <td><?php echo htmlspecialchars($perm['nom'] . ' ' . $perm['prenom']); ?></td>
             <td><?php echo htmlspecialchars($perm['type']); ?></td>
             <td><?php echo $perm['date_debut']; ?></td>
@@ -185,5 +216,50 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterType = document.getElementById('filterType');
+    const filterStatut = document.getElementById('filterStatut');
+    const dateFrom = document.getElementById('dateFrom');
+    const dateTo = document.getElementById('dateTo');
+    const tbody = document.getElementById('permissionsTableBody');
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase();
+        const typeValue = filterType.value;
+        const statutValue = filterStatut.value;
+        const fromValue = dateFrom.value;
+        const toValue = dateTo.value;
+
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const type = row.getAttribute('data-type');
+            const statut = row.getAttribute('data-statut');
+            const date = new Date(row.getAttribute('data-date'));
+
+            const matchesSearch = text.includes(searchValue);
+            const matchesType = !typeValue || type === typeValue;
+            const matchesStatut = !statutValue || statut === statutValue;
+            const matchesFrom = !fromValue || date >= new Date(fromValue);
+            const matchesTo = !toValue || date <= new Date(toValue);
+
+            if (matchesSearch && matchesType && matchesStatut && matchesFrom && matchesTo) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    filterType.addEventListener('change', filterTable);
+    filterStatut.addEventListener('change', filterTable);
+    dateFrom.addEventListener('change', filterTable);
+    dateTo.addEventListener('change', filterTable);
+});
+</script>
 
 <?php include '../templates/footer.php'; ?>
