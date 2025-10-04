@@ -38,8 +38,66 @@ $bootstrap_css = $html_dir === 'rtl' ?
     <link rel="icon" type="image/svg+xml" href="../images/army.png">
     <title><?php echo htmlspecialchars($translations['title']); ?></title>
     <link href="<?php echo $bootstrap_css; ?>" rel="stylesheet">
+    <style>
+        :root {
+            --body-bg: #ffffff;
+            --body-color: #000000;
+        }
+        .dark {
+            --body-bg: #121212;
+            --body-color: #ffffff;
+        }
+        body {
+            background-color: var(--body-bg) !important;
+            color: var(--body-color) !important;
+        }
+        input.form-control, textarea.form-control {
+            background-color: var(--body-bg) !important;
+            color: var(--body-color) !important;
+            border-color: #ced4da;
+        }
+        input.form-control::placeholder, textarea.form-control::placeholder {
+            color: var(--body-color);
+            opacity: 0.7;
+        }
+        input.form-control:focus, textarea.form-control:focus {
+            background-color: var(--body-bg) !important;
+            color: var(--body-color) !important;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        .dark .login-form {
+            background-color: #1e1e1e !important;
+            color: var(--body-color) !important;
+            box-shadow: 0 8px 16px rgba(255,255,255,0.1);
+        }
+        label {
+            color: var(--body-color);
+        }
+        #theme-toggle {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--body-color);
+        }
+        #logout-btn {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--body-color);
+            transition: transform 0.3s ease;
+        }
+        #logout-btn:active {
+            transform: scale(1.2);
+        }
+    </style>
 </head>
 <body>
+    <?php if (!isset($_SESSION['user_id'])): ?>
+    <div id="floating-theme-toggle" style="position: fixed; top: 10px; <?php echo $html_dir === 'rtl' ? 'right: 10px;' : 'left: 10px;'; ?> z-index: 1000;">
+        <button id="theme-toggle" class="btn btn-link" style="border: none; background: none; color: inherit; font-size: 1.2rem;" aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill"></i>
+        </button>
+    </div>
+    <?php endif; ?>
     <?php if (isset($_SESSION['user_id'])): ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
@@ -73,19 +131,27 @@ $bootstrap_css = $html_dir === 'rtl' ?
                     <li class="nav-item"><a class="nav-link" href="../docteur/manage_consultations.php"><?php echo htmlspecialchars($translations['consultations']); ?></a></li>
                 </ul>
                 <?php endif; ?>
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="../auth/logout.php"><?php echo htmlspecialchars($translations['logout']); ?></a></li>
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item">
+                        <button id="theme-toggle" class="btn btn-link nav-link p-0" style="border: none; background: none; color: inherit; font-size: 1.2rem;" aria-label="Toggle dark mode">
+                            <i class="bi bi-sun-fill"></i>
+                        </button>
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <?php echo htmlspecialchars($translations['language']); ?>
+                        <a class="nav-link dropdown-toggle p-0" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Select language">
+                            <i class="bi bi-translate"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
-                            <li><a class="dropdown-item" href="?lang=ar"><?php echo htmlspecialchars($translations['arabic']); ?></a></li>
-                            <li><a class="dropdown-item" href="?lang=fr"><?php echo htmlspecialchars($translations['french']); ?></a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="ar">العربية</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="fr">Français</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <a href="../auth/logout.php" id="logout-btn" class="nav-link p-0" style="border: none; background: none; color: inherit; font-size: 1.2rem; text-decoration: none;" aria-label="Logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </a>
+                    </li>
                 </ul>
-            </div>
         </div>
     </nav>
     <?php endif; ?>

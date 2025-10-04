@@ -83,6 +83,10 @@ const ctx = document.getElementById('consultationsChart').getContext('2d');
 const labels = <?php echo json_encode(array_column($consultations_last_week, 'date_consultation')); ?>;
 const data = <?php echo json_encode(array_column($consultations_last_week, 'count')); ?>;
 
+const isDark = localStorage.getItem('theme') === 'dark';
+const borderColor = isDark ? 'rgb(100, 200, 255)' : 'rgb(54, 162, 235)';
+const backgroundColor = isDark ? 'rgba(100, 200, 255, 0.2)' : 'rgba(54, 162, 235, 0.2)';
+
 const consultationsChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -90,8 +94,8 @@ const consultationsChart = new Chart(ctx, {
         datasets: [{
             label: 'عدد الاستشارات',
             data: data,
-            borderColor: 'rgb(54, 162, 235)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: borderColor,
+            backgroundColor: backgroundColor,
             fill: true,
             tension: 0.3
         }]
