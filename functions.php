@@ -5,9 +5,20 @@ session_start();
 
 // Role check function
 function check_role($required_role) {
-    if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== $required_role) {
+    if (!isset($_SESSION['user_id'])) {
         header('Location: ../auth/login.php');
         exit;
+    }
+    if (is_array($required_role)) {
+        if (!in_array($_SESSION['role'], $required_role)) {
+            header('Location: ../auth/login.php');
+            exit;
+        }
+    } else {
+        if ($_SESSION['role'] !== $required_role) {
+            header('Location: ../auth/login.php');
+            exit;
+        }
     }
 }
 
