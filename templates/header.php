@@ -39,20 +39,43 @@ $bootstrap_css = $html_dir === 'rtl' ?
     <link rel="icon" type="image/svg+xml" href="../images/army.png">
     <title><?php echo htmlspecialchars($translations['title']); ?></title>
     <link href="<?php echo $bootstrap_css; ?>" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --body-bg: #ffffff;
             --body-color: #000000;
+            --military-primary: #2C5F2D;
+            --military-secondary: #3D5A3C;
+            --military-accent: #8B7355;
+            --military-gold: #D4AF37;
+            --military-dark: #1A3A1A;
         }
 
         .dark {
             --body-bg: #121212;
             --body-color: #ffffff;
+            --military-primary: #3D5A3C;
+            --military-secondary: #4A6B4A;
         }
 
         body {
             background-color: var(--body-bg) !important;
             color: var(--body-color) !important;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('../images/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0.5;
+            z-index: -1;
         }
 
         input.form-control,
@@ -60,6 +83,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
             background-color: var(--body-bg) !important;
             color: var(--body-color) !important;
             border-color: #ced4da;
+            transition: all 0.3s ease;
         }
 
         input.form-control::placeholder,
@@ -72,8 +96,8 @@ $bootstrap_css = $html_dir === 'rtl' ?
         textarea.form-control:focus {
             background-color: var(--body-bg) !important;
             color: var(--body-color) !important;
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+            border-color: var(--military-gold);
+            box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, .25);
         }
 
         .dark .login-form {
@@ -86,40 +110,228 @@ $bootstrap_css = $html_dir === 'rtl' ?
             color: var(--body-color);
         }
 
-        #theme-toggle {
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--body-color);
+        /* Navbar Militaire Styling */
+        .navbar {
+            background: linear-gradient(135deg, var(--military-primary) 0%, var(--military-secondary) 100%) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-bottom: 3px solid var(--military-gold);
+            padding: 0.8rem 0;
+            transition: all 0.3s ease;
         }
 
-        #logout-btn {
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--body-color);
+        .navbar-brand {
             transition: transform 0.3s ease;
         }
 
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand img {
+            border-radius: 50%;
+            border: 2px solid var(--military-gold);
+            padding: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+
+        /* Nav Links Animation */
+        .nav-link {
+            position: relative;
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.6rem 0.5rem !important;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--military-gold);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: var(--military-gold) !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link:hover::before {
+            width: 80%;
+        }
+
+        .nav-link:active {
+            transform: translateY(0);
+        }
+
+        /* Dropdown Styling */
+        .dropdown-menu {
+            background: linear-gradient(135deg, var(--military-primary) 0%, var(--military-secondary) 100%);
+            border: 2px solid var(--military-gold);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            color: rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.3s ease;
+            padding: 0.6rem 1.2rem;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--military-gold) !important;
+            padding-left: 1.5rem;
+        }
+
+        /* Icon Buttons */
+        #theme-toggle,
+        #logout-btn,
+        #langDropdown {
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        #theme-toggle:hover,
+        #langDropdown:hover {
+            color: var(--military-gold) !important;
+            transform: rotate(15deg) scale(1.15);
+        }
+
+        #logout-btn:hover {
+            color: #ff4444 !important;
+            transform: scale(1.2) rotate(-5deg);
+        }
+
         #logout-btn:active {
-            transform: scale(1.2);
+            transform: scale(1.3) rotate(-10deg);
+        }
+
+        /* Floating Theme Toggle */
+        #floating-theme-toggle {
+            position: fixed;
+            top: 10px;
+            <?php echo $html_dir === 'rtl' ? 'right: 10px;' : 'left: 10px;'; ?>
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #floating-theme-toggle #theme-toggle {
+            background: linear-gradient(135deg, var(--military-primary) 0%, var(--military-secondary) 100%);
+            border: 2px solid var(--military-gold);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #floating-theme-toggle #theme-toggle:hover {
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Navbar Toggler */
+        .navbar-toggler {
+            border: 2px solid var(--military-gold);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.05);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23D4AF37' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .navbar-nav {
+                padding: 1rem 0;
+            }
+
+            .nav-link {
+                margin: 0.3rem 0;
+            }
+
+            .nav-link::before {
+                left: 0;
+                transform: translateX(0);
+            }
+
+            .nav-link:hover::before {
+                width: 100%;
+            }
+        }
+
+        /* Badge Style for Active Page */
+        .nav-item.active .nav-link {
+            color: var(--military-gold) !important;
+            font-weight: 600;
+        }
+
+        .nav-item.active .nav-link::before {
+            width: 80%;
         }
     </style>
 </head>
 
 <body>
     <?php if (!isset($_SESSION['user_id'])): ?>
-        <div id="floating-theme-toggle"
-            style="position: fixed; top: 10px; <?php echo $html_dir === 'rtl' ? 'right: 10px;' : 'left: 10px;'; ?> z-index: 1000;">
+        <div id="floating-theme-toggle">
             <button id="theme-toggle" class="btn btn-link"
-                style="border: none; background: none; color: inherit; font-size: 1.2rem;" aria-label="Toggle dark mode">
+                aria-label="Toggle dark mode">
                 <i class="bi bi-sun-fill"></i>
             </button>
         </div>
     <?php endif; ?>
     <?php if (isset($_SESSION['user_id'])): ?>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="../images/army.png" alt="Logo" height="30" class="d-inline-block align-top">
+                    <img src="../images/logoApp.webp" alt="Logo" height="35" class="d-inline-block align-top">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -193,7 +405,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
                     <ul class="navbar-nav ms-auto align-items-center gap-3">
                         <li class="nav-item">
                             <button id="theme-toggle" class="btn btn-link nav-link p-0"
-                                style="border: none; background: none; color: inherit; font-size: 1.2rem;"
+                                style="border: none; background: none;"
                                 aria-label="Toggle dark mode">
                                 <i class="bi bi-sun-fill"></i>
                             </button>
@@ -210,7 +422,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
                         </li>
                         <li class="nav-item">
                             <a href="../auth/logout.php" id="logout-btn" class="nav-link p-0"
-                                style="border: none; background: none; color: red; font-size: 1.2rem; text-decoration: none;"
+                                style="border: none; background: none; text-decoration: none;"
                                 aria-label="Logout">
                                 <i class="bi bi-box-arrow-right"></i>
                             </a>
