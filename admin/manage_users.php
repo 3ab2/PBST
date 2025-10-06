@@ -4,20 +4,44 @@ check_role('admin');
 
 $users = $pdo->query("SELECT * FROM users ORDER BY id DESC")->fetchAll();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_user'])) {
-    $username = sanitize_input($_POST['username']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $role = $_POST['role'];
-    $nom = sanitize_input($_POST['nom']);
-    $prenom = sanitize_input($_POST['prenom']);
-    $email = sanitize_input($_POST['email']);
-    $csrf = $_POST['csrf_token'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['add_user'])) {
+        $username = sanitize_input($_POST['username']);
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $role = $_POST['role'];
+        $nom = sanitize_input($_POST['nom']);
+        $prenom = sanitize_input($_POST['prenom']);
+        $email = sanitize_input($_POST['email']);
+        $csrf = $_POST['csrf_token'];
 
-    if (validate_csrf_token($csrf)) {
-        $stmt = $pdo->prepare("INSERT INTO users (username, password, role, nom, prenom, email) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$username, $password, $role, $nom, $prenom, $email]);
-        header('Location: manage_users.php');
-        exit;
+        if (validate_csrf_token($csrf)) {
+            $stmt = $pdo->prepare("INSERT INTO users (username, password, role, nom, prenom, email) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$username, $password, $role, $nom, $prenom, $email]);
+            header('Location: manage_users.php');
+            exit;
+        }
+    } elseif (isset($_POST['edit_user'])) {
+        $id = $_POST['id'];
+        $username = sanitize_input($_POST['username']);
+        $password = $_POST['password'];
+        $role = $_POST['role'];
+        $nom = sanitize_input($_POST['nom']);
+        $prenom = sanitize_input($_POST['prenom']);
+        $email = sanitize_input($_POST['email']);
+        $csrf = $_POST['csrf_token'];
+
+        if (validate_csrf_token($csrf)) {
+            if (!empty($password)) {
+                $password = password_hash($password, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("UPDATE users SET username = ?, password = ?, role = ?, nom = ?, prenom = ?, email = ? WHERE id = ?");
+                $stmt->execute([$username, $password, $role, $nom, $prenom, $email, $id]);
+            } else {
+                $stmt = $pdo->prepare("UPDATE users SET username = ?, role = ?, nom = ?, prenom = ?, email = ? WHERE id = ?");
+                $stmt->execute([$username, $role, $nom, $prenom, $email, $id]);
+            }
+            header('Location: manage_users.php');
+            exit;
+        }
     }
 }
 
@@ -64,7 +88,7 @@ $csrf_token = generate_csrf_token();
 <div class="modal fade" id="editUserModal<?php echo $user['id']; ?>" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" action="../actions/edit_user.php">
+            <form method="post">
                 <div class="modal-header">
                     <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_user']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -72,6 +96,7 @@ $csrf_token = generate_csrf_token();
                 <div class="modal-body">
                     <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <input type="hidden" name="edit_user" value="1">
                     <div class="mb-3">
                         <label class="form-label"><?php echo htmlspecialchars($translations['username']); ?></label>
                         <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($user['username']); ?>" required>

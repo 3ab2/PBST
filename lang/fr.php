@@ -192,4 +192,13 @@ return [
     'no_consultations' => 'Aucune consultation enregistrée.',
     'none' => 'Aucun',
     'view' => 'Voir',
+    // View consultation page
+    'consultation_details' => 'Détails de la consultation',
+    'basic_info' => 'Informations de base',
+    'file' => 'Fichier',
+    'download' => 'Télécharger',
+    'stagiaire_info' => 'Informations du stagiaire',
+    'matricule' => 'Matricule',
+    'date_naissance' => 'Date de naissance',
+    'telephone' => 'Téléphone',
 ];

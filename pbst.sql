@@ -69,7 +69,7 @@ CREATE TABLE consultations (
 CREATE TABLE permissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_stagiaire INT NOT NULL,
-    type ENUM('samedi','dimanche','exceptionnelle','vacance') NOT NULL,
+    type ENUM('samedi & dimanche','exceptionnelle','vacance') NOT NULL,
     date_debut DATE,
     date_fin DATE,
     motif TEXT,

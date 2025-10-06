@@ -36,10 +36,11 @@ $bootstrap_css = $html_dir === 'rtl' ?
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="../images/army.png">
+    <link rel="icon" type="image/svg+xml" href="/pbst_app/images/army.png">
     <title><?php echo htmlspecialchars($translations['title']); ?></title>
     <link href="<?php echo $bootstrap_css; ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --body-bg: #ffffff;
@@ -72,7 +73,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('../images/bg.jpg') no-repeat center center fixed;
+            background: url('/pbst_app/images/bg.jpg') no-repeat center center fixed;
             background-size: cover;
             opacity: 0.5;
             z-index: -1;
@@ -365,7 +366,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="../images/logoApp.webp" alt="Logo" height="35" class="d-inline-block align-top">
+                    <img src="/pbst_app/images/logoApp.webp" alt="Logo" height="35" class="d-inline-block align-top">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -375,64 +376,64 @@ $bootstrap_css = $html_dir === 'rtl' ?
                     <?php if ($_SESSION['role'] == 'admin'): ?>
                         <ul class="navbar-nav">
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/dashboard_admin.php"><?php echo htmlspecialchars($translations['dashboard']); ?></a>
+                                    href="/pbst_app/admin/dashboard_admin.php"><?php echo htmlspecialchars($translations['dashboard']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/manage_users.php"><?php echo htmlspecialchars($translations['users']); ?></a>
+                                    href="/pbst_app/admin/manage_users.php"><?php echo htmlspecialchars($translations['users']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/manage_stagiaires.php"><?php echo htmlspecialchars($translations['trainees']); ?></a>
+                                    href="/pbst_app/admin/manage_stagiaires.php"><?php echo htmlspecialchars($translations['trainees']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/manage_consultations.php"><?php echo htmlspecialchars($translations['consultations']); ?></a>
+                                    href="/pbst_app/admin/manage_consultations.php"><?php echo htmlspecialchars($translations['consultations']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/manage_stages.php"><?php echo htmlspecialchars($translations['stages']); ?></a>
+                                    href="/pbst_app/admin/manage_stages.php"><?php echo htmlspecialchars($translations['stages']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/manage_specialites.php"><?php echo htmlspecialchars($translations['specialities']); ?></a>
+                                    href="/pbst_app/admin/manage_specialites.php"><?php echo htmlspecialchars($translations['specialities']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/manage_notes.php"><?php echo htmlspecialchars($translations['notes']); ?></a>
+                                    href="/pbst_app/admin/manage_notes.php"><?php echo htmlspecialchars($translations['notes']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/manage_permissions.php"><?php echo htmlspecialchars($translations['permissions']); ?></a>
+                                    href="/pbst_app/admin/manage_permissions.php"><?php echo htmlspecialchars($translations['permissions']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../admin/manage_sanctions.php"><?php echo htmlspecialchars($translations['sanctions']); ?></a>
+                                    href="/pbst_app/admin/manage_sanctions.php"><?php echo htmlspecialchars($translations['sanctions']); ?></a>
                             </li>
                         </ul>
                     <?php elseif ($_SESSION['role'] == 'secretaire'): ?>
                         <ul class="navbar-nav">
                             <li class="nav-item"><a class="nav-link"
-                                    href="../secretaire/dashboard_secretaire.php"><?php echo htmlspecialchars($translations['dashboard']); ?></a>
+                                    href="/pbst_app/secretaire/dashboard_secretaire.php"><?php echo htmlspecialchars($translations['dashboard']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../secretaire/manage_stagiaires.php"><?php echo htmlspecialchars($translations['trainees']); ?></a>
+                                    href="/pbst_app/secretaire/manage_stagiaires.php"><?php echo htmlspecialchars($translations['trainees']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../secretaire/manage_stages.php"><?php echo htmlspecialchars($translations['stages']); ?></a>
+                                    href="/pbst_app/secretaire/manage_stages.php"><?php echo htmlspecialchars($translations['stages']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../secretaire/manage_specialites.php"><?php echo htmlspecialchars($translations['specialities']); ?></a>
+                                    href="/pbst_app/secretaire/manage_specialites.php"><?php echo htmlspecialchars($translations['specialities']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../secretaire/manage_notes.php"><?php echo htmlspecialchars($translations['notes']); ?></a>
+                                    href="/pbst_app/secretaire/manage_notes.php"><?php echo htmlspecialchars($translations['notes']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../secretaire/manage_permissions.php"><?php echo htmlspecialchars($translations['permissions']); ?></a>
+                                    href="/pbst_app/secretaire/manage_permissions.php"><?php echo htmlspecialchars($translations['permissions']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../secretaire/manage_sanctions.php"><?php echo htmlspecialchars($translations['sanctions']); ?></a>
+                                    href="/pbst_app/secretaire/manage_sanctions.php"><?php echo htmlspecialchars($translations['sanctions']); ?></a>
                             </li>
                         </ul>
                     <?php elseif ($_SESSION['role'] == 'docteur'): ?>
                         <ul class="navbar-nav">
                             <li class="nav-item"><a class="nav-link"
-                                    href="../docteur/dashboard_docteur.php"><?php echo htmlspecialchars($translations['dashboard']); ?></a>
+                                    href="/pbst_app/docteur/dashboard_docteur.php"><?php echo htmlspecialchars($translations['dashboard']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="../docteur/manage_consultations.php"><?php echo htmlspecialchars($translations['consultations']); ?></a>
+                                    href="/pbst_app/docteur/manage_consultations.php"><?php echo htmlspecialchars($translations['consultations']); ?></a>
                             </li>
                         </ul>
                     <?php endif; ?>
@@ -455,7 +456,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="../auth/logout.php" id="logout-btn" class="nav-link p-0"
+                            <a href="/pbst_app/auth/logout.php" id="logout-btn" class="nav-link p-0"
                                 style="border: none; background: none; text-decoration: none;"
                                 aria-label="Logout">
                                 <i class="bi bi-box-arrow-right"></i>

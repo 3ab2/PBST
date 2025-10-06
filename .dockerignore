@@ -1,0 +1,6 @@
+.git
+.qodo
+*.md
+docker-compose.yml
+Dockerfile
+.dockerignore

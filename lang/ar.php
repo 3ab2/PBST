@@ -193,4 +193,13 @@ return [
     'no_consultations' => 'لا توجد استشارات مسجلة.',
     'none' => 'لا يوجد',
     'view' => 'عرض',
+    // View consultation page
+    'consultation_details' => 'تفاصيل الاستشارة',
+    'basic_info' => 'المعلومات الأساسية',
+    'file' => 'الملف',
+    'download' => 'تحميل',
+    'stagiaire_info' => 'معلومات المتدرب',
+    'matricule' => 'المعرف',
+    'date_naissance' => 'تاريخ الميلاد',
+    'telephone' => 'الهاتف',
 ];

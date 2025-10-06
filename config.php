@@ -1,9 +1,9 @@
 <?php
 // Database configuration
-$host = 'localhost';
-$db = 'pbst_db';
-$user = 'root'; // Adjust as needed
-$pass = ''; // Adjust as needed
+$host = getenv('DB_HOST') ?: 'localhost';
+$db = getenv('DB_NAME') ?: 'pbst_db';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASS') ?: '';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

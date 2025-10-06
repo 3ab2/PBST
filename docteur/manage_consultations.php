@@ -66,6 +66,7 @@ $csrf_token = generate_csrf_token();
                 <?php endif; ?>
             </td>
             <td>
+                <a href="../view_consultation.php?id=<?php echo $cons['id']; ?>" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editConsultationModal<?php echo $cons['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
                 <form method="post" action="../actions/delete_consultation.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_consultation']); ?>');">
                     <input type="hidden" name="id" value="<?php echo $cons['id']; ?>">
