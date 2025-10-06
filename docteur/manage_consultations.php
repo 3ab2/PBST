@@ -68,7 +68,7 @@ $csrf_token = generate_csrf_token();
             <td><?php echo htmlspecialchars($cons['remarques']); ?></td>
             <td>
                 <?php if ($cons['file'] != null): ?>
-                <a href="../files/<?php echo $cons['file']; ?>" class="btn btn-sm btn-primary"><?php echo htmlspecialchars($translations['download_file']); ?></a>
+                <a href="../<?php echo $cons['file']; ?>" class="btn btn-sm btn-primary"><?php echo htmlspecialchars($translations['download_file']); ?></a>
                 <?php endif; ?>
             </td>
             <td>

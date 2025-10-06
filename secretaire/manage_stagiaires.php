@@ -19,12 +19,14 @@ $csrf_token = generate_csrf_token();
 <link rel="icon" type="image/svg+xml" href="../images/army.png">
 <?php include '../templates/header.php'; ?>
 <h2><?php echo htmlspecialchars($translations['manage_stagiaires']); ?></h2>
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStagiaireModal"><?php echo htmlspecialchars($translations['add_trainee']); ?></button>
+<button class="btn btn-primary mb-3" data-bs-toggle="modal"
+    data-bs-target="#addStagiaireModal"><?php echo htmlspecialchars($translations['add_trainee']); ?></button>
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
     <div class="col-auto">
-        <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search']); ?>">
+        <input type="text" id="searchInput" class="form-control"
+            placeholder="<?php echo htmlspecialchars($translations['search']); ?>">
     </div>
     <div class="col-auto">
         <select id="filterStage" class="form-select">
@@ -61,170 +63,189 @@ $csrf_token = generate_csrf_token();
     </div>
 </div>
 
-<table class="table table-striped table-responsive">
+<table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>
         <tr>
-            <th><?php echo htmlspecialchars($translations['matricule_label']); ?></th>
-            <th><?php echo htmlspecialchars($translations['registered']); ?></th>
+
             <th><?php echo htmlspecialchars($translations['last_name']); ?></th>
             <th><?php echo htmlspecialchars($translations['first_name']); ?></th>
-            <th><?php echo htmlspecialchars($translations['birth_date']); ?></th>
-            <th><?php echo htmlspecialchars($translations['phone']); ?></th>
-            <th><?php echo htmlspecialchars($translations['email']); ?></th>
+            <th><?php echo htmlspecialchars($translations['matricule_label']); ?></th>
             <th><?php echo htmlspecialchars($translations['blood_group']); ?></th>
             <th><?php echo htmlspecialchars($translations['stage']); ?></th>
             <th><?php echo htmlspecialchars($translations['speciality']); ?></th>
-            <th><?php echo htmlspecialchars($translations['photo']); ?></th>
             <th><?php echo htmlspecialchars($translations['actions']); ?></th>
         </tr>
     </thead>
     <tbody id="stagiairesTableBody">
         <?php foreach ($stagiaires as $stagiaire): ?>
-        <tr data-stage="<?php echo htmlspecialchars($stagiaire['stage_name']); ?>" data-specialite="<?php echo htmlspecialchars($stagiaire['specialite_name']); ?>" data-groupe-sanguin="<?php echo $stagiaire['groupe_sanguin']; ?>">
-            <td><?php echo $stagiaire['matricule']; ?></td>
-            <td><?php echo $stagiaire['date_inscription']; ?></td>
-            <td><?php echo htmlspecialchars($stagiaire['nom']); ?></td>
-            <td><?php echo htmlspecialchars($stagiaire['prenom']); ?></td>
-            <td><?php echo $stagiaire['date_naissance']; ?></td>
-            <td><?php echo htmlspecialchars($stagiaire['telephone']); ?></td>
-            <td><?php echo htmlspecialchars($stagiaire['email']); ?></td>
-            <td><?php echo $stagiaire['groupe_sanguin']; ?></td>
-            <td><?php echo htmlspecialchars($stagiaire['stage_name']); ?></td>
-            <td><?php echo htmlspecialchars($stagiaire['specialite_name']); ?></td>
-            <td>
-                <?php if ($stagiaire['photo'] && file_exists("../uploads/stagiaires/" . $stagiaire['photo'])): ?>
-                    <img src="../uploads/stagiaires/<?php echo $stagiaire['photo']; ?>" alt="Photo" style="max-width: 50px; max-height: 50px;">
-                <?php else: ?>
-                    <?php echo htmlspecialchars($translations['no_photo']); ?>
-                <?php endif; ?>
-            </td>
-            <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStagiaireModal<?php echo $stagiaire['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+            <tr data-stage="<?php echo htmlspecialchars($stagiaire['stage_name']); ?>"
+                data-specialite="<?php echo htmlspecialchars($stagiaire['specialite_name']); ?>"
+                data-groupe-sanguin="<?php echo $stagiaire['groupe_sanguin']; ?>">
 
-            </td>
-        </tr>
+                <td><?php echo htmlspecialchars($stagiaire['nom']); ?></td>
+                <td><?php echo htmlspecialchars($stagiaire['prenom']); ?></td>
+                <td><?php echo $stagiaire['matricule']; ?></td>
+                <td><?php echo $stagiaire['groupe_sanguin']; ?></td>
+                <td><?php echo htmlspecialchars($stagiaire['stage_name']); ?></td>
+                <td><?php echo htmlspecialchars($stagiaire['specialite_name']); ?></td>
+
+                <td class="text-center">
+                    <a href="../admin/profile_stagiaire.php?id=<?php echo $stagiaire['id']; ?>"
+                        class="btn btn-sm btn-info me-1"><?php echo htmlspecialchars($translations['view'] ?? 'View'); ?></a>
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                        data-bs-target="#editStagiaireModal<?php echo $stagiaire['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                    <form method="post" action="../actions/delete_stagiaire.php" style="display:inline-block;"
+                        onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_trainee']); ?>');">
+                        <input type="hidden" name="id" value="<?php echo $stagiaire['id']; ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                        <button type="submit"
+                            class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                    </form>
+
+                </td>
+            </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
 
 <!-- Edit Modals -->
 <?php foreach ($stagiaires as $stagiaire): ?>
-<div class="modal fade" id="editStagiaireModal<?php echo $stagiaire['id']; ?>" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form method="post" action="../actions/edit_stagiaire.php" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_trainee']); ?></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="id" value="<?php echo $stagiaire['id']; ?>">
-                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['registered']); ?></label>
-                            <input type="date" name="date_inscription" class="form-control" value="<?php echo $stagiaire['date_inscription']; ?>" required>
+    <div class="modal fade" id="editStagiaireModal<?php echo $stagiaire['id']; ?>" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form method="post" action="../actions/edit_stagiaire.php" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?php echo htmlspecialchars($translations['edit_trainee']); ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="<?php echo $stagiaire['id']; ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    class="form-label"><?php echo htmlspecialchars($translations['registered']); ?></label>
+                                <input type="date" name="date_inscription" class="form-control"
+                                    value="<?php echo $stagiaire['date_inscription']; ?>" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    class="form-label"><?php echo htmlspecialchars($translations['blood_group']); ?></label>
+                                <select name="groupe_sanguin" class="form-control" required>
+                                    <?php
+                                    $blood_groups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+                                    foreach ($blood_groups as $bg) {
+                                        $selected = ($stagiaire['groupe_sanguin'] == $bg) ? 'selected' : '';
+                                        echo "<option value=\"$bg\" $selected>$bg</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['blood_group']); ?></label>
-                            <select name="groupe_sanguin" class="form-control" required>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    class="form-label"><?php echo htmlspecialchars($translations['matricule_label']); ?></label>
+                                <input type="text" name="matricule" class="form-control"
+                                    value="<?php echo htmlspecialchars($stagiaire['matricule']); ?>" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    class="form-label"><?php echo htmlspecialchars($translations['last_name']); ?></label>
+                                <input type="text" name="nom" class="form-control"
+                                    value="<?php echo htmlspecialchars($stagiaire['nom']); ?>" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    class="form-label"><?php echo htmlspecialchars($translations['first_name']); ?></label>
+                                <input type="text" name="prenom" class="form-control"
+                                    value="<?php echo htmlspecialchars($stagiaire['prenom']); ?>" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    class="form-label"><?php echo htmlspecialchars($translations['birth_date']); ?></label>
+                                <input type="date" name="date_naissance" class="form-control"
+                                    value="<?php echo $stagiaire['date_naissance']; ?>">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['address']); ?></label>
+                            <textarea name="adresse"
+                                class="form-control"><?php echo htmlspecialchars($stagiaire['adresse']); ?></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><?php echo htmlspecialchars($translations['phone']); ?></label>
+                                <input type="text" name="telephone" class="form-control"
+                                    value="<?php echo htmlspecialchars($stagiaire['telephone']); ?>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><?php echo htmlspecialchars($translations['email']); ?></label>
+                                <input type="email" name="email" class="form-control"
+                                    value="<?php echo htmlspecialchars($stagiaire['email']); ?>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><?php echo htmlspecialchars($translations['grade']); ?></label>
+                                <input type="text" name="grade" class="form-control"
+                                    value="<?php echo htmlspecialchars($stagiaire['grade']); ?>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><?php echo htmlspecialchars($translations['stage']); ?></label>
+                                <select name="id_stage" class="form-control" required>
+                                    <?php
+                                    $stages_edit = $pdo->query("SELECT * FROM stages ORDER BY intitule")->fetchAll();
+                                    foreach ($stages_edit as $stage) {
+                                        $selected = ($stagiaire['id_stage'] == $stage['id']) ? 'selected' : '';
+                                        echo "<option value=\"{$stage['id']}\" $selected>" . htmlspecialchars($stage['intitule']) . "</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['speciality']); ?></label>
+                            <select name="id_specialite" class="form-control" required>
                                 <?php
-                                $blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
-                                foreach ($blood_groups as $bg) {
-                                    $selected = ($stagiaire['groupe_sanguin'] == $bg) ? 'selected' : '';
-                                    echo "<option value=\"$bg\" $selected>$bg</option>";
+                                $specialites_edit = $pdo->query("SELECT * FROM specialites ORDER BY nom_specialite")->fetchAll();
+                                foreach ($specialites_edit as $spec) {
+                                    $selected = ($stagiaire['id_specialite'] == $spec['id']) ? 'selected' : '';
+                                    echo "<option value=\"{$spec['id']}\" $selected>" . htmlspecialchars($spec['nom_specialite']) . "</option>";
                                 }
                                 ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['matricule_label']); ?></label>
-                            <input type="text" name="matricule" class="form-control" value="<?php echo htmlspecialchars($stagiaire['matricule']); ?>" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['last_name']); ?></label>
-                            <input type="text" name="nom" class="form-control" value="<?php echo htmlspecialchars($stagiaire['nom']); ?>" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['first_name']); ?></label>
-                            <input type="text" name="prenom" class="form-control" value="<?php echo htmlspecialchars($stagiaire['prenom']); ?>" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['birth_date']); ?></label>
-                            <input type="date" name="date_naissance" class="form-control" value="<?php echo $stagiaire['date_naissance']; ?>">
+                        <div class="mb-3">
+                            <label
+                                class="form-label"><?php echo htmlspecialchars($translations['photo_optional']); ?></label>
+                            <input type="file" name="photo" accept="image/jpeg,image/png,image/gif" class="form-control">
+                            <?php if ($stagiaire['photo'] && file_exists("../uploads/stagiaires/" . $stagiaire['photo'])): ?>
+                                <img src="../uploads/stagiaires/<?php echo $stagiaire['photo']; ?>" alt="Photo"
+                                    style="max-width: 100px; max-height: 100px; margin-top: 10px;">
+                            <?php endif; ?>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label"><?php echo htmlspecialchars($translations['address']); ?></label>
-                        <textarea name="adresse" class="form-control"><?php echo htmlspecialchars($stagiaire['adresse']); ?></textarea>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                        <button type="submit"
+                            class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['phone']); ?></label>
-                            <input type="text" name="telephone" class="form-control" value="<?php echo htmlspecialchars($stagiaire['telephone']); ?>">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['email']); ?></label>
-                            <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($stagiaire['email']); ?>">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['grade']); ?></label>
-                            <input type="text" name="grade" class="form-control" value="<?php echo htmlspecialchars($stagiaire['grade']); ?>">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['stage']); ?></label>
-                            <select name="id_stage" class="form-control" required>
-                                <?php
-                                $stages_edit = $pdo->query("SELECT * FROM stages ORDER BY intitule")->fetchAll();
-                                foreach ($stages_edit as $stage) {
-                                    $selected = ($stagiaire['id_stage'] == $stage['id']) ? 'selected' : '';
-                                    echo "<option value=\"{$stage['id']}\" $selected>" . htmlspecialchars($stage['intitule']) . "</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label"><?php echo htmlspecialchars($translations['speciality']); ?></label>
-                        <select name="id_specialite" class="form-control" required>
-                            <?php
-                            $specialites_edit = $pdo->query("SELECT * FROM specialites ORDER BY nom_specialite")->fetchAll();
-                            foreach ($specialites_edit as $spec) {
-                                $selected = ($stagiaire['id_specialite'] == $spec['id']) ? 'selected' : '';
-                                echo "<option value=\"{$spec['id']}\" $selected>" . htmlspecialchars($spec['nom_specialite']) . "</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label"><?php echo htmlspecialchars($translations['photo_optional']); ?></label>
-                        <input type="file" name="photo" accept="image/jpeg,image/png,image/gif" class="form-control">
-                        <?php if ($stagiaire['photo'] && file_exists("../uploads/stagiaires/" . $stagiaire['photo'])): ?>
-                            <img src="../uploads/stagiaires/<?php echo $stagiaire['photo']; ?>" alt="Photo" style="max-width: 100px; max-height: 100px; margin-top: 10px;">
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
-                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['save_changes']); ?></button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 <?php endforeach; ?>
 
 <!-- Add Stagiaire Modal -->
 <div class="modal fade" id="addStagiaireModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="addStagiaireForm" method="post" action="../actions/add_stagiaire.php" enctype="multipart/form-data">
+            <form id="addStagiaireForm" method="post" action="../actions/add_stagiaire.php"
+                enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title"><?php echo htmlspecialchars($translations['add_trainee']); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -233,14 +254,17 @@ $csrf_token = generate_csrf_token();
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['registered']); ?></label>
-                            <input type="date" name="date_inscription" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
+                            <label
+                                class="form-label"><?php echo htmlspecialchars($translations['registered']); ?></label>
+                            <input type="date" name="date_inscription" class="form-control"
+                                value="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['blood_group']); ?></label>
+                            <label
+                                class="form-label"><?php echo htmlspecialchars($translations['blood_group']); ?></label>
                             <select name="groupe_sanguin" class="form-control" required>
                                 <?php
-                                $blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
+                                $blood_groups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
                                 foreach ($blood_groups as $bg) {
                                     echo "<option value=\"$bg\">$bg</option>";
                                 }
@@ -250,21 +274,25 @@ $csrf_token = generate_csrf_token();
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['matricule_label']); ?></label>
+                            <label
+                                class="form-label"><?php echo htmlspecialchars($translations['matricule_label']); ?></label>
                             <input type="text" name="matricule" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['last_name']); ?></label>
+                            <label
+                                class="form-label"><?php echo htmlspecialchars($translations['last_name']); ?></label>
                             <input type="text" name="nom" class="form-control" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['first_name']); ?></label>
+                            <label
+                                class="form-label"><?php echo htmlspecialchars($translations['first_name']); ?></label>
                             <input type="text" name="prenom" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label"><?php echo htmlspecialchars($translations['birth_date']); ?></label>
+                            <label
+                                class="form-label"><?php echo htmlspecialchars($translations['birth_date']); ?></label>
                             <input type="date" name="date_naissance" class="form-control">
                         </div>
                     </div>
@@ -318,8 +346,10 @@ $csrf_token = generate_csrf_token();
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
-                    <button type="submit" class="btn btn-primary"><?php echo htmlspecialchars($translations['add']); ?></button>
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal"><?php echo htmlspecialchars($translations['cancel']); ?></button>
+                    <button type="submit"
+                        class="btn btn-primary"><?php echo htmlspecialchars($translations['add']); ?></button>
                 </div>
             </form>
         </div>
@@ -327,44 +357,44 @@ $csrf_token = generate_csrf_token();
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const filterStage = document.getElementById('filterStage');
-    const filterSpecialite = document.getElementById('filterSpecialite');
-    const filterGroupeSanguin = document.getElementById('filterGroupeSanguin');
-    const tbody = document.getElementById('stagiairesTableBody');
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const filterStage = document.getElementById('filterStage');
+        const filterSpecialite = document.getElementById('filterSpecialite');
+        const filterGroupeSanguin = document.getElementById('filterGroupeSanguin');
+        const tbody = document.getElementById('stagiairesTableBody');
 
-    function filterTable() {
-        const searchValue = searchInput.value.toLowerCase();
-        const stageValue = filterStage.value;
-        const specialiteValue = filterSpecialite.value;
-        const groupeSanguinValue = filterGroupeSanguin.value;
+        function filterTable() {
+            const searchValue = searchInput.value.toLowerCase();
+            const stageValue = filterStage.value;
+            const specialiteValue = filterSpecialite.value;
+            const groupeSanguinValue = filterGroupeSanguin.value;
 
-        const rows = tbody.querySelectorAll('tr');
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            const stage = row.getAttribute('data-stage');
-            const specialite = row.getAttribute('data-specialite');
-            const groupeSanguin = row.getAttribute('data-groupe-sanguin');
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const stage = row.getAttribute('data-stage');
+                const specialite = row.getAttribute('data-specialite');
+                const groupeSanguin = row.getAttribute('data-groupe-sanguin');
 
-            const matchesSearch = text.includes(searchValue);
-            const matchesStage = !stageValue || stage === stageValue;
-            const matchesSpecialite = !specialiteValue || specialite === specialiteValue;
-            const matchesGroupeSanguin = !groupeSanguinValue || groupeSanguin === groupeSanguinValue;
+                const matchesSearch = text.includes(searchValue);
+                const matchesStage = !stageValue || stage === stageValue;
+                const matchesSpecialite = !specialiteValue || specialite === specialiteValue;
+                const matchesGroupeSanguin = !groupeSanguinValue || groupeSanguin === groupeSanguinValue;
 
-            if (matchesSearch && matchesStage && matchesSpecialite && matchesGroupeSanguin) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
+                if (matchesSearch && matchesStage && matchesSpecialite && matchesGroupeSanguin) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
 
-    searchInput.addEventListener('input', filterTable);
-    filterStage.addEventListener('change', filterTable);
-    filterSpecialite.addEventListener('change', filterTable);
-    filterGroupeSanguin.addEventListener('change', filterTable);
-});
+        searchInput.addEventListener('input', filterTable);
+        filterStage.addEventListener('change', filterTable);
+        filterSpecialite.addEventListener('change', filterTable);
+        filterGroupeSanguin.addEventListener('change', filterTable);
+    });
 </script>
 
 <script src="../admin/js/add_stagiaire_ajax.js"></script>

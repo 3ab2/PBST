@@ -56,44 +56,29 @@ $csrf_token = generate_csrf_token();
     </div>
 </div>
 
-<table class="table table-striped table-responsive">
+<table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>
         <tr>
-            <th><?php echo htmlspecialchars($translations['id'] ?? 'المعرف'); ?></th>
-            <th><?php echo htmlspecialchars($translations['registered'] ?? 'المسجل'); ?></th>
             <th><?php echo htmlspecialchars($translations['last_name'] ?? 'الاسم'); ?></th>
             <th><?php echo htmlspecialchars($translations['first_name'] ?? 'اللقب'); ?></th>
-            <th><?php echo htmlspecialchars($translations['birth_date'] ?? 'تاريخ الميلاد'); ?></th>
-            <th><?php echo htmlspecialchars($translations['phone'] ?? 'الهاتف'); ?></th>
-            <th><?php echo htmlspecialchars($translations['email'] ?? 'البريد الإلكتروني'); ?></th>
+            <th><?php echo htmlspecialchars($translations['id'] ?? 'المعرف'); ?></th>
             <th><?php echo htmlspecialchars($translations['blood_group'] ?? 'المجموعة الدموية'); ?></th>
             <th><?php echo htmlspecialchars($translations['stage'] ?? 'الدورة'); ?></th>
             <th><?php echo htmlspecialchars($translations['speciality'] ?? 'التخصص'); ?></th>
-            <th><?php echo htmlspecialchars($translations['photo'] ?? 'الصورة'); ?></th>
             <th><?php echo htmlspecialchars($translations['actions'] ?? 'إجراءات'); ?></th>
         </tr>
     </thead>
     <tbody id="stagiairesTableBody">
         <?php foreach ($stagiaires as $stagiaire): ?>
         <tr data-stage="<?php echo htmlspecialchars($stagiaire['stage_name']); ?>" data-specialite="<?php echo htmlspecialchars($stagiaire['specialite_name']); ?>" data-bloodgroup="<?php echo $stagiaire['groupe_sanguin']; ?>" id="stagiaireRow<?php echo $stagiaire['id']; ?>">
-            <td><?php echo $stagiaire['matricule']; ?></td>
-            <td><?php echo $stagiaire['date_inscription']; ?></td>
             <td><?php echo htmlspecialchars($stagiaire['nom']); ?></td>
             <td><?php echo htmlspecialchars($stagiaire['prenom']); ?></td>
-            <td><?php echo $stagiaire['date_naissance']; ?></td>
-            <td><?php echo htmlspecialchars($stagiaire['telephone']); ?></td>
-            <td><?php echo htmlspecialchars($stagiaire['email']); ?></td>
+            <td><?php echo $stagiaire['matricule']; ?></td>
             <td><?php echo $stagiaire['groupe_sanguin']; ?></td>
             <td><?php echo htmlspecialchars($stagiaire['stage_name']); ?></td>
             <td><?php echo htmlspecialchars($stagiaire['specialite_name']); ?></td>
-            <td>
-                <?php if ($stagiaire['photo'] && file_exists("../uploads/stagiaires/" . $stagiaire['photo'])): ?>
-                    <img src="../uploads/stagiaires/<?php echo $stagiaire['photo']; ?>" alt="Photo" style="max-width: 50px; max-height: 50px;">
-                <?php else: ?>
-                    <?php echo htmlspecialchars($translations['no_photo']); ?>
-                <?php endif; ?>
-            </td>
-            <td>
+            <td class="text-center">
+                <a href="profile_stagiaire.php?id=<?php echo $stagiaire['id']; ?>" class="btn btn-sm btn-info me-1"><?php echo htmlspecialchars($translations['view'] ?? 'View'); ?></a>
                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStagiaireModal<?php echo $stagiaire['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
                 <form method="post" action="../actions/delete_stagiaire.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_trainee']); ?>');">
                     <input type="hidden" name="id" value="<?php echo $stagiaire['id']; ?>">

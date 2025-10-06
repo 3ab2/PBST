@@ -131,9 +131,9 @@ $csrf_token = generate_csrf_token();
     <form method="post" class="login-form" novalidate>
         <style>
             .anime-bg {
-                height: 100px;
-                width: 100px;
-                background-image: url('../images/management.png');
+                height: 120px;
+                width: 120px;
+                background-image: url('../images/logoApp.webp');
                 background-repeat: no-repeat;
                 background-size: cover;
                 border-radius: 50%;
