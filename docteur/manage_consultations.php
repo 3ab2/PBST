@@ -46,14 +46,11 @@ $csrf_token = generate_csrf_token();
     </div>
 </div>
 
-<table class="table table-striped table-responsive">
+<table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>
         <tr>
             <th><?php echo htmlspecialchars($translations['trainee']); ?></th>
             <th><?php echo htmlspecialchars($translations['consultation_date']); ?></th>
-            <th><?php echo htmlspecialchars($translations['diagnosis']); ?></th>
-            <th><?php echo htmlspecialchars($translations['treatment']); ?></th>
-            <th><?php echo htmlspecialchars($translations['notes']); ?></th>
             <th><?php echo htmlspecialchars($translations['consultation_file']); ?></th>
             <th><?php echo htmlspecialchars($translations['actions']); ?></th>
         </tr>
@@ -63,9 +60,6 @@ $csrf_token = generate_csrf_token();
         <tr data-stagiaire="<?php echo htmlspecialchars($cons['matricule'] . ' - ' . $cons['nom'] . ' ' . $cons['prenom']); ?>" data-date="<?php echo $cons['date_consultation']; ?>">
             <td><?php echo htmlspecialchars($cons['matricule'] . ' - ' . $cons['nom'] . ' ' . $cons['prenom']); ?></td>
             <td><?php echo $cons['date_consultation']; ?></td>
-            <td><?php echo htmlspecialchars($cons['diagnostic']); ?></td>
-            <td><?php echo htmlspecialchars($cons['traitement']); ?></td>
-            <td><?php echo htmlspecialchars($cons['remarques']); ?></td>
             <td>
                 <?php if ($cons['file'] != null): ?>
                 <a href="../<?php echo $cons['file']; ?>" class="btn btn-sm btn-primary"><?php echo htmlspecialchars($translations['download_file']); ?></a>

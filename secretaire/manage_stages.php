@@ -24,7 +24,7 @@ $csrf_token = generate_csrf_token();
 <?php include '../templates/header.php'; ?>
 <h2><?php echo htmlspecialchars($translations['courses']); ?></h2>
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStageModal"><?php echo htmlspecialchars($translations['add_course'] ?? 'إضافة دورة'); ?></button>
-<table class="table table-striped mt-3">
+<table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>
         <tr>
             <th><?php echo htmlspecialchars($translations['id'] ?? 'ID'); ?></th>

@@ -47,7 +47,7 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
     </div>
 </div>
 
-<table class="table table-striped table-responsive">
+<table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>
         <tr>
             <th><?php echo htmlspecialchars($translations['trainee']); ?></th>

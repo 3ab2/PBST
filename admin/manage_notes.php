@@ -42,7 +42,7 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
     </div>
 </div>
 
-<table class="table table-striped table-responsive">
+<table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>
         <tr>
             <th><?php echo htmlspecialchars($translations['trainee']); ?></th>

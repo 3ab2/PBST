@@ -315,6 +315,40 @@ $bootstrap_css = $html_dir === 'rtl' ?
         .nav-item.active .nav-link::before {
             width: 80%;
         }
+
+        /* Table styling for military theme and centering */
+        table {
+            background-color: rgba(76, 91, 65, 0.10); /* lighter transparency for light mode */
+            border-radius: 10px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .dark table {
+            background-color: rgba(76, 91, 65, 0.25); /* slightly darker for dark mode */
+        }
+
+        table th {
+            background-color: rgba(76, 91, 65, 0.25);
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .dark table th {
+            background-color: rgba(76, 91, 65, 0.35);
+            color: #fff;
+        }
+
+        table td, table th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        table tbody tr:hover {
+            background-color: rgba(76, 91, 65, 0.25);
+            transition: background-color 0.3s ease;
+        }
     </style>
 </head>
 

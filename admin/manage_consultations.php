@@ -52,16 +52,12 @@ $csrf_token = generate_csrf_token();
     </div>
 </div>
 
-<table class="table table-striped table-responsive">
+<table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>
         <tr>
             <th><?php echo htmlspecialchars($translations['id'] ?? 'المعرف'); ?></th>
             <th><?php echo htmlspecialchars($translations['trainee'] ?? 'المتدرب'); ?></th>
-            <th><?php echo htmlspecialchars($translations['doctor'] ?? 'الطبيب'); ?></th>
             <th><?php echo htmlspecialchars($translations['consultation_date'] ?? 'تاريخ الاستشارة'); ?></th>
-            <th><?php echo htmlspecialchars($translations['diagnosis'] ?? 'التشخيص'); ?></th>
-            <th><?php echo htmlspecialchars($translations['treatment'] ?? 'العلاج'); ?></th>
-            <th><?php echo htmlspecialchars($translations['notes'] ?? 'ملاحظات'); ?></th>
             <th><?php echo htmlspecialchars($translations['consultation_file'] ?? 'ملف الاستشارة'); ?></th>
             <th><?php echo htmlspecialchars($translations['actions'] ?? 'إجراءات'); ?></th>
         </tr>
@@ -71,14 +67,10 @@ $csrf_token = generate_csrf_token();
         <tr data-stagiaire="<?php echo htmlspecialchars($consultation['stagiaire_nom'] . ' ' . $consultation['stagiaire_prenom']); ?>" data-docteur="<?php echo htmlspecialchars($consultation['docteur_nom'] . ' ' . $consultation['docteur_prenom']); ?>" data-date="<?php echo $consultation['date_consultation']; ?>">
             <td><?php echo $consultation['id']; ?></td>
             <td><?php echo htmlspecialchars($consultation['stagiaire_nom'] . ' ' . $consultation['stagiaire_prenom']); ?></td>
-            <td><?php echo htmlspecialchars($consultation['docteur_nom'] . ' ' . $consultation['docteur_prenom']); ?></td>
             <td><?php echo $consultation['date_consultation']; ?></td>
-            <td><?php echo nl2br(htmlspecialchars($consultation['diagnostic'])); ?></td>
-            <td><?php echo nl2br(htmlspecialchars($consultation['traitement'])); ?></td>
-            <td><?php echo nl2br(htmlspecialchars($consultation['remarques'])); ?></td>
             <td>
                 <?php if ($consultation['file'] != null): ?>
-                <a href="../files/<?php echo $consultation['file']; ?>" class="btn btn-sm btn-primary"><?php echo htmlspecialchars($translations['download_file']); ?></a>
+                <a href="../<?php echo $consultation['file']; ?>" class="btn btn-sm btn-primary"><?php echo htmlspecialchars($translations['download_file']); ?></a>
                 <?php endif; ?>
             </td>
             <td>

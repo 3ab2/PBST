@@ -136,7 +136,6 @@ $csrf_token = generate_csrf_token();
                 background-image: url('../images/logoApp.webp');
                 background-repeat: no-repeat;
                 background-size: cover;
-                border-radius: 50%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
