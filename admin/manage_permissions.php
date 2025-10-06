@@ -19,19 +19,18 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
-    <div class="col-auto">
+    <div class="col">
         <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search']); ?>">
     </div>
-    <div class="col-auto">
+    <div class="col">
         <select id="filterType" class="form-select">
             <option value=""><?php echo htmlspecialchars($translations['all_types']); ?></option>
-            <option value="samedi">samedi</option>
-            <option value="dimanche">dimanche</option>
+            <option value="samedi & dimanche">samedi & dimanche</option>
             <option value="exceptionnelle">exceptionnelle</option>
             <option value="vacance">vacance</option>
         </select>
     </div>
-    <div class="col-auto">
+    <div class="col">
         <select id="filterStatut" class="form-select">
             <option value=""><?php echo htmlspecialchars($translations['all_statuses']); ?></option>
             <option value="en_attente">en_attente</option>
@@ -39,10 +38,10 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
             <option value="refusee">refusee</option>
         </select>
     </div>
-    <div class="col-auto">
+    <div class="col">
         <input type="date" id="dateFrom" class="form-control" placeholder="<?php echo htmlspecialchars($translations['from_start_date']); ?>">
     </div>
-    <div class="col-auto">
+    <div class="col">
         <input type="date" id="dateTo" class="form-control" placeholder="<?php echo htmlspecialchars($translations['to_start_date']); ?>">
     </div>
 </div>
@@ -106,7 +105,7 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
                                 <label class="form-label"><?php echo htmlspecialchars($translations['type']); ?></label>
                                 <select name="type" class="form-control" required>
                                     <?php
-                                    $types = ['samedi','dimanche','exceptionnelle','vacance'];
+                                    $types = ['samedi & dimanche','exceptionnelle','vacance'];
                                     foreach ($types as $type) {
                                         $selected = ($perm['type'] == $type) ? 'selected' : '';
                                         echo "<option value=\"$type\" $selected>$type</option>";
@@ -178,8 +177,7 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
                         <label class="form-label"><?php echo htmlspecialchars($translations['type']); ?></label>
                         <select name="type" class="form-control" required>
                             <option value=""><?php echo htmlspecialchars($translations['select']); ?></option>
-                            <option value="samedi">samedi</option>
-                            <option value="dimanche">dimanche</option>
+                            <option value="samedi & dimanche">samedi & dimanche</option>
                             <option value="exceptionnelle">exceptionnelle</option>
                             <option value="vacance">vacance</option>
                         </select>

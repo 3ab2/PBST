@@ -21,10 +21,10 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
-    <div class="col-auto">
+    <div class="col">
         <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search']); ?>">
     </div>
-    <div class="col-auto">
+    <div class="col">
         <select id="filterAuteur" class="form-select">
             <option value=""><?php echo htmlspecialchars($translations['all_authors']); ?></option>
             <?php
@@ -34,10 +34,10 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
             ?>
         </select>
     </div>
-    <div class="col-auto">
+    <div class="col">
         <input type="date" id="dateFrom" class="form-control" placeholder="<?php echo htmlspecialchars($translations['from_date']); ?>">
     </div>
-    <div class="col-auto">
+    <div class="col">
         <input type="date" id="dateTo" class="form-control" placeholder="<?php echo htmlspecialchars($translations['to_date']); ?>">
     </div>
 </div>
@@ -142,7 +142,9 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
                     <div class="mb-3">
                         <label class="form-label"><?php echo htmlspecialchars($translations['trainee']); ?></label>
                         <select name="id_stagiaire" class="form-control" required>
-                            <option value=""><?php echo htmlspecialchars($translations['select']); ?></option>
+                            <option value="" style="display:none;">
+                                <?php echo htmlspecialchars($translations['search']); ?>
+                            </option>
                             <?php foreach ($stagiaires as $stagiaire): ?>
                             <option value="<?php echo $stagiaire['id']; ?>">
                                 <?php echo htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']); ?>

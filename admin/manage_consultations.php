@@ -21,10 +21,10 @@ $csrf_token = generate_csrf_token();
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
-    <div class="col-auto">
+    <div class="col">
         <input type="text" id="searchInput" class="form-control" placeholder="<?php echo htmlspecialchars($translations['search'] ?? 'ابحث...'); ?>">
     </div>
-    <div class="col-auto">
+    <div class="col">
         <select id="filterStagiaire" class="form-select">
             <option value=""><?php echo htmlspecialchars($translations['all_trainees'] ?? 'كل المتدربين'); ?></option>
             <?php
@@ -34,7 +34,7 @@ $csrf_token = generate_csrf_token();
             ?>
         </select>
     </div>
-    <div class="col-auto">
+    <div class="col">
         <select id="filterDocteur" class="form-select">
             <option value=""><?php echo htmlspecialchars($translations['all_doctors'] ?? 'كل الأطباء'); ?></option>
             <?php
@@ -44,10 +44,10 @@ $csrf_token = generate_csrf_token();
             ?>
         </select>
     </div>
-    <div class="col-auto">
+    <div class="col">
         <input type="date" id="dateFrom" class="form-control" placeholder="<?php echo htmlspecialchars($translations['from_date'] ?? 'من تاريخ'); ?>">
     </div>
-    <div class="col-auto">
+    <div class="col">
         <input type="date" id="dateTo" class="form-control" placeholder="<?php echo htmlspecialchars($translations['to_date'] ?? 'إلى تاريخ'); ?>">
     </div>
 </div>

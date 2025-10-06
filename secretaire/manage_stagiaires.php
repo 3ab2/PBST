@@ -24,11 +24,11 @@ $csrf_token = generate_csrf_token();
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">
-    <div class="col-auto">
+    <div class="col">
         <input type="text" id="searchInput" class="form-control"
             placeholder="<?php echo htmlspecialchars($translations['search']); ?>">
     </div>
-    <div class="col-auto">
+    <div class="col">
         <select id="filterStage" class="form-select">
             <option value=""><?php echo htmlspecialchars($translations['all_stages']); ?></option>
             <?php
@@ -38,7 +38,7 @@ $csrf_token = generate_csrf_token();
             ?>
         </select>
     </div>
-    <div class="col-auto">
+    <div class="col">
         <select id="filterSpecialite" class="form-select">
             <option value=""><?php echo htmlspecialchars($translations['all_specialities']); ?></option>
             <?php
@@ -48,7 +48,7 @@ $csrf_token = generate_csrf_token();
             ?>
         </select>
     </div>
-    <div class="col-auto">
+    <div class="col">
         <select id="filterGroupeSanguin" class="form-select">
             <option value=""><?php echo htmlspecialchars($translations['all_blood_groups']); ?></option>
             <option value="A+">A+</option>
@@ -188,11 +188,22 @@ $csrf_token = generate_csrf_token();
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label"><?php echo htmlspecialchars($translations['grade']); ?></label>
-                                <input type="text" name="grade" class="form-control"
-                                    value="<?php echo htmlspecialchars($stagiaire['grade']); ?>">
-                            </div>
+                             <div class="col-md-6 mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($translations['grade']); ?></label>
+                            <select name="grade" class="form-control">
+                                <option value=""><?php echo htmlspecialchars($translations['choose']); ?></option>
+                                <option value="Lieutenant">Lieutenant</option>
+                                <option value="Sous-Lieutenant">Sous-Lieutenant</option>
+                                <option value="Adjudant Chef">Adjudant Chef</option>
+                                <option value="Adjudant">Adjudant</option>
+                                <option value="Sergent Chef">Sergent Chef</option>
+                                <option value="Sergent">Sergent</option>
+                                <option value="Caporal Chef">Caporal Chef</option>
+                                <option value="Caporal">Caporal</option>
+                                <option value="2 eme Classe">2 eme Classe</option>
+                                <option value="1er Classe">1er Classe</option>
+                            </select>
+                        </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label"><?php echo htmlspecialchars($translations['stage']); ?></label>
                                 <select name="id_stage" class="form-control" required>
@@ -311,9 +322,21 @@ $csrf_token = generate_csrf_token();
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                         <div class="col-md-6 mb-3">
                             <label class="form-label"><?php echo htmlspecialchars($translations['grade']); ?></label>
-                            <input type="text" name="grade" class="form-control">
+                            <select name="grade" class="form-control">
+                                <option value=""><?php echo htmlspecialchars($translations['choose']); ?></option>
+                                <option value="Lieutenant">Lieutenant</option>
+                                <option value="Sous-Lieutenant">Sous-Lieutenant</option>
+                                <option value="Adjudant Chef">Adjudant Chef</option>
+                                <option value="Adjudant">Adjudant</option>
+                                <option value="Sergent Chef">Sergent Chef</option>
+                                <option value="Sergent">Sergent</option>
+                                <option value="Caporal Chef">Caporal Chef</option>
+                                <option value="Caporal">Caporal</option>
+                                <option value="2 eme Classe">2eme Classe</option>
+                                <option value="1er Classe">1er Classe</option>
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label"><?php echo htmlspecialchars($translations['stage']); ?></label>

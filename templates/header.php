@@ -350,6 +350,58 @@ $bootstrap_css = $html_dir === 'rtl' ?
             background-color: rgba(76, 91, 65, 0.25);
             transition: background-color 0.3s ease;
         }
+
+        /* Military-themed search and filter inputs */
+        .form-control, .form-select {
+            background-color: #E8F5E8 !important; /* light military green */
+            color: #1A3A1A !important; /* darker green text */
+            border: 1px solid #4A6B4A !important; /* subtle darker green border */
+            border-radius: 0.375rem !important; /* rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; /* subtle shadow */
+            font-family: 'Poppins', sans-serif !important;
+            padding: 0.375rem 0.75rem !important; /* consistent padding */
+            transition: all 0.3s ease !important;
+        }
+
+        .form-control:hover, .form-select:hover {
+            background-color: #D4E7D4 !important; /* deeper olive on hover */
+        }
+
+        .form-control::placeholder {
+            color: #6B8E6B !important; /* soft gray-green placeholder */
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--military-gold) !important;
+            box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25), 0 0 4px rgba(0, 100, 0, 0.3) !important; /* light border glow */
+        }
+
+        /* Dark mode adjustments for inputs */
+        .dark .form-control, .dark .form-select {
+            background-color: rgba(76, 91, 65, 0.25) !important;
+            color: #ffffff !important;
+            border-color: #4A6B4A !important;
+        }
+
+        .dark .form-control::placeholder {
+            color: #B0C4B0 !important;
+        }
+
+        .dark .form-control:hover, .dark .form-select:hover {
+            background-color: rgba(76, 91, 65, 0.35) !important;
+        }
+
+        /* Optional subtle overlay for search/filter section */
+        .mb-3.row.g-3.align-items-center {
+            background: rgba(76, 91, 65, 0.05) !important; /* subtle transparent overlay */
+            padding: 1rem !important;
+            border-radius: 0.5rem !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        .dark .mb-3.row.g-3.align-items-center {
+            background: rgba(76, 91, 65, 0.1) !important;
+        }
     </style>
 </head>
 

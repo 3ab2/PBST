@@ -1,5 +1,12 @@
 
 
+
+<footer class=" text-center text-muted py-3 mt-5">
+    <div class="container">
+        <p><?php echo htmlspecialchars($translations['footer_copyright']); ?></p>
+    </div>
+</footer>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <script>
 document.addEventListener('DOMContentLoaded', function() {
