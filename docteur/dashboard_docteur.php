@@ -2,7 +2,7 @@
 require '../functions.php';
 check_role('docteur');
 ?>
-<link rel="icon" type="image/svg+xml" href="../images/army.png">
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <?php include '../templates/header.php'; ?>
 <h2><?php echo htmlspecialchars($translations['doctor_dashboard_title'] ?? 'لوحة تحكم الطبيب'); ?></h2>

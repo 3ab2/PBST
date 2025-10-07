@@ -28,6 +28,7 @@ if (!$consultation) {
 // Determine back URL
 $back_url = ($_SESSION['role'] === 'admin') ? 'admin/manage_consultations.php' : 'docteur/manage_consultations.php';
 ?>
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include 'templates/header.php'; ?>
 <div class="mt-3 mb-4">
     <a href="<?php echo $back_url; ?>" class="btn btn-secondary"><?php echo htmlspecialchars($translations['back'] ?? 'Back'); ?></a>

@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $csrf_token = generate_csrf_token();
 ?>
-<link rel="icon" type="image/svg+xml" href="../images/army.png">
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
 <h2><?php echo htmlspecialchars($translations['manage_users']); ?></h2>
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal"><?php echo htmlspecialchars($translations['add_user']); ?></button>

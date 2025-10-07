@@ -31,7 +31,7 @@ $stmt->execute();
 $consultations_last_week = $stmt->fetchAll();
 
 ?>
-<link rel="icon" type="image/svg+xml" href="../images/army.png">
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 
 <div class="container mt-4">
     <h2>لوحة المتابعة</h2>

@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_stage'])) {
 
 $csrf_token = generate_csrf_token();
 ?>
-<link rel="icon" type="image/svg+xml" href="../images/army.png">
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
 <h2><?php echo htmlspecialchars($translations['courses']); ?></h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStageModal"><?php echo htmlspecialchars($translations['add_course'] ?? 'إضافة دورة'); ?></button>

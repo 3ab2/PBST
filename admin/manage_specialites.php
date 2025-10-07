@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_specialite'])) {
 
 $csrf_token = generate_csrf_token();
 ?>
-<link rel="icon" type="image/svg+xml" href="../images/army.png">
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
 <h2><?php echo htmlspecialchars($translations['specialities']); ?></h2>
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSpecialiteModal"><?php echo htmlspecialchars($translations['add_specialty']); ?></button>

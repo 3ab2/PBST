@@ -16,7 +16,7 @@ $specialites = $pdo->query("SELECT id, nom_specialite FROM specialites ORDER BY 
 
 $csrf_token = generate_csrf_token();
 ?>
-<link rel="icon" type="image/svg+xml" href="../images/army.png">
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
 <h2><?php echo htmlspecialchars($translations['manage_stagiaires']); ?></h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal"

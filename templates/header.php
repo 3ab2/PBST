@@ -36,7 +36,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="/pbst_app/images/army.png">
+    <link rel="icon" type="image/svg+xml" href="/pbst_app/images/bst.png">
     <title><?php echo htmlspecialchars($translations['title']); ?></title>
     <link href="<?php echo $bootstrap_css; ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -418,7 +418,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="/pbst_app/images/logoApp.webp" alt="Logo" height="35" class="d-inline-block align-top">
+                    <img src="/pbst_app/images/bst.png" alt="Logo" height="35" class="d-inline-block align-top">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

@@ -1,6 +1,6 @@
 <?php
 session_start();
 session_destroy();
-header('Location: login.php');
+header('Location: /pbst_app/auth/login.php');
 exit;
 ?>

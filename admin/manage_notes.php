@@ -16,6 +16,7 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
 $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll();
 ?>
 <?php include '../templates/header.php'; ?>
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <h2><?php echo htmlspecialchars($translations['notes']); ?></h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addNoteModal"><?php echo htmlspecialchars($translations['add_note']); ?></button>
 

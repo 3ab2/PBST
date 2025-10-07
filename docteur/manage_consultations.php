@@ -17,7 +17,7 @@ $stagiaires = $pdo->query("SELECT id, matricule, nom, prenom FROM stagiaires ORD
 
 $csrf_token = generate_csrf_token();
 ?>
-<link rel="icon" type="image/svg+xml" href="../images/army.png">
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
 <h2><?php echo htmlspecialchars($translations['manage_consultations']); ?></h2>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addConsultationModal"><?php echo htmlspecialchars($translations['add_consultation']); ?></button>

@@ -67,6 +67,7 @@ if (!empty($consultations)) {
 }
 
 ?>
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
 
 <div class="container mt-4">

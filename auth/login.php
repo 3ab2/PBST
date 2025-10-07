@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $csrf_token = generate_csrf_token();
 ?>
-<link rel="icon" type="image/svg+xml" href="../images/army.png">
+<link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
 <div class="position-absolute top-0 end-0 p-3">
     <div class="dropdown">
@@ -133,13 +133,15 @@ $csrf_token = generate_csrf_token();
             .anime-bg {
                 height: 120px;
                 width: 120px;
-                background-image: url('../images/logoApp.webp');
+                background-image: url('../images/bst.png');
+                
                 background-repeat: no-repeat;
                 background-size: cover;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 margin: 0 auto 1rem auto;
+                border-radius: 30px;
             }
         </style>
         <div class="anime-bg"></div>
