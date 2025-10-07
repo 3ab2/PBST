@@ -39,11 +39,11 @@ $csrf_token = generate_csrf_token();
             <td><?php echo $spec['nom_specialite']; ?></td>
             <td><?php echo $spec['description']; ?></td>
             <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editSpecialiteModal<?php echo $spec['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editSpecialiteModal<?php echo $spec['id']; ?>"><i class="fas fa-edit"></i></button>
                 <form method="post" action="../actions/delete_specialite.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_specialite'] ?? 'Are you sure you want to delete this specialite?'); ?>');">
                     <input type="hidden" name="id" value="<?php echo $spec['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                 </form>
             </td>
         </tr>

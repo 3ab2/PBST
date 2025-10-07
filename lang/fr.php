@@ -99,12 +99,14 @@ return [
     // Specialties
     'add_specialty' => 'Ajouter une spécialité',
     'specialty_name' => 'Nom de la spécialité',
+    'nom_specialite' => 'Nom de la spécialité',
     // Stages
     'add_course' => 'Ajouter un stage',
     'title' => 'Titre',
     'courses' => 'Stages',
     // Users
     'add_user' => 'Ajouter un utilisateur',
+    'edit_user' => 'Modifier l\'utilisateur',
     'username' => 'Nom d\'utilisateur',
     'password' => 'Mot de passe',
     'role' => 'Rôle',

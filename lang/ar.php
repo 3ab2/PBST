@@ -98,12 +98,14 @@ return [
     // Specialties
     'add_specialty' => 'إضافة تخصص',
     'specialty_name' => 'اسم التخصص',
+    'nom_specialite' => 'اسم التخصص',
     // Stages
     'add_course' => 'إضافة دورة',
     'title' => 'المسمى',
     'courses' => 'الدورات',
     // Users
     'add_user' => 'إضافة مستخدم',
+    'edit_user' => 'تعديل مستخدم',
     'username' => 'اسم المستخدم',
     'password' => 'كلمة المرور',
     'role' => 'الدور',

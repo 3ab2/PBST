@@ -71,11 +71,11 @@ $csrf_token = generate_csrf_token();
             <td><?php echo $user['nom'] . ' ' . $user['prenom']; ?></td>
             <td><?php echo $user['email']; ?></td>
             <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal<?php echo $user['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal<?php echo $user['id']; ?>"><i class="fas fa-edit"></i></button>
                 <form method="post" action="../actions/delete_user.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_user'] ?? 'Are you sure you want to delete this user?'); ?>');">
                     <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                 </form>
             </td>
         </tr>

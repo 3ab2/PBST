@@ -91,15 +91,15 @@ $csrf_token = generate_csrf_token();
 
                 <td class="text-center">
                     <a href="../admin/profile_stagiaire.php?id=<?php echo $stagiaire['id']; ?>"
-                        class="btn btn-sm btn-info me-1"><?php echo htmlspecialchars($translations['view'] ?? 'View'); ?></a>
+                        class="btn btn-sm btn-info me-1"><i class="fas fa-eye"></i></a>
                     <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                        data-bs-target="#editStagiaireModal<?php echo $stagiaire['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                        data-bs-target="#editStagiaireModal<?php echo $stagiaire['id']; ?>"><i class="fas fa-edit"></i></button>
                     <form method="post" action="../actions/delete_stagiaire.php" style="display:inline-block;"
                         onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_trainee']); ?>');">
                         <input type="hidden" name="id" value="<?php echo $stagiaire['id']; ?>">
                         <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                         <button type="submit"
-                            class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                            class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                     </form>
 
                 </td>

@@ -68,11 +68,11 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
             <td><?php echo htmlspecialchars($perm['motif']); ?></td>
             <td><?php echo htmlspecialchars($perm['statut']); ?></td>
             <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editPermissionModal<?php echo $perm['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editPermissionModal<?php echo $perm['id']; ?>"><i class="fas fa-edit"></i></button>
                 <form method="post" action="../actions/delete_permission.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_permission']); ?>');">
                     <input type="hidden" name="id" value="<?php echo $perm['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                 </form>
             </td>
         </tr>

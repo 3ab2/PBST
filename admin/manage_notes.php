@@ -60,11 +60,11 @@ $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll
             <td><?php echo $note['date_remarque']; ?></td>
             <td><?php echo htmlspecialchars($note['auteur_id'] ? $note['auteur_nom'] . ' ' . $note['auteur_prenom'] : ''); ?></td>
             <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editNoteModal<?php echo $note['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editNoteModal<?php echo $note['id']; ?>"><i class="fas fa-edit"></i></button>
                 <form method="post" action="../actions/delete_note.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_note']); ?>');">
                     <input type="hidden" name="id" value="<?php echo $note['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                    <button type="submit" class="btn btn-sm btn-danger"><?php echo htmlspecialchars($translations['delete']); ?></button>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                 </form>
             </td>
         </tr>

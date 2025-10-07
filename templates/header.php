@@ -213,22 +213,22 @@ $bootstrap_css = $html_dir === 'rtl' ?
         #theme-toggle,
         #logout-btn,
         #langDropdown {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             cursor: pointer;
             color: rgba(255, 255, 255, 0.9) !important;
-            transition: all 0.3s ease;
+            transition: all 0s ease;
             position: relative;
         }
 
         #theme-toggle:hover,
         #langDropdown:hover {
             color: var(--military-gold) !important;
-            transform: rotate(15deg) scale(1.15);
+         
         }
 
         #logout-btn:hover {
             color: #ff4444 !important;
-            transform: scale(1.2) rotate(-5deg);
+         
         }
 
         #logout-btn:active {
