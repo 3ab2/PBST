@@ -575,7 +575,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
     <?php if (isset($_SESSION['user_id'])): ?>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/pbst_app/index.php">
                     <img src="/pbst_app/images/bst.png" alt="Logo" height="35" class="d-inline-block align-top">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

@@ -151,7 +151,7 @@ $page_title = htmlspecialchars($translations['consultation_details']);
                 <p class="text-start"><strong><?php echo htmlspecialchars($translations['traitement'] ?? 'Treatment'); ?> :</strong> <?php echo htmlspecialchars($consultation['traitement'] ?? ''); ?></p>
                 <p class="text-start"><strong><?php echo htmlspecialchars($translations['remarques'] ?? 'Remarks'); ?> :</strong> <?php echo htmlspecialchars($consultation['remarques'] ?? ''); ?></p>
                 <?php if ($consultation['file']) : ?>
-                <p class="text-start"><strong><?php echo htmlspecialchars($translations['file'] ?? 'File'); ?> :</strong> <a href="<?php echo $consultation['file']; ?>" target="_blank"><?php echo htmlspecialchars($translations['download'] ?? 'Download'); ?></a></p>
+                <p class="text-start"><strong><?php echo htmlspecialchars($translations['file'] ?? 'File'); ?> :</strong> <a class="btn btn-outline-danger" href="<?php echo $consultation['file']; ?>" target="_blank"><?php echo htmlspecialchars($translations['download'] ?? 'Download'); ?></a></p>
                 <?php endif; ?>
             </div>
         </div>
