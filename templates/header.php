@@ -396,6 +396,9 @@ $bootstrap_css = $html_dir === 'rtl' ?
             display: flex;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            border: none;
+            outline: none;
         }
         .breadcrumb-header span {
             margin: 0 6px;

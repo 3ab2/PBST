@@ -25,7 +25,7 @@ $page_title = htmlspecialchars($translations['courses']);
 <?php include '../templates/header.php'; ?>
 <div class="d-flex justify-content-between align-items-center mb-3">
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_secretaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_stage']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_stages']); ?></div>
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStageModal"><?php echo htmlspecialchars($translations['add_course'] ?? 'إضافة دورة'); ?></button>
+<button class="breadcrumb-header" data-bs-toggle="modal" data-bs-target="#addStageModal"><?php echo htmlspecialchars($translations['add_course'] ?? 'إضافة دورة'); ?></button>
 </div>
 <table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>

@@ -20,7 +20,7 @@ $page_title = htmlspecialchars($translations['notes']);
 <?php include '../templates/header.php'; ?>
 <div class="d-flex justify-content-between align-items-center mb-3">
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_secretaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_note']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_notes']); ?></div>
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal"><?php echo htmlspecialchars($translations['add_note']); ?></button>
+<button class="breadcrumb-header" data-bs-toggle="modal" data-bs-target="#addNoteModal"><?php echo htmlspecialchars($translations['add_note']); ?></button>
 </div>
 
 <!-- Search and Filter -->

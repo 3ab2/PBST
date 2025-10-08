@@ -18,7 +18,7 @@ $page_title = htmlspecialchars($translations['permissions']);
 <?php include '../templates/header.php'; ?>
 <div class="d-flex justify-content-between align-items-center mb-3">
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_admin']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_permission']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_permissions']); ?></div>
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><?php echo htmlspecialchars($translations['add_permission']); ?></button>
+<button class="breadcrumb-header" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><?php echo htmlspecialchars($translations['add_permission']); ?></button>
 </div>
 
 <!-- Search and Filter -->
