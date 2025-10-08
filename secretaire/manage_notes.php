@@ -14,6 +14,7 @@ $notes = $pdo->query("
 
 $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")->fetchAll();
 $users = $pdo->query("SELECT id, nom, prenom FROM users ORDER BY nom")->fetchAll();
+$page_title = htmlspecialchars($translations['notes']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>

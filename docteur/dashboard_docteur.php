@@ -1,6 +1,7 @@
 <?php
 require '../functions.php';
 check_role('docteur');
+$page_title = htmlspecialchars($translations['doctor_dashboard_title']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

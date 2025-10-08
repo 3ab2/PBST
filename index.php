@@ -6,6 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$page_title = htmlspecialchars($translations['dashboard']) ;
 include 'templates/header.php';
 
 // Fetch statistics for charts

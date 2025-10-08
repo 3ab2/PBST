@@ -1,6 +1,7 @@
 <?php
 require '../functions.php';
 check_role('secretaire');
+$page_title = htmlspecialchars($translations['secretaire_dashboard_title']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

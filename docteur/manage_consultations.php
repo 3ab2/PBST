@@ -16,6 +16,7 @@ $consultations = $stmt->fetchAll();
 $stagiaires = $pdo->query("SELECT id, matricule, nom, prenom FROM stagiaires ORDER BY nom")->fetchAll();
 
 $csrf_token = generate_csrf_token();
+$page_title = htmlspecialchars($translations['manage_consultations']) ;
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
@@ -67,7 +68,7 @@ $csrf_token = generate_csrf_token();
             </td>
             <td>
                 <a href="../view_consultation.php?id=<?php echo $cons['id']; ?>" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editConsultationModal<?php echo $cons['id']; ?>"><?php echo htmlspecialchars($translations['edit']); ?></button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editConsultationModal<?php echo $cons['id']; ?>"><i class="fas fa-edit"></i></button>
                 <form method="post" action="../actions/delete_consultation.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_consultation']); ?>');">
                     <input type="hidden" name="id" value="<?php echo $cons['id']; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">

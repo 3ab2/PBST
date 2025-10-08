@@ -14,6 +14,7 @@ $stagiaires = $pdo->query("SELECT id, nom, prenom FROM stagiaires ORDER BY nom")
 $docteurs = $pdo->query("SELECT id, nom, prenom FROM users WHERE role = 'docteur' ORDER BY nom")->fetchAll();
 
 $csrf_token = generate_csrf_token();
+$page_title = htmlspecialchars($translations['consultations']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>

@@ -66,6 +66,7 @@ if (!empty($consultations)) {
     $assigned_supervisor = $latest_consult['docteur_nom'] . ' ' . $latest_consult['docteur_prenom'];
 }
 
+$page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']) ;
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>

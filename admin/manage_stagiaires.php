@@ -11,6 +11,7 @@ $sql = "SELECT s.*, st.intitule AS stage_name, sp.nom_specialite AS specialite_n
 $stagiaires = $pdo->query($sql)->fetchAll();
 
 $csrf_token = generate_csrf_token();
+$page_title = htmlspecialchars($translations['trainees']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>

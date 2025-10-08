@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_specialite'])) {
 }
 
 $csrf_token = generate_csrf_token();
+$page_title = htmlspecialchars($translations['specialities']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>

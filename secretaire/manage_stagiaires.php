@@ -15,6 +15,7 @@ $stages = $pdo->query("SELECT id, intitule FROM stages ORDER BY intitule")->fetc
 $specialites = $pdo->query("SELECT id, nom_specialite FROM specialites ORDER BY nom_specialite")->fetchAll();
 
 $csrf_token = generate_csrf_token();
+$page_title = htmlspecialchars($translations['manage_stagiaires']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>

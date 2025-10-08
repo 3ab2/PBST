@@ -1,25 +1,4 @@
 <?php
-
-
-// Determine language from session or default to Arabic
-if (isset($_GET['lang'])) {
-    $lang = $_GET['lang'];
-    $_SESSION['lang'] = $lang;
-} elseif (isset($_SESSION['lang'])) {
-    $lang = $_SESSION['lang'];
-} else {
-    $lang = 'ar';
-    $_SESSION['lang'] = $lang;
-}
-
-// Load language file
-$lang_file = __DIR__ . '/../lang/' . $lang . '.php';
-if (file_exists($lang_file)) {
-    $translations = include $lang_file;
-} else {
-    $translations = include __DIR__ . '/../lang/ar.php';
-}
-
 // Set html lang and dir attributes
 $html_lang = $translations['lang_code'] ?? 'ar';
 $html_dir = $translations['dir'] ?? 'rtl';
@@ -37,7 +16,10 @@ $bootstrap_css = $html_dir === 'rtl' ?
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/pbst_app/images/bst.png">
-    <title><?php echo htmlspecialchars($translations['title']); ?></title>
+    <?php $page_title = $page_title ?? $translations['title']; ?>
+    <title><?php echo htmlspecialchars($page_title); ?></title>
+    <meta property="og:title" content="<?php echo htmlspecialchars($page_title); ?>">
+    <meta name="twitter:title" content="<?php echo htmlspecialchars($page_title); ?>">
     <link href="<?php echo $bootstrap_css; ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
