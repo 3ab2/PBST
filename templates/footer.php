@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       logoutBtn.style.transform = 'scale(1.2)';
       setTimeout(() => {
-        window.location.href = '../auth/logout.php';
+        window.location.href = '/pbst_app/auth/logout.php';
       }, 300);
     });
   }

@@ -204,7 +204,7 @@ return [
     'matricule' => 'المعرف',
     'date_naissance' => 'تاريخ الميلاد',
     'telephone' => 'الهاتف',
-    'footer_copyright' => '© 2023 نظام إدارة التدريبات والأذونات . جميع الحقوق محفوظة.',
+    'footer_copyright' => '© 2025 نظام إدارة التدريبات والأذونات . جميع الحقوق محفوظة.',
     // Breadcrumb translations
     'breadcrumb_admin' => 'مدير',
     'breadcrumb_secretaire' => 'سكرتير',

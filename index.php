@@ -6,7 +6,7 @@ include 'templates/header.php';
 
 <div class="container mt-5 mb-5">
     <div class="text-center mb-4">
-        <img src="/pbst_app/images/bst.png" alt="Institution Logo" class="mb-3" style="max-width: 150px;">
+        <img src="/pbst_app/images/bst.png" alt="Institution Logo" class="mb-3" style="max-width: 150px; border-radius: 25px;">
         <h1 class="display-4" style="color: var(--military-gold); font-weight: 700;"><?php echo htmlspecialchars($translations['history_title']); ?></h1>
         <p class="lead" style="color: var(--military-secondary); font-weight: 500;">
             <?php echo htmlspecialchars($translations['history_subtitle']); ?>

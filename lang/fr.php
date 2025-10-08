@@ -203,7 +203,7 @@ return [
     'matricule' => 'Matricule',
     'date_naissance' => 'Date de naissance',
     'telephone' => 'Téléphone',
-    'footer_copyright' => '© 2023 Système de Gestion des Stages et Permissions . Tous droits réservés.',
+    'footer_copyright' => '© 2025 Système de Gestion des Stages et Permissions . Tous droits réservés.',
     // Breadcrumb translations
     'breadcrumb_admin' => 'admin',
     'breadcrumb_secretaire' => 'secretaire',
