@@ -69,6 +69,192 @@ if (!empty($consultations)) {
 $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']) ;
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
+<style>
+    /* Military Style Enhancements for Profile Stagiaire Page */
+    .military-card {
+        background: linear-gradient(135deg, rgba(44, 95, 45, 0.9) 0%, rgba(61, 90, 60, 0.9) 100%);
+        border: 3px solid #D4AF37;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .military-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('../images/army.png') no-repeat center center;
+        background-size: cover;
+        opacity: 0.1;
+        pointer-events: none;
+    }
+
+    .military-card .card-header {
+        background: linear-gradient(135deg, #1A3A1A 0%, #2C5F2D 100%);
+        border-bottom: 2px solid #D4AF37;
+        color: #D4AF37;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+
+    .military-card .card-body {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(5px);
+    }
+
+    .military-card p {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .military-card strong {
+        color: #D4AF37;
+        font-weight: 700;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #556B2F 0%, #6B8E23 100%);
+        border: 2px solid #4A5D23;
+        color: #fff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #6B8E23 0%, #556B2F 100%);
+        border-color: #D4AF37;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(107, 142, 35, 0.4);
+    }
+
+    h2 {
+        color: #D4AF37;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+    }
+
+    /* Profile Picture Military Style */
+    .img-fluid.rounded-circle {
+        border: 4px solid #D4AF37;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(135deg, #2C5F2D 0%, #1A3A1A 100%);
+        padding: 5px;
+    }
+
+    .bg-light.rounded-circle {
+        background: linear-gradient(135deg, #556B2F 0%, #6B8E23 100%) !important;
+        border: 4px solid #D4AF37;
+        color: #D4AF37;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Table Military Style */
+    .table {
+        background: linear-gradient(135deg, rgba(76, 91, 65, 0.15) 0%, rgba(58, 73, 47, 0.10) 100%);
+        border-radius: 12px;
+        overflow: hidden;
+        width: 100%;
+        border: 2px solid #D4AF37;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: relative;
+    }
+
+    .table::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.02) 10px,
+            rgba(255, 255, 255, 0.02) 20px
+        );
+        pointer-events: none;
+        border-radius: 12px;
+    }
+
+    .table th {
+        background: linear-gradient(135deg, #1A3A1A 0%, #2C5F2D 100%);
+        color: #D4AF37;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #D4AF37;
+    }
+
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 0.75rem;
+        border: none;
+        color: #fff;
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background: linear-gradient(135deg, rgba(76, 91, 65, 0.20) 0%, rgba(58, 73, 47, 0.15) 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark mode adjustments */
+    .dark .military-card {
+        background: linear-gradient(135deg, rgba(61, 90, 60, 0.9) 0%, rgba(74, 107, 74, 0.9) 100%);
+    }
+
+    .dark .military-card .card-header {
+        background: linear-gradient(135deg, #2C5F2D 0%, #1A3A1A 100%);
+    }
+
+    .dark .table {
+        background: linear-gradient(135deg, rgba(76, 91, 65, 0.30) 0%, rgba(58, 73, 47, 0.25) 100%);
+        border-color: #2C5F2D;
+    }
+
+    .dark .table th {
+        background: linear-gradient(135deg, #2C5F2D 0%, #1A3A1A 100%);
+    }
+
+    .dark .table tbody tr:hover {
+        background: linear-gradient(135deg, rgba(76, 91, 65, 0.35) 0%, rgba(58, 73, 47, 0.30) 100%);
+    }
+</style>
 <?php include '../templates/header.php'; ?>
 
 <div class="container mt-4">
@@ -92,7 +278,7 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
     </div>
 
     <!-- Personal Information -->
-    <div class="card mb-4">
+    <div class="card military-card mb-4">
         <div class="card-header">
             <h5><?php echo htmlspecialchars($translations['personal_information'] ?? 'Personal Information'); ?></h5>
         </div>
@@ -113,7 +299,7 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
     </div>
 
     <!-- Contact Information -->
-    <div class="card mb-4">
+    <div class="card military-card mb-4">
         <div class="card-header">
             <h5><?php echo htmlspecialchars($translations['contact_information'] ?? 'Contact Information'); ?></h5>
         </div>
@@ -131,7 +317,7 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
     </div>
 
     <!-- Internship / Training Details -->
-    <div class="card mb-4">
+    <div class="card military-card mb-4">
         <div class="card-header">
             <h5><?php echo htmlspecialchars($translations['internship_training_details'] ?? 'Internship / Training Details'); ?></h5>
         </div>
@@ -149,7 +335,7 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
     </div>
 
     <!-- Course / Program Info -->
-    <div class="card mb-4">
+    <div class="card military-card mb-4">
         <div class="card-header">
             <h5><?php echo htmlspecialchars($translations['course_program_info'] ?? 'Course / Program Info'); ?></h5>
         </div>
@@ -169,7 +355,7 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
     </div>
 
     <!-- Permissions -->
-    <div class="card mb-4">
+    <div class="card military-card mb-4">
         <div class="card-header">
             <h5><?php echo htmlspecialchars($translations['permissions'] ?? 'Permissions'); ?></h5>
         </div>
@@ -204,7 +390,7 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
     </div>
 
     <!-- Notes -->
-    <div class="card mb-4">
+    <div class="card military-card mb-4">
         <div class="card-header">
             <h5><?php echo htmlspecialchars($translations['notes'] ?? 'Notes'); ?></h5>
         </div>
@@ -235,7 +421,7 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
     </div>
 
     <!-- Sanctions -->
-    <div class="card mb-4">
+    <div class="card military-card mb-4">
         <div class="card-header">
             <h5><?php echo htmlspecialchars($translations['sanctions'] ?? 'Sanctions'); ?></h5>
         </div>
@@ -268,7 +454,7 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
     </div>
 
     <!-- Consultations -->
-    <div class="card mb-4">
+    <div class="card military-card mb-4">
         <div class="card-header">
             <h5><?php echo htmlspecialchars($translations['consultations'] ?? 'Consultations'); ?></h5>
         </div>

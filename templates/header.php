@@ -299,40 +299,193 @@ $bootstrap_css = $html_dir === 'rtl' ?
             width: 80%;
         }
 
-        /* Table styling for military theme and centering */
+        
+        /* Military-Style Table Styling */
         table {
-            background-color: rgba(76, 91, 65, 0.10); /* lighter transparency for light mode */
-            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(76, 91, 65, 0.15) 0%, rgba(58, 73, 47, 0.10) 100%);
+            border-radius: 12px;
             overflow: hidden;
             width: 100%;
+            border: 2px solid var(--military-secondary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        table::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.02) 10px,
+                rgba(255, 255, 255, 0.02) 20px
+            );
+            pointer-events: none;
+            border-radius: 12px;
         }
 
         .dark table {
-            background-color: rgba(76, 91, 65, 0.25); /* slightly darker for dark mode */
+            background: linear-gradient(135deg, rgba(76, 91, 65, 0.30) 0%, rgba(58, 73, 47, 0.25) 100%);
+            border-color: var(--military-primary);
+        }
+
+        .dark table::before {
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
         }
 
         table th {
-            background-color: rgba(76, 91, 65, 0.25);
+            background: linear-gradient(135deg, var(--military-primary) 0%, var(--military-secondary) 100%);
             color: #fff;
             text-align: center;
             vertical-align: middle;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--military-gold);
         }
 
         .dark table th {
-            background-color: rgba(76, 91, 65, 0.35);
-            color: #fff;
+            background: linear-gradient(135deg, var(--military-secondary) 0%, var(--military-dark) 100%);
+            color: #f0f0f0;
         }
 
         table td, table th {
             text-align: center;
             vertical-align: middle;
+            padding: 0.75rem;
+            border: none;
+        }
+
+        table tbody tr {
+            transition: all 0.3s ease;
         }
 
         table tbody tr:hover {
-            background-color: rgba(76, 91, 65, 0.25);
-            transition: background-color 0.3s ease;
+            background: linear-gradient(135deg, rgba(76, 91, 65, 0.20) 0%, rgba(58, 73, 47, 0.15) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .dark table tbody tr:hover {
+            background: linear-gradient(135deg, rgba(76, 91, 65, 0.35) 0%, rgba(58, 73, 47, 0.30) 100%);
+        }
+
+        /* Military-Style Action Buttons */
+        .btn {
+            border-radius: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #556B2F 0%, #6B8E23 100%); /* Olive green */
+            color: #fff;
+            border-color: #4A5D23;
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #6B8E23 0%, #556B2F 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 142, 35, 0.4);
+            border-color: var(--military-gold);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #BDB76B 0%, #D2B48C 100%); /* Khaki */
+            color: #2F4F2F;
+            border-color: #A09162;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #D2B48C 0%, #BDB76B 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(189, 183, 107, 0.4);
+            border-color: var(--military-gold);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); /* Saddle brown */
+            color: #fff;
+            border-color: #6B3A1A;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
+            border-color: #DC143C;
+        }
+
+        .btn i {
+            font-weight: 900;
+            margin-right: 0.25rem;
+        }
+
+        /* Dark mode button adjustments */
+        .dark .btn-info {
+            background: linear-gradient(135deg, #4A5D23 0%, #556B2F 100%);
+            border-color: #3A4A1C;
+        }
+
+        .dark .btn-warning {
+            background: linear-gradient(135deg, #A09162 0%, #BDB76B 100%);
+            color: #1A1A1A;
+        }
+
+        .dark .btn-danger {
+            background: linear-gradient(135deg, #6B3A1A 0%, #8B4513 100%);
+        }
+
+        /* Responsive table adjustments */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+
+            table td, table th {
+                padding: 0.5rem;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+                padding: 0.375rem 0.75rem;
+            }
+
+            .btn i {
+                margin-right: 0.125rem;
+            }
+        }
         /* Military-themed search and filter inputs */
         .form-control, .form-select {
             background-color: #E8F5E8 !important; /* light military green */
