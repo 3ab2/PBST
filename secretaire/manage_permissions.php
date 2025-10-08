@@ -16,8 +16,10 @@ $page_title = htmlspecialchars($translations['permissions']) ;
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
+<div class="d-flex justify-content-between align-items-center mb-3">
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_secretaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_permission']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_permissions']); ?></div>
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><?php echo htmlspecialchars($translations['add_permission']); ?></button>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><?php echo htmlspecialchars($translations['add_permission']); ?></button>
+</div>
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">

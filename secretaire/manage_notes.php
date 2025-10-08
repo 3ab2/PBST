@@ -18,8 +18,10 @@ $page_title = htmlspecialchars($translations['notes']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
+<div class="d-flex justify-content-between align-items-center mb-3">
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_secretaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_note']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_notes']); ?></div>
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addNoteModal"><?php echo htmlspecialchars($translations['add_note']); ?></button>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal"><?php echo htmlspecialchars($translations['add_note']); ?></button>
+</div>
 
 <!-- Search and Filter -->
 <div class="mb-3 row g-3 align-items-center">

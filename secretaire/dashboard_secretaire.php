@@ -7,10 +7,10 @@ $page_title = htmlspecialchars($translations['secretaire_dashboard_title']);
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <?php include '../templates/header.php'; ?>
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_secretaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_dashboard']); ?></div>
-<p><?php echo htmlspecialchars($translations['secretaire_dashboard_welcome'] ?? 'مرحبا بك في لوحة التحكم الخاصة بالسكرتري.'); ?></p>
+
 
 <!-- Cards Row -->
-<div class="row mb-4">
+<div class="row mb-4 mt-5">
     <div class="col-lg-4 col-md-6 col-12 mb-3">
         <div class="card text-center">
             <div class="card-body" style="min-height: 120px;">

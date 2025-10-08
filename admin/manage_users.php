@@ -50,9 +50,11 @@ $page_title = htmlspecialchars($translations['manage_users']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
+<div class="d-flex justify-content-between align-items-center mb-3">
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_admin']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_user']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_users']); ?></div>
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal"><?php echo htmlspecialchars($translations['add_user']); ?></button>
-<table class="table table-striped mt-3">
+</div>
+<table class="table table-striped">
     <thead>
         <tr>
             <th><?php echo htmlspecialchars($translations['id']); ?></th>

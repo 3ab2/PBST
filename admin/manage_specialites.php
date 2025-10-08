@@ -22,9 +22,11 @@ $page_title = htmlspecialchars($translations['specialities']) ;
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
+<div class="d-flex justify-content-between align-items-center mb-3">
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_admin']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_specialite']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_specialites']); ?></div>
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSpecialiteModal"><?php echo htmlspecialchars($translations['add_specialty']); ?></button>
-<table class="table table-striped table-responsive mt-4" style="border-radius: 0.5rem; overflow: hidden;">
+</div>
+<table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>
         <tr>
             <th><?php echo htmlspecialchars($translations['id']); ?></th>

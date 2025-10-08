@@ -7,10 +7,10 @@ $page_title = htmlspecialchars($translations['admin_dashboard']);
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <?php include '../templates/header.php'; ?>
 <div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_admin']); ?></div>
-<p><?php echo htmlspecialchars($translations['welcome_admin'] ?? 'مرحبا بك في لوحة التحكم الخاصة بالمدير.'); ?></p>
+
 
 <!-- Cards Row -->
-<div class="row mb-4">
+<div class="row mb-4 mt-5">
     <div class="col-lg-3 col-md-6 col-12 mb-3">
         <div class="card text-center">
             <div class="card-body" style="min-height: 120px;">
