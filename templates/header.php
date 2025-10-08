@@ -384,6 +384,26 @@ $bootstrap_css = $html_dir === 'rtl' ?
         .dark .mb-3.row.g-3.align-items-center {
             background: rgba(76, 91, 65, 0.1) !important;
         }
+
+        /* Breadcrumb Header Styling */
+        .breadcrumb-header {
+            background: rgba(34, 49, 34, 0.7);
+            color: #f5f5dc;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .breadcrumb-header span {
+            margin: 0 6px;
+            color: #d2d2b4;
+        }
+        .breadcrumb-header:hover {
+            filter: brightness(1.1);
+        }
     </style>
 </head>
 

@@ -15,7 +15,7 @@ $page_title = htmlspecialchars($translations['trainees']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
-<h2><?php echo htmlspecialchars($translations['trainees']); ?></h2>
+<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_admin']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_stagiaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_stagiaires']); ?></div>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal"
     data-bs-target="#addStagiaireModal"><?php echo htmlspecialchars($translations['add_trainee'] ?? 'إضافة متدرب'); ?></button>
 

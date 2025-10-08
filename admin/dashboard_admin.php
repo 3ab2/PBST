@@ -6,7 +6,7 @@ $page_title = htmlspecialchars($translations['admin_dashboard']);
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <?php include '../templates/header.php'; ?>
-<h2><?php echo htmlspecialchars($translations['admin_dashboard']); ?></h2>
+<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_admin']); ?></div>
 <p><?php echo htmlspecialchars($translations['welcome_admin'] ?? 'مرحبا بك في لوحة التحكم الخاصة بالمدير.'); ?></p>
 
 <!-- Cards Row -->

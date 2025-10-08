@@ -18,7 +18,7 @@ $page_title = htmlspecialchars($translations['sanctions']) ;
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
-<h2><?php echo htmlspecialchars($translations['sanctions']); ?></h2>
+<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_admin']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_sanction']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_sanctions']); ?></div>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal"
     data-bs-target="#addSanctionModal"><?php echo htmlspecialchars($translations['add_sanction'] ?? 'إضافة عقوبة'); ?></button>
 

@@ -1,6 +1,6 @@
 <?php
 require '../functions.php';
-check_role('admin');
+check_role('secretaire');
 
 $users = $pdo->query("SELECT * FROM users ORDER BY id DESC")->fetchAll();
 
@@ -50,7 +50,7 @@ $page_title = htmlspecialchars($translations['manage_users']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
-<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_admin']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_user']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_users']); ?></div>
+<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_secretaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_user']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_users']); ?></div>
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal"><?php echo htmlspecialchars($translations['add_user']); ?></button>
 <table class="table table-striped mt-3">
     <thead>

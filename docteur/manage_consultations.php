@@ -20,7 +20,7 @@ $page_title = htmlspecialchars($translations['manage_consultations']) ;
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
-<h2><?php echo htmlspecialchars($translations['manage_consultations']); ?></h2>
+<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_docteur']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_consultation']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_consultations']); ?></div>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addConsultationModal"><?php echo htmlspecialchars($translations['add_consultation']); ?></button>
 
 <!-- Search and Filter -->

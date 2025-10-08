@@ -18,7 +18,7 @@ $page_title = htmlspecialchars($translations['notes']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
-<h2><?php echo htmlspecialchars($translations['notes']); ?></h2>
+<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_secretaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_note']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_notes']); ?></div>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addNoteModal"><?php echo htmlspecialchars($translations['add_note']); ?></button>
 
 <!-- Search and Filter -->

@@ -22,7 +22,7 @@ $page_title = htmlspecialchars($translations['specialities']);
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <?php include '../templates/header.php'; ?>
-<h2><?php echo htmlspecialchars($translations['specialities']); ?></h2>
+<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_secretaire']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_specialite']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_liste_specialites']); ?></div>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSpecialiteModal"><?php echo htmlspecialchars($translations['add_specialty']); ?></button>
 <table class="table table-striped table-responsive" style="border-radius: 0.5rem; overflow: hidden;">
     <thead>

@@ -6,7 +6,7 @@ $page_title = htmlspecialchars($translations['doctor_dashboard_title']);
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <?php include '../templates/header.php'; ?>
-<h2><?php echo htmlspecialchars($translations['doctor_dashboard_title'] ?? 'لوحة تحكم الطبيب'); ?></h2>
+<div class="breadcrumb-header"><?php echo htmlspecialchars($translations['breadcrumb_docteur']); ?> <span>></span> <?php echo htmlspecialchars($translations['breadcrumb_dashboard']); ?></div>
 <p><?php echo htmlspecialchars($translations['doctor_dashboard_welcome'] ?? 'مرحبا بك في لوحة تحكم الطبيب.'); ?></p>
 
 <!-- Cards Row -->
