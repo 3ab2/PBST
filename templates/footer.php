@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     html.classList.add('dark');
     toggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
   } else {
-    toggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+    toggle.innerHTML = '<i class="bi bi-sun-fill"></i>'; 
   }
   toggle.addEventListener('click', function() {
     if (html.classList.contains('dark')) {

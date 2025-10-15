@@ -5,7 +5,7 @@ $html_dir = $translations['dir'] ?? 'rtl';
 
 // Determine Bootstrap CSS based on direction
 $bootstrap_css = $html_dir === 'rtl' ?
-    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css' :
+     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css' :
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
 
 ?>
@@ -22,7 +22,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
     <meta name="twitter:title" content="<?php echo htmlspecialchars($page_title); ?>">
     <link href="<?php echo $bootstrap_css; ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --body-bg: #ffffff;
@@ -55,7 +55,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('/pbst_app/images/bg.jpg') no-repeat center center fixed;
+            background: url('/pbst_app/images/bg.webp') no-repeat center center fixed;
             background-size: cover;
             opacity: 0.5;
             z-index: -1;

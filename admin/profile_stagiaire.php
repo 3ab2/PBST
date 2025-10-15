@@ -259,8 +259,9 @@ $page_title = htmlspecialchars($translations['trainee_profile']) . ' — ' . htm
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-12 mb-4">
+<div class="col-md-12 mb-4">
              <a href="manage_stagiaires.php" class="btn btn-secondary mb-3"><?php echo htmlspecialchars($translations['back'] ?? 'Back'); ?></a>
+             <a href="../generate_stagiaire_pdf.php?id=<?php echo $stagiaire['id']; ?>" class="btn btn-secondary mb-3 ms-2">Download PDF</a>
             <h2 class="text-center"><?php echo htmlspecialchars($stagiaire['nom'] . ' ' . $stagiaire['prenom']); ?></h2>
         </div>
     </div>

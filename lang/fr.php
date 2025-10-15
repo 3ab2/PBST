@@ -249,4 +249,5 @@ return [
     'achievements_text' => 'Tout au long de son histoire, notre institution militaire a démontré une valeur et une efficacité exceptionnelles dans la sauvegarde de la nation. Nos réalisations incluent des opérations de défense réussies, des missions de maintien de la paix et des contributions à la stabilité régionale.',
     'role_title' => 'Rôle dans la Défense Nationale',
     'role_text' => 'En tant que gardien de la souveraineté de notre nation, notre institution militaire joue un rôle vital dans la dissuasion des menaces, la réponse aux crises et le soutien des autorités civiles. Notre engagement envers l\'excellence assure la sécurité et la prospérité de notre peuple.',
+    'specialite' => 'Spécialité',
 ];
