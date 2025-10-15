@@ -3,6 +3,38 @@ ob_start();
 require 'vendor/autoload.php';
 require 'functions.php';
 
+// Custom PDF class to handle header and footer on all pages
+class MyPDF extends TCPDF {
+    public function Header() {
+        // Draw header line
+        $this->Line(10, 8, 200, 8);
+
+        // Header: logo center, date left, text right
+        $logoFile = __DIR__ . '/images/bst.png';
+           if (file_exists($logoFile)) {
+             $this->Image($logoFile, 90, 10, 20, 20, '', '', '', false, 300, '', false, false, 0);
+        }
+
+        $this->SetFont('helvetica', '', 10);
+        $this->SetXY(10, 12);
+        $this->Cell(50, 10, 'Date: ' . date('Y-m-d'), 0, 0, 'L');
+
+        $this->SetFont('helvetica', 'B', 12);
+        $this->SetXY(120, 12);
+        $this->Cell(80, 10, '1 BST', 0, 0, 'R');
+    }
+
+    public function Footer() {
+        // Draw footer line
+        $this->Line(10, 280, 200, 280);
+
+        // Footer: copyright center
+        $this->SetFont('helvetica', '', 8);
+        $this->SetXY(0, 285);
+        $this->Cell(0, 10, '© 2025 Système de Gestion des Stages et Permissions . Tous droits réservés.', 0, 0, 'C');
+    }
+}
+
 // Check if id is provided
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die('Invalid stagiaire ID');
@@ -59,7 +91,7 @@ $punitions = $punitions->fetchAll();
 $html = '';
 
 // Create new PDF document
-$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+$pdf = new MyPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
 // Set document information
 $pdf->SetCreator('PBST App');
@@ -67,32 +99,15 @@ $pdf->SetAuthor('1 BST');
 $pdf->SetTitle('Stagiaire Profile');
 $pdf->SetSubject('Stagiaire PDF');
 
-// Remove default header/footer
-$pdf->setPrintHeader(false);
-$pdf->setPrintFooter(false);
+// Enable custom header/footer
+$pdf->setPrintHeader(true);
+$pdf->setPrintFooter(true);
 
 // Set margins
-$pdf->SetMargins(15, 20, 15);
+$pdf->SetMargins(15, 50, 15); // Increased top margin to accommodate header
 
 // Add a page
 $pdf->AddPage();
-
-// Draw header line
-$pdf->Line(10, 10, 200, 10);
-
-// Header: logo center, date left, text right
-$logoFile = __DIR__ . '/images/bst.png';
-if (file_exists($logoFile) && (extension_loaded('gd') || extension_loaded('PNG'))) {
-    $pdf->Image($logoFile, 85, 15, 30, 30, '', '', '', false, 300, '', false, false, 0);
-}
-
-$pdf->SetFont('helvetica', '', 10);
-$pdf->SetXY(10, 15);
-$pdf->Cell(50, 10, 'Date: ' . date('Y-m-d'), 0, 0, 'L');
-
-$pdf->SetFont('helvetica', 'B', 12);
-$pdf->SetXY(120, 15);
-$pdf->Cell(80, 10, '1 BST', 0, 0, 'R');
 
 // Body title in red center
 $pdf->SetFont('helvetica', 'B', 16);
@@ -268,15 +283,6 @@ if (!empty($remarques)) {
 // Output the HTML content
 $pdf->writeHTML($html, true, false, true, false, '');
 
-// Draw footer line
-$pdf->Line(10, 280, 200, 280);
-
-// Footer: copyright center
-$pdf->SetFont('helvetica', '', 8);
-$pdf->SetXY(0, 285);
-$pdf->Cell(0, 10, '© 2025 Système de Gestion des Stages et Permissions . Tous droits réservés.', 0, 0, 'C');
-
 // Close and output PDF document
 ob_end_clean();
-$pdf->Output('stagiaire_' . $stagiaire['id'] . '.pdf', 'D');
-?>
+$pdf->Output('stagiaire_' . $stagiaire['id'] . '.pdf', 'I');
