@@ -2,7 +2,7 @@
 ob_start();
 require 'vendor/autoload.php';
 require 'functions.php';
-
+echo '<link rel="icon" type="image/svg+xml" href="../images/bst.png">';
 // Custom PDF class to handle header and footer on all pages
 class MyPDF extends TCPDF {
     public function Header() {
@@ -10,9 +10,9 @@ class MyPDF extends TCPDF {
         $this->Line(10, 8, 200, 8);
 
         // Header: logo center, date left, text right
-        $logoFile = __DIR__ . '/images/bst.png';
+        $logoFile = __DIR__ . '/images/far.png';
            if (file_exists($logoFile)) {
-             $this->Image($logoFile, 90, 10, 20, 20, '', '', '', false, 300, '', false, false, 0);
+             $this->Image($logoFile, 90, 10, 15, 20, '', '', '', false, 300, '', false, false, 0);
         }
 
         $this->SetFont('helvetica', '', 10);
@@ -31,7 +31,7 @@ class MyPDF extends TCPDF {
         // Footer: copyright center
         $this->SetFont('helvetica', '', 8);
         $this->SetXY(0, 285);
-        $this->Cell(0, 10, '© 2025 Système de Gestion des Stages et Permissions . Tous droits réservés.', 0, 0, 'C');
+        $this->Cell(0, 10, '© 2025 Système de Gestion des Stagiaires . Tous droits réservés.', 0, 0, 'C');
     }
 }
 
@@ -113,10 +113,9 @@ $pdf->AddPage();
 $pdf->SetFont('helvetica', 'B', 16);
 $pdf->SetTextColor(255, 0, 0); // Red
 $pdf->SetXY(0, 50);
-$grade = htmlspecialchars($stagiaire['grade']);
 $nom = htmlspecialchars($stagiaire['nom']);
 $prenom = htmlspecialchars($stagiaire['prenom']);
-$pdf->Cell(0, 10, $grade . ' ' . $nom . ' ' . $prenom, 0, 1, 'C');
+$pdf->Cell(0, 10, 'PROFILE DE ' . $nom . ' ' . $prenom, 0, 1, 'C');
 $pdf->SetTextColor(0, 0, 0); // Reset to black
 
 // Set font for content
