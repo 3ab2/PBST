@@ -34,6 +34,9 @@ $csrf_token = generate_csrf_token();
 $page_title = htmlspecialchars($translations['login_title']) ;
 ?>
 <link rel="icon" type="image/svg+xml" href="../images/bst.png">
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#0d47a1">
+
 <?php include '../templates/header.php'; ?>
 <div class="position-absolute top-0 end-0 p-3">
     <div class="dropdown">
@@ -53,7 +56,7 @@ $page_title = htmlspecialchars($translations['login_title']) ;
     body,
     html {
         height: 100%;
-        background-image: url('../images/bg.jpg');
+        
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
@@ -170,4 +173,11 @@ $page_title = htmlspecialchars($translations['login_title']) ;
         });
     });
 </script>
+<script >if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('../service-worker.js')
+      .then(reg => console.log('SW registered', reg))
+      .catch(err => console.log('SW register failed', err));
+  });
+}</script>
 <?php include '../templates/footer.php'; ?>

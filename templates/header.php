@@ -20,6 +20,10 @@ $bootstrap_css = $html_dir === 'rtl' ?
     <title><?php echo htmlspecialchars($page_title); ?></title>
     <meta property="og:title" content="<?php echo htmlspecialchars($page_title); ?>">
     <meta name="twitter:title" content="<?php echo htmlspecialchars($page_title); ?>">
+    <!-- PWA manifest and theme -->
+    <link rel="manifest" href="/pbst_app/manifest.webmanifest">
+    <meta name="theme-color" content="#0b5fff">
+    <link rel="apple-touch-icon" href="/pbst_app/assets/icons/icon-192.png">
     <link href="<?php echo $bootstrap_css; ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -55,7 +59,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('/pbst_app/images/bg.webp') no-repeat center center fixed;
+            background: url('/pbst_app/images/bg1.webp') no-repeat center center fixed;
             background-size: cover;
             opacity: 0.5;
             z-index: -1;
@@ -252,6 +256,48 @@ $bootstrap_css = $html_dir === 'rtl' ?
         #floating-theme-toggle #theme-toggle:hover {
             transform: rotate(180deg) scale(1.1);
             box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        #floating-theme-toggle #login-btn {
+            background: linear-gradient(135deg, var(--military-primary) 0%, var(--military-secondary) 100%);
+            border: 2px solid var(--military-gold);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        #floating-theme-toggle #login-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        #floating-theme-toggle #floating-langDropdown {
+            background: linear-gradient(135deg, var(--military-primary) 0%, var(--military-secondary) 100%);
+            border: 2px solid var(--military-gold);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        #floating-theme-toggle #floating-langDropdown:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+            text-decoration: none;
+            color: inherit;
         }
 
         /* Navbar Toggler */
@@ -565,11 +611,24 @@ $bootstrap_css = $html_dir === 'rtl' ?
 
 <body>
     <?php if (!isset($_SESSION['user_id'])): ?>
-        <div id="floating-theme-toggle">
+        <div id="floating-theme-toggle" style="display: flex; gap: 10px; align-items: center;">
             <button id="theme-toggle" class="btn btn-link"
                 aria-label="Toggle dark mode">
                 <i class="bi bi-sun-fill"></i>
             </button>
+            <a href="/pbst_app/auth/login.php" id="login-btn" class="btn btn-link" aria-label="Login">
+                <i class="bi bi-box-arrow-in-right"></i>
+            </a>
+            <div class="dropdown">
+                <button class="btn btn-link dropdown-toggle" type="button" id="floating-langDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false" aria-label="Select language">
+                    <i class="bi bi-translate"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="floating-langDropdown">
+                    <li><a class="dropdown-item" href="#" data-lang="ar">العربية</a></li>
+                    <li><a class="dropdown-item" href="#" data-lang="fr">Français</a></li>
+                </ul>
+            </div>
         </div>
     <?php endif; ?>
     <?php if (isset($_SESSION['user_id'])): ?>

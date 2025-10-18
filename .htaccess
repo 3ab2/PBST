@@ -1,0 +1,7 @@
+# Serve manifest with correct MIME type
+AddType application/manifest+json .webmanifest
+
+# Cache control for Service Worker 
+<Files "sw.js">
+  Header set Cache-Control "no-cache, no-store, must-revalidate"
+</Files>

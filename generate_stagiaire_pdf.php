@@ -2,6 +2,7 @@
 ob_start();
 require 'vendor/autoload.php';
 require 'functions.php';
+$lang = include 'lang/fr.php';
 echo '<link rel="icon" type="image/svg+xml" href="../images/bst.png">';
 // Custom PDF class to handle header and footer on all pages
 class MyPDF extends TCPDF {
@@ -126,15 +127,15 @@ $pdf->Ln(10);
 $pdf->Line(10, 70, 200, 70);
 
 // Personal Information
-$html .= '<h2 style="color:#2C5F2D;">Personal Information</h2>';
+$html .= '<h2 style="color:#2C5F2D;">' . $lang['personal_information'] . '</h2>';
 $html .= '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">';
 $html .= '<tr style="background-color:#D4AF37; color:#000; font-weight:bold;">
-            <th>Matricule</th>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>Birth Date</th>
-            <th>Blood Group</th>
-            <th>Grade</th>
+            <th>' . $lang['matricule'] . '</th>
+            <th>' . $lang['last_name'] . '</th>
+            <th>' . $lang['first_name'] . '</th>
+            <th>' . $lang['birth_date'] . '</th>
+            <th>' . $lang['blood_group'] . '</th>
+            <th>' . $lang['grade'] . '</th>
           </tr>';
 $html .= '<tr>
             <td>' . htmlspecialchars($stagiaire['matricule']) . '</td>
@@ -147,12 +148,12 @@ $html .= '<tr>
 $html .= '</table>';
 
 // Contact Information
-$html .= '<h2 style="color:#2C5F2D; margin-top:20px;">Contact Information</h2>';
+$html .= '<h2 style="color:#2C5F2D; margin-top:20px;">' . $lang['contact_information'] . '</h2>';
 $html .= '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">';
 $html .= '<tr style="background-color:#D4AF37; color:#000; font-weight:bold;">
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Address</th>
+            <th>' . $lang['phone'] . '</th>
+            <th>' . $lang['email'] . '</th>
+            <th>' . $lang['address'] . '</th>
           </tr>';
 $html .= '<tr>
             <td>' . htmlspecialchars($stagiaire['telephone']) . '</td>
@@ -162,12 +163,12 @@ $html .= '<tr>
 $html .= '</table>';
 
 // Training Details
-$html .= '<h2 style="color:#2C5F2D; margin-top:20px;">Training Details</h2>';
+$html .= '<h2 style="color:#2C5F2D; margin-top:20px;">' . $lang['internship_training_details'] . '</h2>';
 $html .= '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">';
 $html .= '<tr style="background-color:#D4AF37; color:#000; font-weight:bold;">
-            <th>Stage</th>
-            <th>Specialty</th>
-            <th>Registration Date</th>
+            <th>' . $lang['stage'] . '</th>
+            <th>' . $lang['speciality'] . '</th>
+            <th>' . $lang['date'] . '</th>
           </tr>';
 $html .= '<tr>
             <td>' . htmlspecialchars($stagiaire['stage_name']) . '</td>
@@ -177,14 +178,14 @@ $html .= '<tr>
 $html .= '</table>';
 
 // Course Info
-$html .= '<h2 style="color:#2C5F2D; margin-top:20px;">Course Info</h2>';
+$html .= '<h2 style="color:#2C5F2D; margin-top:20px;">' . $lang['course_program_info'] . '</h2>';
 $html .= '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">';
 $html .= '<tr style="background-color:#D4AF37; color:#000; font-weight:bold;">
-            <th>Stage</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Specialty</th>
-            <th>Description</th>
+            <th>' . $lang['stage'] . '</th>
+            <th>' . $lang['start_date'] . '</th>
+            <th>' . $lang['end_date'] . '</th>
+            <th>' . $lang['speciality'] . '</th>
+            <th>' . $lang['description'] . '</th>
           </tr>';
 $html .= '<tr>
             <td>' . htmlspecialchars($stagiaire['stage_name']) . '</td>
@@ -197,14 +198,14 @@ $html .= '</table>';
 
 // Permissions
 if (!empty($permissions)) {
-    $html .= '<h2 style="color:#2C5F2D; margin-top:20px;">Permissions</h2>';
+    $html .= '<h2 style="color:#2C5F2D; margin-top:20px;">' . $lang['permissions'] . '</h2>';
     $html .= '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">';
     $html .= '<tr style="background-color:#D4AF37; color:#000; font-weight:bold;">
-                <th>Type</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Status</th>
-                <th>Reason</th>
+                <th>' . $lang['type'] . '</th>
+                <th>' . $lang['start_date'] . '</th>
+                <th>' . $lang['end_date'] . '</th>
+                <th>' . $lang['status'] . '</th>
+                <th>' . $lang['reason'] . '</th>
               </tr>';
     foreach ($permissions as $perm) {
         $html .= '<tr>
@@ -220,13 +221,13 @@ if (!empty($permissions)) {
 
 // Consultations
 if (!empty($consultations)) {
-    $html .= '<h2 style="color:#2C5F2D; margin-top:20px;">Consultations</h2>';
+    $html .= '<h2 style="color:#2C5F2D; margin-top:20px;">' . $lang['consultations'] . '</h2>';
     $html .= '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">';
     $html .= '<tr style="background-color:#D4AF37; color:#000; font-weight:bold;">
-                <th>Date</th>
-                <th>Doctor</th>
-                <th>Diagnosis</th>
-                <th>Treatment</th>
+                <th>' . $lang['date'] . '</th>
+                <th>' . $lang['doctor'] . '</th>
+                <th>' . $lang['diagnosis'] . '</th>
+                <th>' . $lang['treatment'] . '</th>
               </tr>';
     foreach ($consultations as $cons) {
         $html .= '<tr>
@@ -241,13 +242,13 @@ if (!empty($consultations)) {
 
 // Sanctions
 if (!empty($punitions)) {
-    $html .= '<h2 style="color:#2C5F2D; margin-top:20px;">Sanctions</h2>';
+    $html .= '<h2 style="color:#2C5F2D; margin-top:20px;">' . $lang['sanctions'] . '</h2>';
     $html .= '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">';
     $html .= '<tr style="background-color:#D4AF37; color:#000; font-weight:bold;">
-                <th>Date</th>
-                <th>Type</th>
-                <th>Description</th>
-                <th>Responsible</th>
+                <th>' . $lang['date'] . '</th>
+                <th>' . $lang['type'] . '</th>
+                <th>' . $lang['description'] . '</th>
+                <th>' . $lang['responsible'] . '</th>
               </tr>';
     foreach ($punitions as $pun) {
         $html .= '<tr>
@@ -262,12 +263,12 @@ if (!empty($punitions)) {
 
 // Notes
 if (!empty($remarques)) {
-    $html .= '<h2 style="color:#2C5F2D; margin-top:20px;">Notes</h2>';
+    $html .= '<h2 style="color:#2C5F2D; margin-top:20px;">' . $lang['notes'] . '</h2>';
     $html .= '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">';
     $html .= '<tr style="background-color:#D4AF37; color:#000; font-weight:bold;">
-                <th>Date</th>
-                <th>Author</th>
-                <th>Note</th>
+                <th>' . $lang['date'] . '</th>
+                <th>' . $lang['author'] . '</th>
+                <th>' . $lang['note'] . '</th>
               </tr>';
     foreach ($remarques as $rem) {
         $html .= '<tr>

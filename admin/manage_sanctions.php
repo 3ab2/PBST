@@ -201,29 +201,19 @@ $page_title = htmlspecialchars($translations['sanctions']) ;
                     <div class="mb-3">
                         <label class="form-label"><?php echo htmlspecialchars($translations['type']); ?></label>
                         <select name="type" class="form-control" required>
-                            <option value="samedi & dimanche" <?php echo ($sanction['type'] == 'samedi & dimanche') ? 'selected' : ''; ?>>samedi & dimanche</option>
-                            <option value="piquet" <?php echo ($sanction['type'] == 'piquet') ? 'selected' : ''; ?>>piquet
-                            </option>
-                            <option value="permanence" <?php echo ($sanction['type'] == 'permanence') ? 'selected' : ''; ?>>permanence</option>
-                            <option value="chef de poste" <?php echo ($sanction['type'] == 'chef de poste') ? 'selected' : ''; ?>>chef de poste</option>
-                            <option value="Garde" <?php echo ($sanction['type'] == 'Garde') ? 'selected' : ''; ?>>
-                                Garde</option>
-                            <option value="Corvet" <?php echo ($sanction['type'] == 'Corvet') ? 'selected' : ''; ?>>Corvet
-                            </option>
-                            <option value="LD 4 Jrs" <?php echo ($sanction['type'] == 'LD 4 Jrs') ? 'selected' : ''; ?>>LD
-                                4 Jrs</option>
-                            <option value="LD 8 Jrs" <?php echo ($sanction['type'] == 'LD 8 Jrs') ? 'selected' : ''; ?>>LD
-                                8 Jrs</option>
-                            <option value="LD 10 Jrs" <?php echo ($sanction['type'] == 'LD 10 Jrs') ? 'selected' : ''; ?>>
-                                LD 10 Jrs</option>
-                            <option value="LD 15 Jrs" <?php echo ($sanction['type'] == 'LD 15 Jrs') ? 'selected' : ''; ?>>
-                                LD 15 Jrs</option>
-                            <option value="LD 25 Jrs" <?php echo ($sanction['type'] == 'LD 25 Jrs') ? 'selected' : ''; ?>>
-                                LD 25 Jrs</option>
-                            <option value="LD 30 Jrs" <?php echo ($sanction['type'] == 'LD 30 Jrs') ? 'selected' : ''; ?>>
-                                LD 30 Jrs</option>
-                            <option value="LD 40 Jrs" <?php echo ($sanction['type'] == 'LD 40 Jrs') ? 'selected' : ''; ?>>
-                                LD 40 Jrs</option>
+                            <option value="samedi & dimanche">samedi & dimanche</option>
+                            <option value="piquet">piquet</option>
+                            <option value="permanence">permanence</option>
+                            <option value="chef de poste">chef de poste</option>
+                            <option value="Garde">Garde</option>
+                            <option value="Corvet">Corvet</option>
+                            <option value="LD 4 Jrs">LD 4 Jrs</option>
+                            <option value="LD 8 Jrs">LD 8 Jrs</option>
+                            <option value="LD 10 Jrs">LD 10 Jrs</option>
+                            <option value="LD 15 Jrs">LD 15 Jrs</option>
+                            <option value="LD 25 Jrs">LD 25 Jrs</option>
+                            <option value="LD 30 Jrs">LD 30 Jrs</option>
+                            <option value="LD 40 Jrs">LD 40 Jrs</option>
                         </select>
                     </div>
                     <div class="mb-3">

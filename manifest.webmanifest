@@ -1,0 +1,28 @@
+
+{
+  "name": "PBST App",
+  "short_name": "PBST",
+  "description": "PBST Application for Military Training Management",
+  "start_url": "/pbst_app/index.php",
+  "scope": "/pbst_app/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#0b5fff",
+  "categories": ["productivity", "business"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "/pbst_app/assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pbst_app/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

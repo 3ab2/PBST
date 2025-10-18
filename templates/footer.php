@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     html.classList.add('dark');
     toggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
   } else {
-    toggle.innerHTML = '<i class="bi bi-sun-fill"></i>'; 
+    toggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
   }
   toggle.addEventListener('click', function() {
     if (html.classList.contains('dark')) {
@@ -77,8 +77,23 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 300);
     });
   }
+
+  // PWA Install Prompt - Allow default browser banner
+  window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('Install prompt event fired - default banner will be shown');
+  });
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Register Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/pbst_app/sw.js')
+      .then(reg => console.log('Service Worker registered:', reg.scope))
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
+</script>
 </body>
 </html>
