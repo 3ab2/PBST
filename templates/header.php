@@ -631,7 +631,7 @@ $bootstrap_css = $html_dir === 'rtl' ?
             </div>
         </div>
     <?php endif; ?>
-    <?php if (isset($_SESSION['user_id'])): ?>
+    <?php if (isset($_SESSION['user_id']) || isset($_SESSION['instructor_id'])): ?>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="/pbst_app/index.php">
@@ -703,6 +703,24 @@ $bootstrap_css = $html_dir === 'rtl' ?
                             </li>
                             <li class="nav-item"><a class="nav-link"
                                     href="/pbst_app/docteur/manage_consultations.php"><?php echo htmlspecialchars($translations['consultations']); ?></a>
+                            </li>
+                        </ul>
+                    <?php elseif ($_SESSION['role'] == 'cellule_pedagogique'): ?>
+                        <ul class="navbar-nav">
+                            <li class="nav-item <?php echo (strpos($_SERVER['REQUEST_URI'], 'dashboard_cellule_pedagogique.php') !== false) ? 'active' : ''; ?>"><a class="nav-link"
+                                    href="/pbst_app/cellule_pedagogique/dashboard_cellule_pedagogique.php"><?php echo htmlspecialchars($translations['Dashboard']); ?></a>
+                            </li>
+                            <li class="nav-item <?php echo (strpos($_SERVER['REQUEST_URI'], 'manage_instructors.php') !== false) ? 'active' : ''; ?>"><a class="nav-link"
+                                    href="/pbst_app/cellule_pedagogique/manage_instructors.php"><?php echo htmlspecialchars($translations['Instructeurs']); ?></a>
+                            </li>
+                            <li class="nav-item <?php echo (strpos($_SERVER['REQUEST_URI'], 'manage_observations.php') !== false) ? 'active' : ''; ?>"><a class="nav-link"
+                                    href="/pbst_app/cellule_pedagogique/manage_observations.php"><?php echo htmlspecialchars($translations['Observations']); ?></a>
+                            </li>
+                            <li class="nav-item <?php echo (strpos($_SERVER['REQUEST_URI'], 'manage_subjects.php') !== false) ? 'active' : ''; ?>"><a class="nav-link"
+                                    href="/pbst_app/cellule_pedagogique/manage_subjects.php"><?php echo htmlspecialchars($translations['Matières']); ?></a>
+                            </li>
+                            <li class="nav-item <?php echo (strpos($_SERVER['REQUEST_URI'], 'stats.php') !== false) ? 'active' : ''; ?>"><a class="nav-link"
+                                    href="/pbst_app/cellule_pedagogique/stats.php"><?php echo htmlspecialchars($translations['stats'] ?? 'Stats'); ?></a>
                             </li>
                         </ul>
                     <?php endif; ?>

@@ -4,8 +4,6 @@ const CORE_ASSETS = [
   '/pbst_app/index.php',
   '/pbst_app/offline.html',
   '/pbst_app/manifest.webmanifest',
-  '/pbst_app/assets/css/app.css',
-  '/pbst_app/assets/js/app.js',
   '/pbst_app/assets/icons/icon-192.png',
   '/pbst_app/assets/icons/icon-512.png'
 ];

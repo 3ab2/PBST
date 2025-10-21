@@ -251,6 +251,134 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `nom`, `prenom`, `ema
 (6, 'Dr khaldoun', '$2y$10$h7xTNn95ZMHXchIaIsPXBe454qJupjo1p6kaT1F3ZcyTawDkIICae', 'docteur', 'mohammed', 'khaldoun', 'dr.khaldoun@gmail.com', '2025-10-03 10:43:18');
 
 --
+
+-- Update users table to include new roles
+ALTER TABLE users MODIFY COLUMN role ENUM('admin','secretaire','docteur','cellule_pedagogique','instructor') NOT NULL;
+
+-- Create instructors table
+CREATE TABLE instructors (
+  id_instructor INT AUTO_INCREMENT PRIMARY KEY,
+  cine VARCHAR(50) NOT NULL UNIQUE,
+  mle VARCHAR(50) NOT NULL UNIQUE,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  email VARCHAR(150),
+  phone VARCHAR(30),
+  bio TEXT,
+  password VARCHAR(255) NOT NULL,
+  is_active TINYINT(1) DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  speciality_id INT  NULL,
+);
+
+-- Create subjects table
+CREATE TABLE subjects (
+  id_subject INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  type ENUM('militaire','universitaire') NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(name, type)
+);
+
+-- Create instructor_subjects table
+CREATE TABLE instructor_subjects (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  instructor_id INT NOT NULL,
+  subject_id INT NOT NULL,
+  is_primary TINYINT(1) DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_isub_instructor FOREIGN KEY (instructor_id) REFERENCES instructors(id_instructor) ON DELETE CASCADE,
+  CONSTRAINT fk_isub_subject FOREIGN KEY (subject_id) REFERENCES subjects(id_subject) ON DELETE CASCADE,
+  UNIQUE(instructor_id, subject_id)
+);
+
+-- Create lessons table
+CREATE TABLE lessons (
+  id_lesson INT AUTO_INCREMENT PRIMARY KEY,
+  instructor_id INT NOT NULL,
+  subject_id INT NOT NULL,
+  title VARCHAR(255),
+  file_path VARCHAR(500) NOT NULL,
+  file_name VARCHAR(255),
+  file_size BIGINT,
+  uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  is_published TINYINT(1) DEFAULT 1,
+  CONSTRAINT fk_lesson_instructor FOREIGN KEY (instructor_id) REFERENCES instructors(id_instructor) ON DELETE CASCADE,
+  CONSTRAINT fk_lesson_subject FOREIGN KEY (subject_id) REFERENCES subjects(id_subject) ON DELETE CASCADE,
+  INDEX(instructor_id), INDEX(subject_id)
+);
+
+-- Create observations table
+CREATE TABLE observations (
+  id_observation INT AUTO_INCREMENT PRIMARY KEY,
+  instructor_id INT NOT NULL,
+  subject_id INT NOT NULL,
+  observed_by_user_id INT NULL,
+  obs_date DATE NOT NULL,
+  heure_debut TIME NOT NULL,
+  heure_fin TIME NOT NULL,
+  rating ENUM('positive','negative') NOT NULL,
+  score TINYINT NULL,
+  comment TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_obs_instructor FOREIGN KEY (instructor_id) REFERENCES instructors(id_instructor) ON DELETE CASCADE,
+  CONSTRAINT fk_obs_subject FOREIGN KEY (subject_id) REFERENCES subjects(id_subject) ON DELETE CASCADE,
+  CONSTRAINT fk_obs_user FOREIGN KEY (observed_by_user_id) REFERENCES users(id) ON DELETE SET NULL,
+  INDEX(instructor_id), INDEX(obs_date), INDEX(observed_by_user_id)
+);
+
+-- Create monthly_instructor_stats table
+CREATE TABLE monthly_instructor_stats (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  instructor_id INT NOT NULL,
+  year INT NOT NULL,
+  month INT NOT NULL,
+  positive_count INT DEFAULT 0,
+  negative_count INT DEFAULT 0,
+  total INT DEFAULT 0,
+  positive_ratio FLOAT DEFAULT 0.0,
+  computed_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE(instructor_id, year, month),
+  CONSTRAINT fk_mis_instructor FOREIGN KEY (instructor_id) REFERENCES instructors(id_instructor) ON DELETE CASCADE
+);
+
+-- Seed subjects
+INSERT INTO subjects (name, type) VALUES
+('tactique','militaire'),('reglement','militaire'),('IST','militaire'),
+('sécurité militaire','militaire'),('armement','militaire'),('topographie','militaire'),
+('génie informatique','universitaire'),('cyber sécurité','universitaire'),
+('réseau informatique','universitaire'),('infographie','universitaire'),
+('technique','universitaire'),('exploitation','universitaire'),
+('SSE','universitaire'),('Efficacité énergétique','universitaire');
+
+-- Sample instructors (passwords hashed with password_hash)
+INSERT INTO instructors ( cine, mle,username, first_name, last_name, email, phone, bio, password, specialite) VALUES
+( 'CINE001', 'MLE001','ahmed.benali', 'Ahmed', 'Benali', 'ahmed.benali@example.com', '0612345678', 'Experienced instructor in military tactics.', '$2y$10$dummy.hash.for.demo', 'Tactique Militaire'),
+( 'CINE002', 'MLE002', 'fatima.zahra','Fatima', 'Zahra', 'fatima.zahra@example.com', '0623456789', 'Expert in computer science.', '$2y$10$dummy.hash.for.demo', 'Informatique');
+
+-- Link instructors to subjects
+INSERT INTO instructor_subjects (instructor_id, subject_id, is_primary) VALUES
+(1, 1, 1), (1, 2, 0), -- Ahmed teaches tactique (primary) and reglement
+(2, 7, 1), (2, 8, 0); -- Fatima teaches génie informatique (primary) and cyber sécurité
+
+-- Migrate specialite to speciality_id foreign key
+ALTER TABLE instructors ADD COLUMN speciality_id INT;
+
+-- Populate speciality_id by matching existing specialite to specialites.nom_specialite
+UPDATE instructors SET speciality_id = (
+    SELECT s.id FROM specialites s WHERE s.nom_specialite = instructors.specialite
+) WHERE specialite IS NOT NULL AND specialite != '';
+
+-- Drop the old specialite column
+ALTER TABLE instructors DROP COLUMN specialite;
+
+-- Add foreign key constraint
+ALTER TABLE instructors ADD CONSTRAINT fk_instructor_specialite
+    FOREIGN KEY (speciality_id) REFERENCES specialites(id)
+
+
 -- Indexes for dumped tables
 --
 

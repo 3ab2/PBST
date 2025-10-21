@@ -7,6 +7,9 @@ if (in_array($_GET['type'] ?? '', ['specialites', 'stages', 'stagiaires', 'notes
 if (in_array($_GET['type'] ?? '', ['consultations', 'consultations_specialty', 'patients'])) {
     $allowed_roles[] = 'docteur';
 }
+if (in_array($_GET['type'] ?? '', ['instructors', 'subjects', 'observations', 'instructor_stats', 'observation_trends'])) {
+    $allowed_roles[] = 'cellule_pedagogique';
+}
 if (!in_array($_SESSION['role'], $allowed_roles)) {
     header('Location: ../auth/login.php');
     exit;
@@ -56,6 +59,43 @@ switch ($type) {
     case 'patients':
         $data = $pdo->query("SELECT COUNT(DISTINCT id_stagiaire) as total FROM consultations")->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(['total' => $data[0]['total']]);
+        break;
+    case 'instructors':
+        $data = $pdo->query("SELECT COUNT(*) as total FROM instructors WHERE is_active = 1")->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['total' => $data[0]['total']]);
+        break;
+    case 'subjects':
+        $data = $pdo->query("SELECT type, COUNT(*) as count FROM subjects GROUP BY type")->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($data);
+        break;
+    case 'observations':
+        $data = $pdo->query("SELECT COUNT(*) as total FROM observations")->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['total' => $data[0]['total']]);
+        break;
+    case 'instructor_stats':
+        $data = $pdo->query("
+            SELECT i.first_name, i.last_name, COUNT(o.id_observation) as observation_count,
+                   SUM(CASE WHEN o.rating = 'positive' THEN 1 ELSE 0 END) as positive_count,
+                   SUM(CASE WHEN o.rating = 'negative' THEN 1 ELSE 0 END) as negative_count
+            FROM instructors i
+            LEFT JOIN observations o ON i.id_instructor = o.instructor_id
+            WHERE i.is_active = 1
+            GROUP BY i.id_instructor, i.first_name, i.last_name
+            ORDER BY observation_count DESC
+            LIMIT 10
+        ")->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($data);
+        break;
+    case 'observation_trends':
+        $data = $pdo->query("
+            SELECT DATE_FORMAT(obs_date, '%Y-%m') as month, COUNT(*) as count,
+                   SUM(CASE WHEN rating = 'positive' THEN 1 ELSE 0 END) as positive_count,
+                   SUM(CASE WHEN rating = 'negative' THEN 1 ELSE 0 END) as negative_count
+            FROM observations
+            GROUP BY month
+            ORDER BY month
+        ")->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($data);
         break;
     default:
         echo json_encode(['error' => 'Invalid type']);

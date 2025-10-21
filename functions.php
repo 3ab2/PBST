@@ -10,7 +10,7 @@ if (isset($_GET['lang'])) {
 } elseif (isset($_SESSION['lang'])) {
     $lang = $_SESSION['lang'];
 } else {
-    $lang = 'ar';
+    $lang = 'fr';
     $_SESSION['lang'] = $lang;
 }
 
@@ -19,7 +19,7 @@ $lang_file = __DIR__ . '/lang/' . $lang . '.php';
 if (file_exists($lang_file)) {
     $translations = include $lang_file;
 } else {
-    $translations = include __DIR__ . '/lang/ar.php';
+    $translations = include __DIR__ . '/lang/fr.php';
 }
 
 // Role check function
@@ -38,6 +38,14 @@ function check_role($required_role) {
             header('Location: ../auth/login.php');
             exit;
         }
+    }
+}
+
+// Instructor login check
+function check_instructor_login() {
+    if (!isset($_SESSION['instructor_id'])) {
+        header('Location: ../auth/login.php');
+        exit;
     }
 }
 

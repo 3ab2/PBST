@@ -2,8 +2,12 @@
 require '../functions.php';
 
 
-if (isset($_SESSION['user_id'])) {
-    header('Location: ../' . $_SESSION['role'] . '/dashboard_' . $_SESSION['role'] . '.php');
+if (isset($_SESSION['user_id']) || isset($_SESSION['instructor_id'])) {
+    if (isset($_SESSION['role'])) {
+        header('Location: ../' . $_SESSION['role'] . '/dashboard_' . $_SESSION['role'] . '.php');
+    } elseif (isset($_SESSION['instructor_id'])) {
+        header('Location: ../instructor/dashboard_instructor.php');
+    }
     exit;
 }
 
@@ -16,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!validate_csrf_token($csrf)) {
         $errors[] = $translations['login_csrf_invalid'];
     } else {
+        // Check users table first
         $stmt = $pdo->prepare("SELECT id, password, role FROM users WHERE username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
@@ -25,7 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: ../' . $user['role'] . '/dashboard_' . $user['role'] . '.php');
             exit;
         } else {
-            $errors[] = $translations['login_invalid_credentials'];
+            // Check instructors table (login with username)
+            $stmt = $pdo->prepare("SELECT id_instructor, password, first_name, last_name FROM instructors WHERE username = ? AND is_active = 1");
+            $stmt->execute([$username]);
+            $instructor = $stmt->fetch();
+            if ($instructor && password_verify($password, $instructor['password'])) {
+                $_SESSION['instructor_id'] = $instructor['id_instructor'];
+                $_SESSION['instructor_name'] = $instructor['first_name'] . ' ' . $instructor['last_name'];
+                header('Location: ../instructor/dashboard_instructor.php');
+                exit;
+            } else {
+                $errors[] = $translations['login_invalid_credentials'];
+            }
         }
     }
 }
@@ -140,14 +156,14 @@ $page_title = htmlspecialchars($translations['login_title']) ;
         <div class="mb-3 form-group">
             <label for="username"
                 class="form-label"><?php echo htmlspecialchars($translations['login_username_label']); ?></label>
-            <i class="bi bi-person-fill form-icon"></i>
+            
             <input type="text" class="form-control" id="username" name="username" required autocomplete="username"
                 placeholder="<?php echo htmlspecialchars($translations['login_username_placeholder']); ?>">
         </div>
         <div class="mb-3 form-group">
             <label for="password"
                 class="form-label"><?php echo htmlspecialchars($translations['login_password_label']); ?></label>
-            <i class="bi bi-lock-fill form-icon"></i>
+            
             <input type="password" class="form-control" id="password" name="password" required
                 autocomplete="current-password"
                 placeholder="<?php echo htmlspecialchars($translations['login_password_placeholder']); ?>">
