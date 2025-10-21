@@ -12,6 +12,7 @@ return [
     'notes' => 'Remarques',
     'permissions' => 'Permissions',
     'sanctions' => 'Sanctions',
+    'plus' => 'Plus',
     'logout' => 'Déconnexion',
     'language' => 'Langue',
     'arabic' => 'Arabe',

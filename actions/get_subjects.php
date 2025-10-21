@@ -1,6 +1,6 @@
 <?php
 require '../functions.php';
-check_role(['cellule_pedagogique', 'instructor']);
+check_role(['cellule_pedagogique', 'instructor', 'admin']);
 
 header('Content-Type: application/json');
 

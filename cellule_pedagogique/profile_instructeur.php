@@ -1,6 +1,6 @@
 <?php
 require '../functions.php';
-check_role('cellule_pedagogique');
+check_role(['cellule_pedagogique', 'admin']);
 $instructor_id = $_GET['id'] ?? null;
 if (!$instructor_id) {
     header('Location: stats.php');

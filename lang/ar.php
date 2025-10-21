@@ -12,6 +12,7 @@ return [
     'notes' => 'الملاحظات',
     'permissions' => 'الأذونات',
     'sanctions' => 'العقوبات',
+    'plus' => 'المزيد',
     'logout' => 'تسجيل الخروج',
     'language' => 'اللغة',
     'arabic' => 'العربية',

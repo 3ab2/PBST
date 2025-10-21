@@ -1,6 +1,6 @@
 <?php
 require '../functions.php';
-check_role('cellule_pedagogique');
+check_role(['cellule_pedagogique', 'admin']);
 
 $csrf_token = generate_csrf_token();
 $page_title = htmlspecialchars($translations['manage_subjects']);

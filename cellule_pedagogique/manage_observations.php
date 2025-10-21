@@ -1,6 +1,6 @@
 <?php
 require '../functions.php';
-check_role('cellule_pedagogique');
+check_role(['cellule_pedagogique', 'admin']);
 $page_title = 'Manage Observations';
 
 // Add missing translations if not defined

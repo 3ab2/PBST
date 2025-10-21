@@ -225,9 +225,15 @@ $bootstrap_css = $html_dir === 'rtl' ?
         #floating-theme-toggle {
             position: fixed;
             top: 10px;
-            <?php echo $html_dir === 'rtl' ? 'right: 10px;' : 'left: 10px;'; ?>
+            left: 10px;
+            right: auto;
             z-index: 1000;
             animation: fadeIn 0.5s ease;
+        }
+
+        [dir="rtl"] #floating-theme-toggle {
+            right: 10px;
+            left: auto;
         }
 
         @keyframes fadeIn {
@@ -648,28 +654,34 @@ $bootstrap_css = $html_dir === 'rtl' ?
                                     href="/pbst_app/admin/dashboard_admin.php"><?php echo htmlspecialchars($translations['dashboard']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
-                                    href="/pbst_app/admin/manage_users.php"><?php echo htmlspecialchars($translations['users']); ?></a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link"
                                     href="/pbst_app/admin/manage_stagiaires.php"><?php echo htmlspecialchars($translations['trainees']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
+                                    href="/pbst_app/cellule_pedagogique/manage_instructors.php"><?php echo htmlspecialchars($translations['Instructeurs']); ?></a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link"
                                     href="/pbst_app/admin/manage_consultations.php"><?php echo htmlspecialchars($translations['consultations']); ?></a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link"
-                                    href="/pbst_app/admin/manage_stages.php"><?php echo htmlspecialchars($translations['stages']); ?></a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link"
-                                    href="/pbst_app/admin/manage_specialites.php"><?php echo htmlspecialchars($translations['specialities']); ?></a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link"
-                                    href="/pbst_app/admin/manage_notes.php"><?php echo htmlspecialchars($translations['notes']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
                                     href="/pbst_app/admin/manage_permissions.php"><?php echo htmlspecialchars($translations['permissions']); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link"
                                     href="/pbst_app/admin/manage_sanctions.php"><?php echo htmlspecialchars($translations['sanctions']); ?></a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <?php echo htmlspecialchars($translations['plus'] ?? 'Plus'); ?>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="moreDropdown">
+                                    <li><a class="dropdown-item" href="/pbst_app/admin/manage_notes.php"><?php echo htmlspecialchars($translations['notes']); ?></a></li>
+                                    <li><a class="dropdown-item" href="/pbst_app/cellule_pedagogique/manage_observations.php"><?php echo htmlspecialchars($translations['Observations']); ?></a></li>
+                                    <li><a class="dropdown-item" href="/pbst_app/cellule_pedagogique/manage_subjects.php"><?php echo htmlspecialchars($translations['Matières']); ?></a></li>
+                                    <li><a class="dropdown-item" href="/pbst_app/cellule_pedagogique/stats.php"><?php echo htmlspecialchars($translations['stats'] ?? 'Stats'); ?></a></li>
+                                    <li><a class="dropdown-item" href="/pbst_app/admin/manage_stages.php"><?php echo htmlspecialchars($translations['stages']); ?></a></li>
+                                    <li><a class="dropdown-item" href="/pbst_app/admin/manage_specialites.php"><?php echo htmlspecialchars($translations['specialities']); ?></a></li>
+                                    <li><a class="dropdown-item" href="/pbst_app/admin/manage_users.php"><?php echo htmlspecialchars($translations['users']); ?></a></li>
+                                    
+                                </ul>
                             </li>
                         </ul>
                     <?php elseif ($_SESSION['role'] == 'secretaire'): ?>
