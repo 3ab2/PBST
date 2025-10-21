@@ -363,4 +363,9 @@ return [
     'day' => 'يوم',
     'month' => 'شهر',
     'year' => 'سنة',
+    'filter_by_stage' => 'تصفية حسب الدورة',
+    'search_by_name' => 'البحث بالاسم',
+    'all_stages' => 'جميع الدورات',
+    'select_stage' => 'اختر الدورة',
+    'file_upload_error' => 'خطأ في رفع الملف',
 ];

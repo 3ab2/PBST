@@ -1,26 +1,26 @@
-# TODO: Add heure_debut and heure_fin to observations
+# TODO: Implement Independent Filters for Military and Academic Subjects Tables
 
-## Database Schema Update
-- [x] ALTER TABLE observations CHANGE obs_time heure_debut TIME NOT NULL;
-- [x] ALTER TABLE observations ADD COLUMN heure_fin TIME NOT NULL;
+## Steps to Complete
 
-## Backend Actions
-- [x] Update actions/add_observation.php: Change obs_time to heure_debut, add heure_fin, add validation (heure_fin > heure_debut)
-- [x] Update actions/edit_observation.php: Change obs_time to heure_debut, add heure_fin, add validation
-- [x] Update actions/get_observations.php: Change obs_time to heure_debut, add heure_fin in SELECT
+1. **Update actions/get_subjects.php**
+   - Add 'category' parameter to filter subjects by s.type (militaire or universitaire). ❌ (Reverted to original)
 
-## Frontend Updates
-- [x] Update cellule_pedagogique/manage_observations.php: Change table column from "Time" to "Start Time", add "End Time" column. Update add/edit modals to have heure_debut and heure_fin inputs. Update JS for new fields and validation.
-- [x] Update cellule_pedagogique/dashboard_cellule_pedagogique.php: Update add observation modal similarly.
-- [x] Update profile_instructeur_pdf.php: Change obs_time references to heure_debut and heure_fin
+2. **Add Filter UI Above Military Subjects Table**
+   - Insert a Bootstrap row with search input (for subject name) and stage dropdown (with "All" option) above the military subjects card-body. ❌ (Removed)
 
-## Validation & UX
-- [x] Add client-side validation in JS to ensure heure_fin > heure_debut
-- [x] Ensure time inputs use HH:MM format
+3. **Add Filter UI Above Academic Subjects Table**
+   - Insert a Bootstrap row with search input (for subject name) and stage dropdown (with "All" option) above the academic subjects card-body. ❌ (Removed)
 
-## Followup steps
-- [x] Run database migration to update schema
-- [x] Test adding/editing observations with new time fields
-- [x] Verify validation works (heure_fin > heure_debut)
-- [x] Check display in tables and PDFs
-- [x] Update translations for start_time and end_time in lang/ar.php and lang/fr.php
+4. **Modify JavaScript Logic**
+   - Replace loadSubjects() with separate loadMilitarySubjects() and loadAcademicSubjects() functions.
+   - Each function calls get_subjects.php with category, search, and stage_id parameters. ❌ (Reverted to single loadSubjects function)
+
+5. **Add Event Listeners for Filters**
+   - Attach oninput to search inputs and onchange to stage dropdowns to trigger respective load functions. ❌ (Removed)
+
+6. **Update Load Calls in Handlers**
+   - In add/edit/delete success handlers, call both loadMilitarySubjects() and loadAcademicSubjects() with default filters. ❌ (Reverted to single loadSubjects call)
+
+7. **Test Implementation**
+   - Verify filters work independently, update only their table, and persist after operations.
+   - Ensure Bootstrap styling and responsiveness.

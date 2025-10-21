@@ -11,8 +11,9 @@ header('Content-Type: application/json');
 
 $subject_name = sanitize_input($_POST['subject_name'] ?? '');
 $category = $_POST['category'] ?? '';
+$stage_id = $_POST['stage_id'] ?? '';
 
-if (empty($subject_name) || empty($category)) {
+if (empty($subject_name) || empty($category) || empty($stage_id)) {
     echo json_encode(['success' => false, 'message' => $translations['invalid_input']]);
     exit;
 }
@@ -20,6 +21,25 @@ if (empty($subject_name) || empty($category)) {
 if (!in_array($category, ['militaire', 'universitaire'])) {
     echo json_encode(['success' => false, 'message' => $translations['invalid_type']]);
     exit;
+}
+
+// Handle file upload
+$file_path = null;
+if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
+    $upload_dir = '../uploads/subjects/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+    $original_name = basename($_FILES['file']['name']);
+    $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
+    $new_filename = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $original_name);
+    $target_file = $upload_dir . $new_filename;
+    if (move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
+        $file_path = 'uploads/subjects/' . $new_filename;
+    } else {
+        echo json_encode(['success' => false, 'message' => $translations['file_upload_error']]);
+        exit;
+    }
 }
 
 try {
@@ -31,8 +51,8 @@ try {
         exit;
     }
 
-    $stmt = $pdo->prepare("INSERT INTO subjects (name, type) VALUES (?, ?)");
-    $stmt->execute([$subject_name, $category]);
+    $stmt = $pdo->prepare("INSERT INTO subjects (name, type, stage_id, file) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$subject_name, $category, $stage_id, $file_path]);
 
     echo json_encode(['success' => true, 'message' => $translations['subject_added_successfully']]);
 } catch (Exception $e) {

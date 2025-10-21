@@ -362,4 +362,9 @@ return [
     'day' => 'Jour',
     'month' => 'Mois',
     'year' => 'Année',
+    'filter_by_stage' => 'Filtrer par stage',
+    'search_by_name' => 'Rechercher par nom',
+    'all_stages' => 'Tous les stages',
+    'select_stage' => 'Sélectionner la stage',
+    'file_upload_error' => 'Erreur de téléchargement de fichier',
 ];
