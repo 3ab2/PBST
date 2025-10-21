@@ -23,22 +23,50 @@ if (!in_array($category, ['militaire', 'universitaire'])) {
     exit;
 }
 
-// Handle file upload
-$file_path = null;
-if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
+// Handle multiple file uploads
+$uploaded_files = [];
+if (isset($_FILES['files'])) {
     $upload_dir = '../uploads/subjects/';
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0755, true);
     }
-    $original_name = basename($_FILES['file']['name']);
-    $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
-    $new_filename = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $original_name);
-    $target_file = $upload_dir . $new_filename;
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
-        $file_path = 'uploads/subjects/' . $new_filename;
-    } else {
-        echo json_encode(['success' => false, 'message' => $translations['file_upload_error']]);
-        exit;
+
+    $allowed_types = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'mp4', 'avi', 'mov', 'jpg', 'jpeg', 'png'];
+    $max_size = 20 * 1024 * 1024; // 20MB
+
+    foreach ($_FILES['files']['name'] as $key => $original_name) {
+        if ($_FILES['files']['error'][$key] !== UPLOAD_ERR_OK) {
+            continue; // Skip files with errors
+        }
+
+        $file_size = $_FILES['files']['size'][$key];
+        $file_extension = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
+
+        // Validate file type and size
+        if (!in_array($file_extension, $allowed_types)) {
+            echo json_encode(['success' => false, 'message' => $translations['invalid_file_type'] ?? 'Invalid file type']);
+            exit;
+        }
+
+        if ($file_size > $max_size) {
+            echo json_encode(['success' => false, 'message' => $translations['file_too_large'] ?? 'File too large']);
+            exit;
+        }
+
+        $new_filename = time() . '_' . uniqid() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $original_name);
+        $target_file = $upload_dir . $new_filename;
+
+        if (move_uploaded_file($_FILES['files']['tmp_name'][$key], $target_file)) {
+            $uploaded_files[] = [
+                'file_path' => 'uploads/subjects/' . $new_filename,
+                'file_name' => $original_name,
+                'file_type' => $file_extension,
+                'file_size' => $file_size
+            ];
+        } else {
+            echo json_encode(['success' => false, 'message' => $translations['file_upload_error']]);
+            exit;
+        }
     }
 }
 
@@ -51,8 +79,18 @@ try {
         exit;
     }
 
-    $stmt = $pdo->prepare("INSERT INTO subjects (name, type, stage_id, file) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$subject_name, $category, $stage_id, $file_path]);
+    // Insert subject
+    $stmt = $pdo->prepare("INSERT INTO subjects (name, type, stage_id) VALUES (?, ?, ?)");
+    $stmt->execute([$subject_name, $category, $stage_id]);
+    $subject_id = $pdo->lastInsertId();
+
+    // Insert files into subject_files table
+    if (!empty($uploaded_files)) {
+        $stmt = $pdo->prepare("INSERT INTO subject_files (subject_id, file_path, file_name, file_type, file_size) VALUES (?, ?, ?, ?, ?)");
+        foreach ($uploaded_files as $file) {
+            $stmt->execute([$subject_id, $file['file_path'], $file['file_name'], $file['file_type'], $file['file_size']]);
+        }
+    }
 
     echo json_encode(['success' => true, 'message' => $translations['subject_added_successfully']]);
 } catch (Exception $e) {

@@ -118,8 +118,9 @@ $page_title = htmlspecialchars($translations['manage_subjects']);
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label"><?php echo htmlspecialchars($translations['file']); ?></label>
-                        <input type="file" name="file" class="form-control" accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.avi,.mov">
+                        <label class="form-label"><?php echo htmlspecialchars($translations['files']); ?></label>
+                        <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.avi,.mov,.jpg,.jpeg,.png">
+                        <div id="addFilePreview" class="mt-2"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -163,9 +164,10 @@ $page_title = htmlspecialchars($translations['manage_subjects']);
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label"><?php echo htmlspecialchars($translations['file']); ?></label>
-                        <input type="file" name="file" class="form-control" accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.avi,.mov">
-                        <small class="form-text text-muted">Leave empty to keep current file</small>
+                        <label class="form-label"><?php echo htmlspecialchars($translations['files']); ?></label>
+                        <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.avi,.mov,.jpg,.jpeg,.png">
+                        <div id="editFilePreview" class="mt-2"></div>
+                        <input type="hidden" name="files_to_remove" id="editFilesToRemove">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -222,10 +224,34 @@ $(document).ready(function() {
             data: { id: id },
             dataType: 'json',
             success: function(data) {
+                if (typeof data !== 'object' || !data) {
+                    alert('Invalid response from server');
+                    return;
+                }
+                if (!data.files) data.files = [];
                 $('#edit_subject_id').val(data.id_subject);
                 $('#edit_subject_name').val(data.name);
                 $('#edit_category').val(data.type);
                 $('#edit_stage_select').val(data.stage_id);
+
+                // Load and display existing files
+                const previewDiv = $('#editFilePreview');
+                previewDiv.empty();
+                if (data.files && data.files.length > 0) {
+                    data.files.forEach(file => {
+                        const fileDiv = $(`
+                            <div class="d-flex align-items-center mb-2 p-2 border rounded">
+                                <i class="bi ${getFileIcon(file.file_type)} me-2"></i>
+                                <span class="flex-grow-1">${file.file_name}</span>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFile(${file.id}, this)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        `);
+                        previewDiv.append(fileDiv);
+                    });
+                }
+
                 $('#editSubjectModal').modal('show');
             },
             error: function(xhr, status, error) {
@@ -260,18 +286,29 @@ function loadSubjects() {
     fetch('../actions/get_subjects.php')
         .then(response => response.json())
         .then(data => {
+            if (data.error) {
+                alert('Error loading subjects: ' + data.error);
+                return;
+            }
+            if (!Array.isArray(data)) {
+                console.error('Expected array of subjects, got:', data);
+                return;
+            }
             const militaryTbody = document.getElementById('militarySubjectsTableBody');
             const academicTbody = document.getElementById('academicSubjectsTableBody');
             militaryTbody.innerHTML = '';
             academicTbody.innerHTML = '';
 
             data.forEach(subject => {
-                const fileLink = subject.file ? `<a href="../${subject.file}" target="_blank" class="btn btn-sm btn-info"><i class="bi bi-file-earmark"></i> View</a>` : 'No file';
+                let filesHtml = '<span class="text-muted">No files</span>';
+                if (subject.files && subject.files.length > 0) {
+                    filesHtml = `<button class="btn btn-sm btn-outline-primary" onclick="viewSubjectFiles(${subject.id_subject}, '${subject.name}')"><i class="bi bi-folder"></i> ${subject.files.length} file(s)</button>`;
+                }
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${subject.name}</td>
                     <td>${subject.stage_name || 'N/A'}</td>
-                    <td>${fileLink}</td>
+                    <td>${filesHtml}</td>
                     <td>
                         <button class="btn btn-sm btn-warning me-1 btn-edit" data-id="${subject.id_subject}">
                             <i class="bi bi-pencil"></i>
@@ -292,6 +329,10 @@ function loadSubjects() {
             // Apply initial filters
             filterSubjects('military');
             filterSubjects('academic');
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert('Error loading subjects: ' + error.message);
         });
 }
 
@@ -342,6 +383,151 @@ function loadStages() {
             });
         })
         .catch(error => console.error('Error loading stages:', error));
+}
+
+function getFileIcon(type) {
+    const icons = {
+        'pdf': 'bi-file-earmark-pdf',
+        'doc': 'bi-file-earmark-word',
+        'docx': 'bi-file-earmark-word',
+        'ppt': 'bi-file-earmark-ppt',
+        'pptx': 'bi-file-earmark-ppt',
+        'mp4': 'bi-file-earmark-play',
+        'avi': 'bi-file-earmark-play',
+        'mov': 'bi-file-earmark-play',
+        'jpg': 'bi-file-earmark-image',
+        'jpeg': 'bi-file-earmark-image',
+        'png': 'bi-file-earmark-image'
+    };
+    return icons[type] || 'bi-file-earmark';
+}
+
+function viewFile(filePath, fileType) {
+    if (['jpg', 'jpeg', 'png'].includes(fileType)) {
+        // Show image in modal
+        const modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.innerHTML = `
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <img src="../${filePath}" class="img-fluid" alt="File">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="../${filePath}" target="_blank" class="btn btn-primary">Download</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        new bootstrap.Modal(modal).show();
+        modal.addEventListener('hidden.bs.modal', () => modal.remove());
+    } else if (['mp4', 'avi', 'mov'].includes(fileType)) {
+        // Show video in modal
+        const modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.innerHTML = `
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <video controls class="w-100">
+                            <source src="../${filePath}" type="video/${fileType === 'mov' ? 'mp4' : fileType}">
+                        </video>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="../${filePath}" target="_blank" class="btn btn-primary">Download</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        new bootstrap.Modal(modal).show();
+        modal.addEventListener('hidden.bs.modal', () => modal.remove());
+    } else {
+        // Open in new tab for PDFs and documents
+        window.open(`../${filePath}`, '_blank');
+    }
+}
+
+function removeFile(fileId, buttonElement) {
+    if (confirm('Are you sure you want to remove this file?')) {
+        const currentFiles = $('#editFilesToRemove').val();
+        const filesToRemove = currentFiles ? currentFiles.split(',') : [];
+        filesToRemove.push(fileId);
+        $('#editFilesToRemove').val(filesToRemove.join(','));
+        $(buttonElement).closest('.d-flex').remove();
+    }
+}
+
+function viewSubjectFiles(subjectId, subjectName) {
+    fetch('../actions/get_subjects.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'id=' + subjectId
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('Error loading files: ' + data.error);
+            return;
+        }
+        if (!data.files || data.files.length === 0) {
+            alert('No files found for this subject.');
+            return;
+        }
+
+        // Create modal
+        const modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.id = 'filesModal';
+        modal.innerHTML = `
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Files for ${subjectName}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            ${data.files.map(file => `
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="bi ${getFileIcon(file.file_type)} fs-1 mb-2"></i>
+                                            <h6 class="card-title">${file.file_name}</h6>
+                                            <p class="card-text text-muted">${file.file_type.toUpperCase()} • ${(file.file_size / 1024 / 1024).toFixed(2)} MB</p>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-outline-primary" onclick="viewFile('${file.file_path}', '${file.file_type}')">
+                                                    <i class="bi bi-eye"></i> View
+                                                </button>
+                                                <a href="../${file.file_path}" target="_blank" class="btn btn-sm btn-outline-success">
+                                                    <i class="bi bi-download"></i> Download
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        new bootstrap.Modal(modal).show();
+        modal.addEventListener('hidden.bs.modal', () => modal.remove());
+    })
+    .catch(error => {
+        console.error('Error loading files:', error);
+        alert('Error loading files: ' + error.message);
+    });
 }
 
 function deleteSubject(id) {

@@ -278,8 +278,10 @@ CREATE TABLE subjects (
   id_subject INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
   type ENUM('militaire','universitaire') NOT NULL,
+  stage_id INT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE(name, type)
+  UNIQUE(name, type),
+  CONSTRAINT fk_subjects_stage FOREIGN KEY (stage_id) REFERENCES stages(id) ON DELETE SET NULL
 );
 
 -- Create instructor_subjects table
@@ -327,6 +329,19 @@ CREATE TABLE observations (
   CONSTRAINT fk_obs_subject FOREIGN KEY (subject_id) REFERENCES subjects(id_subject) ON DELETE CASCADE,
   CONSTRAINT fk_obs_user FOREIGN KEY (observed_by_user_id) REFERENCES users(id) ON DELETE SET NULL,
   INDEX(instructor_id), INDEX(obs_date), INDEX(observed_by_user_id)
+);
+
+-- Create subject_files table
+CREATE TABLE subject_files (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subject_id INT NOT NULL,
+  file_path VARCHAR(500) NOT NULL,
+  file_name VARCHAR(255) NOT NULL,
+  file_type VARCHAR(50) NOT NULL,
+  file_size BIGINT NOT NULL,
+  uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_subject_files_subject FOREIGN KEY (subject_id) REFERENCES subjects(id_subject) ON DELETE CASCADE,
+  INDEX(subject_id)
 );
 
 -- Create monthly_instructor_stats table

@@ -44,6 +44,9 @@ $pdf->setPrintFooter(false);
 
 $pdf->AddPage();
 
+// Set background image
+$pdf->Image('images/border.jpg', 0, 0, 210, 297, 'JPG', '', '', false, 300, '', false, false, 0);
+
 // HTML content
 $months = [
     1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April',
@@ -53,47 +56,54 @@ $months = [
 
 $month_name = $months[$month];
 
-// Place-specific styling (for top 3 only)
-$badge_text = '';
-$badge_color = '#4A6B4A';
-if ($position === 1) { $badge_text = '1st Place'; $badge_color = '#D4AF37'; }
-elseif ($position === 2) { $badge_text = '2nd Place'; $badge_color = '#C0C0C0'; }
-elseif ($position === 3) { $badge_text = '3rd Place'; $badge_color = '#CD7F32'; }
 $ratio = number_format($stats['positive_ratio'] * 100, 1);
 
 $html = '
 <style>
-body { font-family: dejavusans; text-align: center; padding: 40px; }
-.logo { margin-top: 20px; }
-.title { font-size: 28px; margin-top: 30px; font-weight: bold; }
-.badge { display:inline-block; margin-top:10px; padding:6px 14px; border-radius:20px; color:#000; font-weight:bold; border:2px solid ' . $badge_color . '; }
-.name { font-size: 24px; margin-top: 20px; }
-.meta { margin-top: 20px; font-size: 16px; }
-.signatures { margin-top: 60px; display: flex; justify-content: space-around; }
-.signature { text-align: center; }
+body { font-family: dejavusans; margin: 0; padding: 20px; }
+.header { display: table; width: 100%; margin-bottom: 40px; }
+.header-left { display: table-cell; vertical-align: top; text-align: left; font-size: 14px; }
+.header-center { display: table-cell; vertical-align: top; text-align: center; }
+.header-right { display: table-cell; vertical-align: top; text-align: right; font-size: 12px; }
+.body { text-align: center; margin: 40px 0; }
+.title { font-size: 32px; font-weight: bold; margin-bottom: 20px; }
+.appreciation { font-size: 18px; margin-bottom: 20px; }
+.name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+.details { font-size: 16px; margin-bottom: 30px; }
+.footer { text-align: right; margin-top: 60px; font-size: 14px; }
+.signature { margin-bottom: 10px; }
+.hinata { font-size: 12px; color: #888; }
 </style>
 
-<img class="logo" src="images/bst.png" alt="logo" width="140"/>
-<div class="title">Certificate of Appreciation</div>
-' . ($badge_text ? '<div class="badge" style="background-color: rgba(0,0,0,0);">' . htmlspecialchars($badge_text) . '</div>' : '') . '
-<div class="meta">This is to certify that</div>
-<div class="name">' . htmlspecialchars($instructor['first_name'] . ' ' . $instructor['last_name']) . '</div>
-<div class="meta">CINE: ' . htmlspecialchars($instructor['cine']) . ' | MLE: ' . htmlspecialchars($instructor['mle']) . '</div>
-<p style="margin-top:30px;">
-    In recognition of outstanding teaching performance for <strong>' . $month_name . ' ' . $year . '</strong>.
-    Positive observations: <strong>' . $stats['positive_count'] . '</strong>, Negative: <strong>' . $stats['negative_count'] . '</strong>, Total: <strong>' . $stats['total'] . '</strong>, Score: <strong>' . $ratio . '%</strong>.
-</p>
-<div class="signatures">
-    <div class="signature">
-        <img src="images/director_signature.png" alt="director" width="180"/><br/>
-        Director<br/>Colonel Erradi
-    </div>
-    <div class="signature">
-        <img src="images/cellule_signature.png" alt="cellule" width="180"/><br/>
-        Cellule Pédagogique<br/>Head of Cellule
+<div class="header">
+    <div class="header-left">MEKNES LE, ' . date('d M Y') . '</div>
+    <div class="header-center"><img src="images/far.png" alt="logo" width="80"/></div>
+    <div class="header-right">
+        ROYAUME DU MAROC<br>
+        FORCES ARMÉES ROYALES<br>
+        PLACE D’ARME DE MEKNES<br>
+        1° BATAILLON DE SOUTIEN DES TRANSMISSIONS
     </div>
 </div>
-<div style="margin-top:30px;">Date: ' . date('F j, Y') . '</div>
+
+<div class="body">
+    <div class="title">Meilleur Formateur</div>
+    <div class="appreciation">
+        En reconnaissance de vos excellentes performances pédagogiques et de votre dévouement à l\'enseignement.<br>
+        Merci pour votre contribution exceptionnelle à la formation de nos stagiaires.
+    </div>
+    <div class="name">' . htmlspecialchars($instructor['first_name'] . ' ' . $instructor['last_name']) . '</div>
+    <div class="details">
+        CINE: ' . htmlspecialchars($instructor['cine']) . ' | MLE: ' . htmlspecialchars($instructor['mle']) . '<br>
+        Période: ' . $month_name . ' ' . $year . '<br>
+        Observations positives: ' . $stats['positive_count'] . ', Négatives: ' . $stats['negative_count'] . ', Total: ' . $stats['total'] . ', Score: ' . $ratio . '%
+    </div>
+</div>
+
+<div class="footer">
+    <div class="signature">Le colonel ABDELHAFID ERRADI</div>
+    <div class="hinata">Hinata ❤️</div>
+</div>
 ';
 
 $pdf->writeHTML($html, true, false, true, false, '');

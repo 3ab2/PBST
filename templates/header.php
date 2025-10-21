@@ -675,8 +675,8 @@ $bootstrap_css = $html_dir === 'rtl' ?
                                 <ul class="dropdown-menu" aria-labelledby="moreDropdown">
                                     <li><a class="dropdown-item" href="/pbst_app/admin/manage_notes.php"><?php echo htmlspecialchars($translations['notes']); ?></a></li>
                                     <li><a class="dropdown-item" href="/pbst_app/cellule_pedagogique/manage_observations.php"><?php echo htmlspecialchars($translations['Observations']); ?></a></li>
-                                    <li><a class="dropdown-item" href="/pbst_app/cellule_pedagogique/manage_subjects.php"><?php echo htmlspecialchars($translations['Matières']); ?></a></li>
                                     <li><a class="dropdown-item" href="/pbst_app/cellule_pedagogique/stats.php"><?php echo htmlspecialchars($translations['stats'] ?? 'Stats'); ?></a></li>
+                                    <li><a class="dropdown-item" href="/pbst_app/cellule_pedagogique/manage_subjects.php"><?php echo htmlspecialchars($translations['Matières']); ?></a></li>
                                     <li><a class="dropdown-item" href="/pbst_app/admin/manage_stages.php"><?php echo htmlspecialchars($translations['stages']); ?></a></li>
                                     <li><a class="dropdown-item" href="/pbst_app/admin/manage_specialites.php"><?php echo htmlspecialchars($translations['specialities']); ?></a></li>
                                     <li><a class="dropdown-item" href="/pbst_app/admin/manage_users.php"><?php echo htmlspecialchars($translations['users']); ?></a></li>

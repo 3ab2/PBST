@@ -2,12 +2,9 @@
 require '../functions.php';
 check_role('admin');
 
-// Fetch users and instructors
-$users = $pdo->query("SELECT id, username, role, nom, prenom, email, NULL as cine, NULL as mle FROM users ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
-$instructors = $pdo->query("SELECT id_instructor as id, username, 'instructor' as role, last_name as nom, first_name as prenom, email, cine, mle FROM instructors ORDER BY id_instructor DESC")->fetchAll(PDO::FETCH_ASSOC);
-
-// Combine users and instructors
-$all_users = array_merge($users, $instructors);
+// Fetch users
+$users = $pdo->query("SELECT id, username, role, nom, prenom, email FROM users ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+$all_users = $users;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_user'])) {
@@ -17,18 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nom = sanitize_input($_POST['nom']);
         $prenom = sanitize_input($_POST['prenom']);
         $email = sanitize_input($_POST['email']);
-        $cine = sanitize_input($_POST['cine'] ?? '');
-        $mle = sanitize_input($_POST['mle'] ?? '');
         $csrf = $_POST['csrf_token'];
 
         if (validate_csrf_token($csrf)) {
-            if ($role == 'instructor') {
-                $stmt = $pdo->prepare("INSERT INTO instructors (username, password, first_name, last_name, email, cine, mle) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$username, $password, $prenom, $nom, $email, $cine, $mle]);
-            } else {
-                $stmt = $pdo->prepare("INSERT INTO users (username, password, role, nom, prenom, email) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$username, $password, $role, $nom, $prenom, $email]);
-            }
+            $stmt = $pdo->prepare("INSERT INTO users (username, password, role, nom, prenom, email) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$username, $password, $role, $nom, $prenom, $email]);
             header('Location: manage_users.php');
             exit;
         }
@@ -40,29 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nom = sanitize_input($_POST['nom']);
         $prenom = sanitize_input($_POST['prenom']);
         $email = sanitize_input($_POST['email']);
-        $cine = sanitize_input($_POST['cine'] ?? '');
-        $mle = sanitize_input($_POST['mle'] ?? '');
         $csrf = $_POST['csrf_token'];
 
         if (validate_csrf_token($csrf)) {
-            if ($role == 'instructor') {
-                if (!empty($password)) {
-                    $password = password_hash($password, PASSWORD_DEFAULT);
-                    $stmt = $pdo->prepare("UPDATE instructors SET username = ?, password = ?, first_name = ?, last_name = ?, email = ?, cine = ?, mle = ? WHERE id_instructor = ?");
-                    $stmt->execute([$username, $password, $prenom, $nom, $email, $cine, $mle, $id]);
-                } else {
-                    $stmt = $pdo->prepare("UPDATE instructors SET username = ?, first_name = ?, last_name = ?, email = ?, cine = ?, mle = ? WHERE id_instructor = ?");
-                    $stmt->execute([$username, $prenom, $nom, $email, $cine, $mle, $id]);
-                }
+            if (!empty($password)) {
+                $password = password_hash($password, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("UPDATE users SET username = ?, password = ?, role = ?, nom = ?, prenom = ?, email = ? WHERE id = ?");
+                $stmt->execute([$username, $password, $role, $nom, $prenom, $email, $id]);
             } else {
-                if (!empty($password)) {
-                    $password = password_hash($password, PASSWORD_DEFAULT);
-                    $stmt = $pdo->prepare("UPDATE users SET username = ?, password = ?, role = ?, nom = ?, prenom = ?, email = ? WHERE id = ?");
-                    $stmt->execute([$username, $password, $role, $nom, $prenom, $email, $id]);
-                } else {
-                    $stmt = $pdo->prepare("UPDATE users SET username = ?, role = ?, nom = ?, prenom = ?, email = ? WHERE id = ?");
-                    $stmt->execute([$username, $role, $nom, $prenom, $email, $id]);
-                }
+                $stmt = $pdo->prepare("UPDATE users SET username = ?, role = ?, nom = ?, prenom = ?, email = ? WHERE id = ?");
+                $stmt->execute([$username, $role, $nom, $prenom, $email, $id]);
             }
             header('Location: manage_users.php');
             exit;
@@ -87,8 +64,6 @@ $page_title = htmlspecialchars($translations['manage_users']);
             <th><?php echo htmlspecialchars($translations['role']); ?></th>
             <th><?php echo htmlspecialchars($translations['name']); ?></th>
             <th><?php echo htmlspecialchars($translations['email']); ?></th>
-            <th>CINE</th>
-            <th>MLE</th>
             <th><?php echo htmlspecialchars($translations['actions']); ?></th>
         </tr>
     </thead>
@@ -100,8 +75,6 @@ $page_title = htmlspecialchars($translations['manage_users']);
             <td><?php echo htmlspecialchars($translations[$user['role']]); ?></td>
             <td><?php echo $user['nom'] . ' ' . $user['prenom']; ?></td>
             <td><?php echo $user['email']; ?></td>
-            <td><?php echo $user['cine'] ?? '-'; ?></td>
-            <td><?php echo $user['mle'] ?? '-'; ?></td>
             <td>
                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal<?php echo $user['id']; ?>"><i class="fas fa-edit"></i></button>
                 <form method="post" action="../actions/delete_user.php" style="display:inline-block;" onsubmit="return confirm('<?php echo htmlspecialchars($translations['confirm_delete_user'] ?? 'Are you sure you want to delete this user?'); ?>');">
@@ -194,17 +167,8 @@ $page_title = htmlspecialchars($translations['manage_users']);
                             <option value="admin"><?php echo htmlspecialchars($translations['admin']); ?></option>
                             <option value="secretaire"><?php echo htmlspecialchars($translations['secretaire']); ?></option>
                             <option value="docteur"><?php echo htmlspecialchars($translations['docteur']); ?></option>
-                            <option value="instructor"><?php echo htmlspecialchars($translations['instructor'] ?? 'Instructor'); ?></option>
                             <option value="cellule_pedagogique"><?php echo htmlspecialchars($translations['cellule_pedagogique'] ?? 'Cellule Pédagogique'); ?></option>
                         </select>
-                    </div>
-                    <div class="mb-3 instructor-fields" style="display: none;">
-                        <label class="form-label">CINE</label>
-                        <input type="text" name="cine" class="form-control">
-                    </div>
-                    <div class="mb-3 instructor-fields" style="display: none;">
-                        <label class="form-label">MLE</label>
-                        <input type="text" name="mle" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><?php echo htmlspecialchars($translations['last_name']); ?></label>
@@ -227,21 +191,5 @@ $page_title = htmlspecialchars($translations['manage_users']);
         </div>
     </div>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const roleSelect = document.getElementById('roleSelect');
-    const instructorFields = document.querySelectorAll('.instructor-fields');
 
-    function toggleInstructorFields() {
-        if (roleSelect.value === 'instructor') {
-            instructorFields.forEach(field => field.style.display = 'block');
-        } else {
-            instructorFields.forEach(field => field.style.display = 'none');
-        }
-    }
-
-    roleSelect.addEventListener('change', toggleInstructorFields);
-    toggleInstructorFields(); // Initial check
-});
-</script>
 <?php include '../templates/footer.php'; ?>

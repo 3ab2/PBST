@@ -1,26 +1,26 @@
-# TODO: Implement Independent Filters for Military and Academic Subjects Tables
+# TODO: Implement Multiple File Uploads for Subjects
 
-## Steps to Complete
+## Database Updates
+- [x] Add stage_id column to subjects table in pbst.sql
+- [x] Create new subject_files table in pbst.sql
 
-1. **Update actions/get_subjects.php**
-   - Add 'category' parameter to filter subjects by s.type (militaire or universitaire). ❌ (Reverted to original)
+## Backend Updates
+- [x] Update actions/add_subject.php to handle multiple file uploads and insert into subject_files
+- [x] Update actions/edit_subject.php to allow adding/removing files
+- [x] Update actions/get_subjects.php to return files as array for each subject
 
-2. **Add Filter UI Above Military Subjects Table**
-   - Insert a Bootstrap row with search input (for subject name) and stage dropdown (with "All" option) above the military subjects card-body. ❌ (Removed)
+## Frontend Updates
+- [ ] Update cellule_pedagogique/manage_subjects.php: change file input to multiple
+- [ ] Add preview area with thumbnails in manage_subjects.php
+- [ ] Update table display to show multiple file thumbnails/icons
+- [ ] Add Bootstrap modals for viewing files (PDF.js, lightbox, video player)
 
-3. **Add Filter UI Above Academic Subjects Table**
-   - Insert a Bootstrap row with search input (for subject name) and stage dropdown (with "All" option) above the academic subjects card-body. ❌ (Removed)
+## Client-side Enhancements
+- [ ] Add JavaScript for file previews and validation
+- [ ] Implement remove buttons in previews
+- [ ] Add drag-drop support
 
-4. **Modify JavaScript Logic**
-   - Replace loadSubjects() with separate loadMilitarySubjects() and loadAcademicSubjects() functions.
-   - Each function calls get_subjects.php with category, search, and stage_id parameters. ❌ (Reverted to single loadSubjects function)
-
-5. **Add Event Listeners for Filters**
-   - Attach oninput to search inputs and onchange to stage dropdowns to trigger respective load functions. ❌ (Removed)
-
-6. **Update Load Calls in Handlers**
-   - In add/edit/delete success handlers, call both loadMilitarySubjects() and loadAcademicSubjects() with default filters. ❌ (Reverted to single loadSubjects call)
-
-7. **Test Implementation**
-   - Verify filters work independently, update only their table, and persist after operations.
-   - Ensure Bootstrap styling and responsiveness.
+## Testing and Followup
+- [ ] Test multiple file uploads and downloads
+- [ ] Verify modals display correctly for different file types
+- [ ] Ensure backward compatibility with existing single files

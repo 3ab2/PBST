@@ -12,12 +12,26 @@ try {
         $stmt = $pdo->prepare("SELECT s.id_subject, s.name, s.type, s.stage_id, s.file FROM subjects s WHERE s.id_subject = ?");
         $stmt->execute([$id]);
         $subject = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($subject) {
+            // Get files for this subject
+            $stmt = $pdo->prepare("SELECT id, file_path, file_name, file_type, file_size FROM subject_files WHERE subject_id = ? ORDER BY uploaded_at");
+            $stmt->execute([$id]);
+            $subject['files'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
         echo json_encode($subject);
     } else {
-        // Get all subjects for listing
-        $stmt = $pdo->prepare("SELECT s.id_subject, s.name, s.type, s.file, st.intitule AS stage_name FROM subjects s LEFT JOIN stages st ON s.stage_id = st.id ORDER BY s.name");
+        // Get all subjects for listing with files
+        $stmt = $pdo->prepare("SELECT s.id_subject, s.name, s.type, s.stage_id, st.intitule AS stage_name FROM subjects s LEFT JOIN stages st ON s.stage_id = st.id ORDER BY s.name");
         $stmt->execute();
         $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Get files for each subject
+        foreach ($subjects as &$subject) {
+            $stmt = $pdo->prepare("SELECT id, file_path, file_name, file_type, file_size FROM subject_files WHERE subject_id = ? ORDER BY uploaded_at");
+            $stmt->execute([$subject['id_subject']]);
+            $subject['files'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         echo json_encode($subjects);
     }
 } catch (Exception $e) {
