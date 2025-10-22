@@ -369,4 +369,13 @@ return [
     'all_stages' => 'جميع الدورات',
     'select_stage' => 'اختر الدورة',
     'file_upload_error' => 'خطأ في رفع الملف',
+    'monthly_statistics' => 'الإحصائيات الشهرية',
+    'files' => 'الملفات',
+    'file_name' => 'اسم الملف',
+    'download' => 'تحميل',
+    'delete_file' => 'حذف الملف',
+    'confirm_delete_file' => 'هل تريد حذف هذا الملف؟',
+    'file_deleted_successfully' => 'تم حذف الملف بنجاح',
+    'file_not_found' => 'الملف غير موجود',
+    'Specialty' => 'التخصص',
 ];

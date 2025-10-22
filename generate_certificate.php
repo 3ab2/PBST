@@ -1,113 +1,134 @@
 <?php
+ob_start();
 require 'vendor/autoload.php';
 require 'functions.php';
+$lang = include 'lang/fr.php';
+echo '<link rel="icon" type="image/svg+xml" href="images/bst.png">';
 check_role(['cellule_pedagogique', 'admin']);
 
-// Get parameters
-$instructor_id = $_GET['instructor_id'] ?? null;
-$year = $_GET['year'] ?? null;
+$year = $_GET['year'] ?? date('Y');
 $month = $_GET['month'] ?? null;
-$position = isset($_GET['position']) ? (int)$_GET['position'] : null; // 1,2,3 for top 3
 
-if (!$instructor_id || !$year || !$month) {
-    die('Missing parameters');
+// Fetch top 3 instructors
+$query = "
+    SELECT i.id_instructor,
+           CONCAT(i.first_name, ' ', i.last_name) AS name,
+           COUNT(CASE WHEN o.rating='positive' THEN 1 END) AS positive_count,
+           AVG(o.score) AS avg_score
+    FROM instructors i
+    LEFT JOIN observations o ON o.instructor_id = i.id_instructor
+    WHERE YEAR(o.obs_date) = ?
+";
+
+$params = [$year];
+
+if ($month) {
+    $query .= " AND MONTH(o.obs_date) = ?";
+    $params[] = $month;
 }
 
-// Get instructor data
-$stmt = $pdo->prepare("SELECT * FROM instructors WHERE id_instructor = ?");
-$stmt->execute([$instructor_id]);
-$instructor = $stmt->fetch();
+$query .= "
+    GROUP BY i.id_instructor
+    ORDER BY positive_count DESC, avg_score DESC
+    LIMIT 3
+";
 
-if (!$instructor) {
-    die('Instructor not found');
+try {
+    $stmt = $pdo->prepare($query);
+    $stmt->execute($params);
+    $instructors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    die('Error fetching instructors: ' . $e->getMessage());
 }
 
-// Get stats
-$stmt = $pdo->prepare("SELECT * FROM monthly_instructor_stats WHERE instructor_id = ? AND year = ? AND month = ?");
-$stmt->execute([$instructor_id, $year, $month]);
-$stats = $stmt->fetch();
-
-if (!$stats) {
-    die('Stats not found');
+if (empty($instructors)) {
+    die('No instructors found for the selected period.');
 }
 
-// Create PDF
-$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+// Custom PDF class for certificate
+class CertificatePDF extends TCPDF {
+    public function Header() {
+        // Header: logo center, date left, text right
+        $logoFile = __DIR__ . '/images/far.png';
+        if (file_exists($logoFile)) {
+            $this->Image($logoFile, 90, 10, 15, 20, '', '', '', false, 300, '', false, false, 0);
+        }
 
-$pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Cellule Pédagogique');
-$pdf->SetTitle('Certificate of Appreciation');
-$pdf->SetSubject('Instructor Certificate');
+        $this->SetFont('helvetica', '', 10);
+        $this->SetXY(10, 12);
+        $this->Cell(50, 10, 'Date: ' . date('Y-m-d'), 0, 0, 'L');
 
-$pdf->setPrintHeader(false);
-$pdf->setPrintFooter(false);
+        $this->SetFont('helvetica', 'B', 8);
+        $this->SetXY(120, 10);
+        $this->Cell(80, 5, 'ROYAUME DU MAROC', 0, 1, 'C');
+        $this->SetXY(120, 15);
+        $this->Cell(80, 5, 'FORCES ARMÉES ROYALES', 0, 1, 'C');
+        $this->SetXY(120, 20);
+        $this->Cell(80, 5, 'PLACE D’ARME DE MEKNES', 0, 1, 'C');
+        $this->SetXY(120, 25);
+        $this->Cell(80, 5, '1° BATTAILLON DE SOUTIEN DES TRANSMISSIONS', 0, 1, 'C');
+    }
 
-$pdf->AddPage();
+    public function Footer() {
+        // Draw footer line
+        $this->Line(10, 280, 200, 280);
 
-// Set background image
-$pdf->Image('images/border.jpg', 0, 0, 210, 297, 'JPG', '', '', false, 300, '', false, false, 0);
+        // Footer: copyright center
+        $this->SetFont('helvetica', '', 8);
+        $this->SetXY(0, 285);
+        $this->Cell(0, 10, '© 2025 Système de Gestion des Instructeurs . Tous droits réservés.', 0, 0, 'C');
+    }
+}
 
-// HTML content
-$months = [
-    1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April',
-    5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August',
-    9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
-];
+$pdf = new CertificatePDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
-$month_name = $months[$month];
+// Set document information
+$pdf->SetCreator('PBST App');
+$pdf->SetAuthor('1 BST');
+$pdf->SetTitle('Certificates for Top Instructors');
+$pdf->SetSubject('Instructor Certificates');
 
-$ratio = number_format($stats['positive_ratio'] * 100, 1);
+// Enable custom header/footer
+$pdf->setPrintHeader(true);
+$pdf->setPrintFooter(true);
 
-$html = '
-<style>
-body { font-family: dejavusans; margin: 0; padding: 20px; }
-.header { display: table; width: 100%; margin-bottom: 40px; }
-.header-left { display: table-cell; vertical-align: top; text-align: left; font-size: 14px; }
-.header-center { display: table-cell; vertical-align: top; text-align: center; }
-.header-right { display: table-cell; vertical-align: top; text-align: right; font-size: 12px; }
-.body { text-align: center; margin: 40px 0; }
-.title { font-size: 32px; font-weight: bold; margin-bottom: 20px; }
-.appreciation { font-size: 18px; margin-bottom: 20px; }
-.name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-.details { font-size: 16px; margin-bottom: 30px; }
-.footer { text-align: right; margin-top: 60px; font-size: 14px; }
-.signature { margin-bottom: 10px; }
-.hinata { font-size: 12px; color: #888; }
-</style>
+// Set margins
+$pdf->SetMargins(15, 50, 15);
 
-<div class="header">
-    <div class="header-left">MEKNES LE, ' . date('d M Y') . '</div>
-    <div class="header-center"><img src="images/far.png" alt="logo" width="80"/></div>
-    <div class="header-right">
-        ROYAUME DU MAROC<br>
-        FORCES ARMÉES ROYALES<br>
-        PLACE D’ARME DE MEKNES<br>
-        1° BATAILLON DE SOUTIEN DES TRANSMISSIONS
-    </div>
-</div>
+// Ranks for top 3
+$ranks = ['1er', '2ème', '3ème'];
 
-<div class="body">
-    <div class="title">Meilleur Formateur</div>
-    <div class="appreciation">
-        En reconnaissance de vos excellentes performances pédagogiques et de votre dévouement à l\'enseignement.<br>
-        Merci pour votre contribution exceptionnelle à la formation de nos stagiaires.
-    </div>
-    <div class="name">' . htmlspecialchars($instructor['first_name'] . ' ' . $instructor['last_name']) . '</div>
-    <div class="details">
-        CINE: ' . htmlspecialchars($instructor['cine']) . ' | MLE: ' . htmlspecialchars($instructor['mle']) . '<br>
-        Période: ' . $month_name . ' ' . $year . '<br>
-        Observations positives: ' . $stats['positive_count'] . ', Négatives: ' . $stats['negative_count'] . ', Total: ' . $stats['total'] . ', Score: ' . $ratio . '%
-    </div>
-</div>
+foreach ($instructors as $index => $instructor) {
+    $pdf->AddPage();
 
-<div class="footer">
-    <div class="signature">Le colonel ABDELHAFID ERRADI</div>
-    <div class="hinata">Hinata ❤️</div>
-</div>
-';
+    // Certificate title
+    $pdf->SetFont('helvetica', 'B', 24);
+    $pdf->SetTextColor(0, 0, 255);
+    $pdf->SetXY(0, 60);
+    $pdf->Cell(0, 20, 'CERTIFICAT D\'EXCELLENCE', 0, 1, 'C');
+    $pdf->SetTextColor(0, 0, 0);
 
-$pdf->writeHTML($html, true, false, true, false, '');
+    // Rank and year
+    $pdf->SetFont('helvetica', 'B', 16);
+    $pdf->Ln(10);
+    $pdf->Cell(0, 10, $ranks[$index] . ' Meilleur Instructeur de l\'Année ' . $year, 0, 1, 'C');
 
-// Output PDF
-$pdf->Output('certificate_' . $instructor_id . '_' . $year . '_' . $month . '.pdf', 'I');
+    // Instructor name
+    $pdf->SetFont('helvetica', 'B', 20);
+    $pdf->Ln(20);
+    $pdf->Cell(0, 10, htmlspecialchars($instructor['name']), 0, 1, 'C');
+
+    // Details
+    $pdf->SetFont('helvetica', '', 12);
+    $pdf->Ln(10);
+    $pdf->MultiCell(0, 10, "Félicitations pour votre excellence en tant qu'instructeur. Vous avez obtenu " . (int)$instructor['positive_count'] . " observations positives avec une moyenne de " . number_format($instructor['avg_score'], 2) . " points.", 0, 'C');
+
+    // Signature placeholder
+    $pdf->Ln(30);
+    $pdf->Cell(0, 10, 'Signature du Commandant', 0, 1, 'R');
+    $pdf->Line(150, $pdf->GetY(), 190, $pdf->GetY());
+}
+
+ob_end_clean();
+$pdf->Output('certificates_top_instructors_' . $year . '.pdf', 'I');
 ?>

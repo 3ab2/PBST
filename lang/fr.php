@@ -368,4 +368,12 @@ return [
     'all_stages' => 'Tous les stages',
     'select_stage' => 'Sélectionner la stage',
     'file_upload_error' => 'Erreur de téléchargement de fichier',
+    'monthly_statistics' => 'Statistiques mensuelles',
+    'files' => 'Fichiers',
+    'no_files_found' => 'Aucun fichier trouvé',
+    'file_name' => 'Nom du fichier',
+    'download_file' => 'Télécharger le fichier',
+    'delete_file' => 'Supprimer le fichier',
+    'confirm_delete_file' => 'Êtes-vous sécurité de vouloir supprimer ce fichier ?',
+    'Specialty' => 'Specialte',
 ];
