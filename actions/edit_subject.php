@@ -1,6 +1,6 @@
 <?php
 require '../functions.php';
-check_role('cellule_pedagogique');
+check_role(['cellule_pedagogique', 'admin']);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -44,7 +44,8 @@ try {
 
     // Handle multiple file uploads and removals
     $uploaded_files = [];
-    $files_to_remove = json_decode($_POST['files_to_remove'] ?? '[]', true);
+    $files_to_remove_str = $_POST['files_to_remove'] ?? '';
+    $files_to_remove = $files_to_remove_str ? explode(',', $files_to_remove_str) : [];
 
     // Remove specified files
     if (!empty($files_to_remove)) {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pbst-static-v1';
+const CACHE_NAME = 'pbst-static-v2';
 const CORE_ASSETS = [
   '/pbst_app/',
   '/pbst_app/index.php',
@@ -25,7 +25,12 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept')?.includes('text/html'))) {
+  // Don't cache API requests
+  if (event.request.url.includes('/actions/')) {
+    return;
+  }
+
+  if (event.request.method === 'GET' && (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html'))) {
     event.respondWith(
       fetch(event.request).then(resp => {
         const copy = resp.clone();

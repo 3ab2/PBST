@@ -1,6 +1,6 @@
 <?php
 require '../functions.php';
-check_role('cellule_pedagogique');
+check_role(['cellule_pedagogique', 'admin']);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
